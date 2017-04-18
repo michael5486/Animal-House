@@ -5,7 +5,7 @@ import java.awt.geom.*;
 import javax.swing.*;
 
 
-public class trooperSimulator {
+public class animalSimulator {
 
     public double x;
     public double y;
@@ -23,7 +23,7 @@ public class trooperSimulator {
     public String type = "";
 
 
-    public trooperSimulator(double initX, double initY, double initV, double initA, double initDelT, boolean initIsCop, String initType) {
+    public animalSimulator(double initX, double initY, double initV, double initA, double initDelT, boolean initIsCop, String initType) {
     	x = initX;
         y = initY;
         v = initV;

@@ -1,7 +1,4 @@
-//trooperGUI.java
-//
-// Author: Michael Esposito
-//
+
 // NOTE ABOUT COORDINATES: All the control code will use standard
 // Cartesian coordinates with the origin in the lower-left corner.
 // The GUI code converts to Java's coordinates where necessary.
@@ -29,6 +26,7 @@ public class animalSimGUI extends JPanel {
 /* Global variables for the GUI and set up methods */
     int numPlants;
     int numRabbits;
+    int id = 1;
 	double delT = 0.1;
 
 /* GUI Animation stuff */
@@ -43,7 +41,8 @@ public class animalSimGUI extends JPanel {
 	// trooperSimulator copSim = null;
 	// trooperSimulator speederSim = null;
 
-	
+/* List of all organisms */
+    ArrayList<Organism> organisms = new ArrayList<Organism>(); // fix this
 
 
 
@@ -51,8 +50,25 @@ public class animalSimGUI extends JPanel {
 
 
 
-    public void setAnimals() {
-    	System.out.println("\nAnimals created...");
+    public void createAnimals() {
+    	System.out.println("  Animals created.");
+
+        // Initialize the number of animals
+        // organisms = new ArrayList<Organism>();
+
+        for(int i = 0; i < numPlants; i++){  // plants
+            // create plants
+            organisms.add(new Organism("plant",id,id*50,id*50)); //create method for random location to initialize!
+            id++;
+            
+        }
+
+        for(int i = 0; i < numRabbits; i++){ // rabbits
+            // create rabbits
+            organisms.add(new Organism("mouse",id,id*10,id*20)); //create method for random location to initialize!
+            id++;
+        }
+
 
         //creates a cop with velocity = 10 and acceleration = 0
 		//copSim = new trooperSimulator(copInitX, copInitY, 0.0, 12, delT, true, "cop    ");
@@ -66,14 +82,34 @@ public class animalSimGUI extends JPanel {
 //Drawing
 
     public void paintComponent(Graphics g) {
-       super.paintComponent(g);
-       Graphics2D g2 = (Graphics2D) g;
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
 
-       Dimension D = this.getSize();
+        Dimension D = this.getSize();
 
-       /* Makes center panel light green */
-       g.setColor(new Color(150, 243, 152));
-       g.fillRect(0,0, D.width, D.height);
+        /* Makes center panel light green */
+        g.setColor(new Color(150, 243, 152));
+        g.fillRect(0,0, D.width, D.height);
+
+
+        Color plantColor = new Color(51,102,0);
+        Color mouseColor = new Color(128,128,128);
+
+        // Draw all organisms
+        for(Organism o:organisms){
+            // draw o
+            if(o.type == "plant"){
+                g.setColor(plantColor);
+                g.fillRect(o.getX(), o.getY(), 10, 10);
+            }
+            else if(o.type == "mouse"){
+                g.setColor(mouseColor);
+                g.fillRect(o.getX(), o.getY(), 10, 10);
+            }
+        }
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~DELETE THIS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ///Draws cars onto contentPane
 
@@ -109,7 +145,7 @@ public class animalSimGUI extends JPanel {
  //        } catch(IOException e) {
  //        	System.out.println("File not found");
  //        }
-
+//~~~~~~~~~~~~~~~~~~~~DELETE ABOVE CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
         //Draws topmessage for time
@@ -122,11 +158,7 @@ public class animalSimGUI extends JPanel {
 
     /* Takes input from GUI text boxes */
 
-    //TODO
-    //need to make this fail gracefully...capture conversion errors with try/catch
-    void reset() {
-        System.out.println("\nReset:");
-
+    void getNumOrganismsFromEntryField(){
         // Get numPlants from entry field
         try{
             numPlants = Integer.parseInt(numPlantsField.getText());
@@ -157,8 +189,22 @@ public class animalSimGUI extends JPanel {
             numRabbitsField.setText("0");
         }
 
+        System.out.printf("  numPlants = %d\n  numRabbits  = %d  \n", numPlants, numRabbits);
+    }
 
-        System.out.printf("  numRabbits = %d\n  numPlants  = %d  \n", numRabbits, numPlants);
+
+    //TODO
+    //need to make this fail gracefully...capture conversion errors with try/catch
+    void reset() {
+        System.out.println("\nReset:");
+
+        // Read values from bottom entry fields
+        getNumOrganismsFromEntryField();
+     
+        // Create animals
+        createAnimals();
+
+        this.repaint();
     }
 
     void go () {
@@ -331,7 +377,6 @@ public class animalSimGUI extends JPanel {
 
     public static void main(String[] args) {
     	animalSimGUI gui = new animalSimGUI();
-    	gui.setAnimals();
     	gui.makeFrame();
 
     	//gui.setCars();
