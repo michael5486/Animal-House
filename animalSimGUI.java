@@ -52,7 +52,7 @@ public class animalSimGUI extends JPanel {
 
 
     public void setAnimals() {
-    	System.out.println("Animals created...");
+    	System.out.println("\nAnimals created...");
 
         //creates a cop with velocity = 10 and acceleration = 0
 		//copSim = new trooperSimulator(copInitX, copInitY, 0.0, 12, delT, true, "cop    ");
@@ -112,29 +112,56 @@ public class animalSimGUI extends JPanel {
 
 
 
-//Draws topmessage for time
-  g.setColor(Color.black);
-  g.drawString(topMessage, 20, 30);
-}
+        //Draws topmessage for time
+        g.setColor(Color.black);
+        g.drawString(topMessage, 20, 30);
+    }
 
 
-//Animation
+    //Animation
 
-/* Takes input from GUI text boxes */
+    /* Takes input from GUI text boxes */
 
-//TODO
-//need to make this fail gracefully...capture conversion errors with try/catch
-void reset() {
+    //TODO
+    //need to make this fail gracefully...capture conversion errors with try/catch
+    void reset() {
+        System.out.println("\nReset:");
 
-    numRabbits = Integer.parseInt(numRabbitsField.getText());
-    numPlants = Integer.parseInt(numPlantsField.getText());
+        // Get numPlants from entry field
+        try{
+            numPlants = Integer.parseInt(numPlantsField.getText());
+            if(numPlants < 0){
+                numPlants = 0;
+                numPlantsField.setText("0");
+                System.out.println("--Error: numPlants cannot be less than 0! Defaulting to 0.");
+            }
+        }
+        catch(NumberFormatException e){
+            System.out.println("--Error: Entry fields must have integer values! Defaulting numPlants to 0.");
+            numPlants = 0;
+            numPlantsField.setText("0");
+        }
 
-    System.out.println("Resetting organism counts...");
-    System.out.printf("numRabbits=%d  numPlants=%d  \n", numRabbits, numPlants);
-}
+        // Get numRabbits from entry field
+        try{
+            numRabbits = Integer.parseInt(numRabbitsField.getText());
+            if(numRabbits < 0){
+                numRabbits = 0;
+                numRabbitsField.setText("0");
+                System.out.println("--Error: numRabbits cannot be less than 0! Defaulting to 0.");
+            }
+        }
+        catch(NumberFormatException e){
+            System.out.println("--Error: Entry fields must have integer values! Defaulting numRabbits to 0.");
+            numRabbits = 0;
+            numRabbitsField.setText("0");
+        }
 
-void go () {
 
+        System.out.printf("  numRabbits = %d\n  numPlants  = %d  \n", numRabbits, numPlants);
+    }
+
+    void go () {
         stopAnimationThread ();    // To ensure only one thread.
         
         currentThread = new Thread () {
@@ -160,7 +187,6 @@ void go () {
     }
 
     void animate () {
-
     	while (true) {
 
     		boolean done = nextStep ();
@@ -179,7 +205,6 @@ void go () {
     			break;
     		}
         } //endwhile
-
         
         //topMessage = "Time: " + df.format(copSim.getTime()) + " trooperSpeed: " + df.format(copSim.getV());
         this.repaint ();
@@ -194,12 +219,17 @@ void go () {
 
 //GUI Contructions
 
-    JPanel makeSetupPanel() {
+    JPanel makeControlPanel() {
     	JPanel panel = new JPanel();
+
+        // set the border and give it a title
+        TitledBorder border = new TitledBorder("Controls");
+        border.setTitleJustification(TitledBorder.CENTER);
+        border.setTitlePosition(TitledBorder.TOP);
+        panel.setBorder (border);
 
     	//panel.setLayout(2,1);
         JButton resetB = new JButton ("Reset");
-
     	JButton goButton = new JButton("Go");
     	JButton quitButton = new JButton("Quit");
 
@@ -233,24 +263,53 @@ void go () {
     	return panel;
     }
 
+    JPanel makeEntryPanel() {
+        JPanel panel = new JPanel();
+        
+        // set the border and give it a title
+        TitledBorder border = new TitledBorder("Enter the number of organisms");
+        border.setTitleJustification(TitledBorder.CENTER);
+        border.setTitlePosition(TitledBorder.TOP);
+        panel.setBorder (border);
+        
+
+        // Labels and Entry fields for number of organisms
+        
+        // Plants
+        JLabel plantLabel = new JLabel("Plants");
+        panel.add(plantLabel);
+
+        numPlantsField = new JTextField(5);
+        numPlantsField.setText("0");
+        panel.add(numPlantsField);
+
+        // Mice
+        JLabel mouseLabel = new JLabel("Mice");
+        panel.add(mouseLabel);
+        numRabbitsField = new JTextField(5);
+        numRabbitsField.setText("0");
+        panel.add(numRabbitsField);
+
+        return panel;
+    }
+
+
+
     JPanel makeBottomPanel () {
     	JPanel panel = new JPanel ();
 
     	//creates a GridLayout with two rows and one column
     	panel.setLayout (new GridLayout (1,1));
 
-    	//creates a panel with Go and Quit buttons
-    	JPanel sPanel = makeSetupPanel ();
-    	sPanel.setBorder (BorderFactory.createTitledBorder ("  Controls  "));
+    	//creates a panel with Reset, Go, and Quit buttons
+    	JPanel sPanel = makeControlPanel ();
     	panel.add (sPanel);
 
-        numPlantsField = new JTextField(1);
-        numPlantsField.setText("numPlants");
-        panel.add(numPlantsField);
 
-        numRabbitsField = new JTextField(1);
-        numRabbitsField.setText("numRabbits");
-        panel.add(numRabbitsField);
+        //creates a panel with Organism Entry Fields
+        JPanel ePanel = makeEntryPanel ();
+        panel.add (ePanel);
+
     	return panel;
     }
 
