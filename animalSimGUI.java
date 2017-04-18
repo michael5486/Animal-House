@@ -25,19 +25,27 @@ public class animalSimGUI extends JPanel {
 	// double copInitX = 50, copInitY = 150;
 	// double speederInitX = 2, speederInitY = 153;
 
+
+/* Global variables for the GUI and set up methods */
+    int numPlants;
+    int numRabbits;
 	double delT = 0.1;
 
-	//Animation stuff
+/* GUI Animation stuff */
 	Thread currentThread;
-
 	DecimalFormat df = new DecimalFormat ("##.##");
-
 	String topMessage = "";
+
+/* GUI Construction stuff */
+    Container cPane = null;
+    JTextField numPlantsField, numRabbitsField;
 
 	// trooperSimulator copSim = null;
 	// trooperSimulator speederSim = null;
 
-	Container cPane = null;
+	
+
+
 
 
 
@@ -112,6 +120,19 @@ public class animalSimGUI extends JPanel {
 
 //Animation
 
+/* Takes input from GUI text boxes */
+
+//TODO
+//need to make this fail gracefully...capture conversion errors with try/catch
+void reset() {
+
+    numRabbits = Integer.parseInt(numRabbitsField.getText());
+    numPlants = Integer.parseInt(numPlantsField.getText());
+
+    System.out.println("Resetting organism counts...");
+    System.out.printf("numRabbits=%d  numPlants=%d  \n", numRabbits, numPlants);
+}
+
 void go () {
 
         stopAnimationThread ();    // To ensure only one thread.
@@ -177,9 +198,20 @@ void go () {
     	JPanel panel = new JPanel();
 
     	//panel.setLayout(2,1);
+        JButton resetB = new JButton ("Reset");
 
     	JButton goButton = new JButton("Go");
     	JButton quitButton = new JButton("Quit");
+
+        resetB.addActionListener (
+        new ActionListener () {
+           public void actionPerformed (ActionEvent a)
+           {
+               reset ();
+           }
+           }
+        );
+        panel.add (resetB);
 
     	goButton.addActionListener(
     		new ActionListener () {
@@ -211,6 +243,14 @@ void go () {
     	JPanel sPanel = makeSetupPanel ();
     	sPanel.setBorder (BorderFactory.createTitledBorder ("  Controls  "));
     	panel.add (sPanel);
+
+        numPlantsField = new JTextField(1);
+        numPlantsField.setText("numPlants");
+        panel.add(numPlantsField);
+
+        numRabbitsField = new JTextField(1);
+        numRabbitsField.setText("numRabbits");
+        panel.add(numRabbitsField);
     	return panel;
     }
 
