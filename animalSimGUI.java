@@ -23,25 +23,26 @@ public class animalSimGUI extends JPanel {
 	// double speederInitX = 2, speederInitY = 153;
 
 
-/* Global variables for the GUI and set up methods */
+    /* Global variables for the GUI and set up methods */
     int numPlants;
     int numRabbits;
     int id = 1;
-	double delT = 0.1;
+    double delT = 0.1;
 
-/* GUI Animation stuff */
-	Thread currentThread;
-	DecimalFormat df = new DecimalFormat ("##.##");
-	String topMessage = "";
+    /* GUI Animation stuff */
+    Thread currentThread;
+    DecimalFormat df = new DecimalFormat ("##.##");
+    String topMessage = "";
 
-/* GUI Construction stuff */
+    /* GUI Construction stuff */
     Container cPane = null;
     JTextField numPlantsField, numRabbitsField;
+    Dimension D;
 
 	// trooperSimulator copSim = null;
 	// trooperSimulator speederSim = null;
 
-/* List of all organisms */
+    /* List of all organisms */
     ArrayList<Organism> organisms = new ArrayList<Organism>(); // fix this
 
 
@@ -56,16 +57,19 @@ public class animalSimGUI extends JPanel {
         // Initialize the number of animals
         // organisms = new ArrayList<Organism>();
 
+        /* Clears all organisms */
+        organisms.clear();
+
         for(int i = 0; i < numPlants; i++){  // plants
             // create plants
-            organisms.add(new Organism("plant",id,id*50,id*50)); //create method for random location to initialize!
+            organisms.add(new Organism("plant",id, createRandomPoint())); //create method for random location to initialize!
             id++;
             
         }
 
         for(int i = 0; i < numRabbits; i++){ // rabbits
             // create rabbits
-            organisms.add(new Organism("mouse",id,id*10,id*20)); //create method for random location to initialize!
+            organisms.add(new Organism("mouse",id, createRandomPoint())); //create method for random location to initialize!
             id++;
         }
 
@@ -85,7 +89,7 @@ public class animalSimGUI extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        Dimension D = this.getSize();
+        D = this.getSize();
 
         /* Makes center panel light green */
         g.setColor(new Color(150, 243, 152));
@@ -107,107 +111,79 @@ public class animalSimGUI extends JPanel {
                 g.fillRect(o.getX(), o.getY(), 10, 10);
             }
         }
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~DELETE THIS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-///Draws cars onto contentPane
-
-      // if (copSim != null) {
-      //     copSim.draw(g2, D);
-      // }
-      // if (speederSim != null) {
-      //     speederSim.draw(g2, D);
-      // } 
-
-	// if (isBusted) {
-	// 	try {
-
- //       		BufferedImage busted = ImageIO.read(new File("busted.png"));
- //        	g2.drawImage(busted, D.width/2 - 250, 50, null);
- //        	System.out.println("busted...");
-
- //            String totalDistance = "totalDistance = " + copSim.getDistanceMoved();
-
- //            //Draw the point of collision
- //            g2.setColor(Color.black);
- //            String collision = "Caught at (" + speederSim.getX() + ", " + speederSim.getY() + ")\n" + totalDistance;
- //            System.out.println(collision);
- //            g.drawString(collision, D.width/2 - 250, 500);
-
- //            //Draw functions
- //            copX.show(copX, speederX);
-
- //            //Find distance traveled
-
-
-
- //        } catch(IOException e) {
- //        	System.out.println("File not found");
- //        }
-//~~~~~~~~~~~~~~~~~~~~DELETE ABOVE CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-        //Draws topmessage for time
-        g.setColor(Color.black);
-        g.drawString(topMessage, 20, 30);
     }
+
+    /* Creates a random cartesian point */
+    Point2D.Double createRandomPoint() {
+
+        /* Creates random x coordinate */
+        int cartX = RandTool.uniform(0, D.width);
+
+        /* Creates random y coordinate */
+        int javaY = RandTool.uniform(0, D.height);
+        int cartY = D.height - javaY;
+
+        Point2D.Double randPoint = new Point2D.Double(cartX, cartY);
+
+        return randPoint; 
+
+        }
 
 
     //Animation
 
-    /* Takes input from GUI text boxes */
+        /* Takes input from GUI text boxes */
 
-    void getNumOrganismsFromEntryField(){
+        void getNumOrganismsFromEntryField(){
         // Get numPlants from entry field
-        try{
-            numPlants = Integer.parseInt(numPlantsField.getText());
-            if(numPlants < 0){
+            try{
+                numPlants = Integer.parseInt(numPlantsField.getText());
+                if(numPlants < 0){
+                    numPlants = 0;
+                    numPlantsField.setText("0");
+                    System.out.println("--Error: numPlants cannot be less than 0! Defaulting to 0.");
+                }
+            }
+            catch(NumberFormatException e){
+                System.out.println("--Error: Entry fields must have integer values! Defaulting numPlants to 0.");
                 numPlants = 0;
                 numPlantsField.setText("0");
-                System.out.println("--Error: numPlants cannot be less than 0! Defaulting to 0.");
             }
-        }
-        catch(NumberFormatException e){
-            System.out.println("--Error: Entry fields must have integer values! Defaulting numPlants to 0.");
-            numPlants = 0;
-            numPlantsField.setText("0");
-        }
 
         // Get numRabbits from entry field
-        try{
-            numRabbits = Integer.parseInt(numRabbitsField.getText());
-            if(numRabbits < 0){
+            try{
+                numRabbits = Integer.parseInt(numRabbitsField.getText());
+                if(numRabbits < 0){
+                    numRabbits = 0;
+                    numRabbitsField.setText("0");
+                    System.out.println("--Error: numRabbits cannot be less than 0! Defaulting to 0.");
+                }
+            }
+            catch(NumberFormatException e){
+                System.out.println("--Error: Entry fields must have integer values! Defaulting numRabbits to 0.");
                 numRabbits = 0;
                 numRabbitsField.setText("0");
-                System.out.println("--Error: numRabbits cannot be less than 0! Defaulting to 0.");
             }
-        }
-        catch(NumberFormatException e){
-            System.out.println("--Error: Entry fields must have integer values! Defaulting numRabbits to 0.");
-            numRabbits = 0;
-            numRabbitsField.setText("0");
-        }
 
-        System.out.printf("  numPlants = %d\n  numRabbits  = %d  \n", numPlants, numRabbits);
-    }
+            System.out.printf("  numPlants = %d\n  numRabbits  = %d  \n", numPlants, numRabbits);
+        }
 
 
     //TODO
     //need to make this fail gracefully...capture conversion errors with try/catch
-    void reset() {
-        System.out.println("\nReset:");
+        void reset() {
+            System.out.println("\nReset:");
 
         // Read values from bottom entry fields
-        getNumOrganismsFromEntryField();
-     
+            getNumOrganismsFromEntryField();
+
         // Create animals
-        createAnimals();
+            createAnimals();
 
-        this.repaint();
-    }
+            this.repaint();
+        }
 
-    void go () {
+        void go () {
         stopAnimationThread ();    // To ensure only one thread.
         
         currentThread = new Thread () {
@@ -268,7 +244,7 @@ public class animalSimGUI extends JPanel {
     JPanel makeControlPanel() {
     	JPanel panel = new JPanel();
 
-        // set the border and give it a title
+        /* set the border and give it a title */
         TitledBorder border = new TitledBorder("Controls");
         border.setTitleJustification(TitledBorder.CENTER);
         border.setTitlePosition(TitledBorder.TOP);
@@ -276,55 +252,54 @@ public class animalSimGUI extends JPanel {
 
     	//panel.setLayout(2,1);
         JButton resetB = new JButton ("Reset");
-    	JButton goButton = new JButton("Go");
-    	JButton quitButton = new JButton("Quit");
+        JButton goButton = new JButton("Go");
+        JButton quitButton = new JButton("Quit");
 
         resetB.addActionListener (
-        new ActionListener () {
-           public void actionPerformed (ActionEvent a)
-           {
-               reset ();
-           }
-           }
+            new ActionListener () {
+             public void actionPerformed (ActionEvent a)
+             {
+                 reset ();
+             }
+         }
+         );
+        goButton.addActionListener(
+          new ActionListener () {
+             public void actionPerformed (ActionEvent a) {
+                go();
+            }
+        }
         );
+
+        quitButton.addActionListener(
+          new ActionListener () {
+             public void actionPerformed (ActionEvent a) {
+                System.exit(0);
+            }
+        }
+        );
+
         panel.add (resetB);
-
-    	goButton.addActionListener(
-    		new ActionListener () {
-    			public void actionPerformed (ActionEvent a) {
-    				go();
-    			}
-    		}
-    		);
-
-    	quitButton.addActionListener(
-    		new ActionListener () {
-    			public void actionPerformed (ActionEvent a) {
-    				System.exit(0);
-    			}
-    		}
-    		);
-    	panel.add(goButton);
-    	panel.add(quitButton);
-    	return panel;
+        panel.add(goButton);
+        panel.add(quitButton);
+        return panel;
     }
 
     JPanel makeEntryPanel() {
         JPanel panel = new JPanel();
         
-        // set the border and give it a title
+        /* Set the border and give it a title */
         TitledBorder border = new TitledBorder("Enter the number of organisms");
         border.setTitleJustification(TitledBorder.CENTER);
         border.setTitlePosition(TitledBorder.TOP);
         panel.setBorder (border);
         
 
-        // Labels and Entry fields for number of organisms
+        /* Labels and Entry fields for number of organisms */
         
         // Plants
         JLabel plantLabel = new JLabel("Plants");
         panel.add(plantLabel);
-
         numPlantsField = new JTextField(5);
         numPlantsField.setText("0");
         panel.add(numPlantsField);
@@ -344,19 +319,19 @@ public class animalSimGUI extends JPanel {
     JPanel makeBottomPanel () {
     	JPanel panel = new JPanel ();
 
-    	//creates a GridLayout with two rows and one column
+    	/* creates a GridLayout with two rows and one column */
     	panel.setLayout (new GridLayout (1,1));
 
-    	//creates a panel with Reset, Go, and Quit buttons
+    	/* creates a panel with Reset, Go, and Quit buttons */
     	JPanel sPanel = makeControlPanel ();
     	panel.add (sPanel);
 
 
-        //creates a panel with Organism Entry Fields
+        /* creates a panel with Organism Entry Fields */
         JPanel ePanel = makeEntryPanel ();
         panel.add (ePanel);
 
-    	return panel;
+        return panel;
     }
 
 
@@ -379,7 +354,5 @@ public class animalSimGUI extends JPanel {
     	animalSimGUI gui = new animalSimGUI();
     	gui.makeFrame();
 
-    	//gui.setCars();
     }
-
 }
