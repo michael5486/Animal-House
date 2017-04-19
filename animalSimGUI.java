@@ -32,6 +32,9 @@ public class animalSimGUI extends JPanel {
     JTextField numPlantsField, numMiceField;
     Dimension D;
 
+    /* Animation Options */
+    boolean drawOrganismAxes = false;
+
 
     /* List of all organisms */
     ArrayList<Organism> organisms = new ArrayList<Organism>(); // fix this
@@ -62,8 +65,6 @@ public class animalSimGUI extends JPanel {
             organisms.add(new Mouse(id, createRandomPoint())); //create method for random location to initialize!
             id++;
         }
-
-
     }
 
 
@@ -74,27 +75,81 @@ public class animalSimGUI extends JPanel {
 
         D = this.getSize();
 
-        /* Makes center panel light green */
+        /* Makes center panel background light green */
         g.setColor(new Color(150, 243, 152));
         g.fillRect(0,0, D.width, D.height);
 
 
-        Color plantColor = new Color(51,102,0);
-        Color mouseColor = new Color(128,128,128);
-
-
         // Draw all organisms
         for(Organism o:organisms){
-            // draw o
+            int x = o.getX();
+            int y = o.getY();
+
+            // Draw the x-y axes of the organism.
+            if(drawOrganismAxes){
+                g.setColor(Color.BLACK);
+                g.drawLine(x-20, y, x+20, y); // x-axis
+                g.drawLine(x, y-20, x, y+20); // y-axis
+            }
+           
+            // draw organism o
             if(o.getType() == "Plant"){
-                g.setColor(plantColor);
-                g.fillRect(o.getX(), o.getY(), 10, 10);
+                drawPlant(x, y, g);
             }
             else if(o.getType() == "Mouse"){
-                g.setColor(mouseColor);
-                g.fillRect(o.getX(), o.getY(), 10, 10);
+                drawMouse(x, y, g);
             }
         }
+    }
+
+    void drawPlant(int x, int y, Graphics g){
+        Color plantColor = new Color(51,102,0);
+        g.setColor(plantColor);
+
+        // lower left
+        g.drawArc(x-38, y-22, 38, 44, 0, 70);
+        g.drawArc(x-36, y-20, 36, 40, 0, 80);
+        g.drawArc(x-34, y-18, 34, 36, 0, 80);
+        g.drawArc(x-32, y-16, 32, 32, 0, 100);
+        g.drawArc(x-30, y-14, 30, 28, 0, 120);
+        g.drawArc(x-28, y-12, 28, 24, 0, 140);
+
+        // lower right
+        g.drawArc(x, y-22, 38, 44, 110, 70);
+        g.drawArc(x, y-20, 36, 40, 100, 80);
+        g.drawArc(x, y-18, 34, 36, 100, 80);
+        g.drawArc(x, y-16, 32, 32, 80, 100);
+        g.drawArc(x, y-14, 30, 28, 60, 120);
+        g.drawArc(x, y-12, 28, 24, 40, 140);
+
+        // center left
+        g.drawLine(x-1, y, x-9, y-24);
+        g.drawLine(x-1, y, x-6, y-25);
+        g.drawLine(x, y, x-4, y-27);
+        g.drawLine(x, y, x-2, y-25);
+
+        // center right
+        g.drawLine(x+1, y, x+9, y-24);
+        g.drawLine(x+1, y, x+6, y-25);
+        g.drawLine(x, y, x+4, y-27);
+        g.drawLine(x, y, x+2, y-25);
+    }
+
+    void drawMouse(int x, int y, Graphics g){
+        Color mouseColor = new Color(128,128,128);
+        g.setColor(mouseColor);
+        g.fillOval(x-5, y-8, 10, 16); // body
+
+        g.setColor(Color.BLACK);
+        g.fillArc(x-5, y-1, 5, 7, 15, 180); // left ear
+        g.fillArc(x, y-1, 5, 7, 345, 180);  // right ear
+        g.fillRect(x-1, y+4, 1, 1);         // left eye
+        g.fillRect(x+1, y+4, 1, 1);         // right eye
+        g.drawArc(x-8,y-10, 8, 6, 0, 180);  // tail
+        g.drawLine(x-1, y+6, x-6, y+5);     // left top whisker
+        g.drawLine(x-1, y+6, x-5, y+7);     // left bottom whisker
+        g.drawLine(x+1, y+6, x+6, y+5);     // right top whisker
+        g.drawLine(x+1, y+6, x+5, y+7);     // right bottom whisker
     }
 
     /* Creates a random cartesian point */
@@ -276,14 +331,14 @@ public class animalSimGUI extends JPanel {
         JLabel plantLabel = new JLabel("Plants");
         panel.add(plantLabel);
         numPlantsField = new JTextField(5);
-        numPlantsField.setText("0");
+        numPlantsField.setText("10");
         panel.add(numPlantsField);
 
         // Mice
         JLabel mouseLabel = new JLabel("Mice");
         panel.add(mouseLabel);
         numMiceField = new JTextField(5);
-        numMiceField.setText("0");
+        numMiceField.setText("10"); 
         panel.add(numMiceField);
 
         return panel;
