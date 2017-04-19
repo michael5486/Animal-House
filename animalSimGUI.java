@@ -17,74 +17,57 @@ import javax.swing.border.*;
 
 public class animalSimGUI extends JPanel {
 
-	// double velocity, acceleration;
-
-	// double copInitX = 50, copInitY = 150;
-	// double speederInitX = 2, speederInitY = 153;
-
 
     /* Global variables for the GUI and set up methods */
     int numPlants;
-    int numRabbits;
+    int numMice;
     int id = 1;
     double delT = 0.1;
 
     /* GUI Animation stuff */
     Thread currentThread;
-    DecimalFormat df = new DecimalFormat ("##.##");
-    String topMessage = "";
 
     /* GUI Construction stuff */
     Container cPane = null;
-    JTextField numPlantsField, numRabbitsField;
+    JTextField numPlantsField, numMiceField;
     Dimension D;
 
-	// trooperSimulator copSim = null;
-	// trooperSimulator speederSim = null;
 
     /* List of all organisms */
     ArrayList<Organism> organisms = new ArrayList<Organism>(); // fix this
 
+    // Note from Karl:
+    // We can also make lists of specific organisms.
+    // For example:
+    //      ArrayList<Plant> plants = new ArrayList<Plant>();
+    // Then we can call specific methods from the Plant class that are not defined in the organism interface.
 
 
 
-
-
-
-    public void createAnimals() {
+    public void createAnimals() { // called from reset()
     	System.out.println("  Animals created.");
 
         // Initialize the number of animals
-        // organisms = new ArrayList<Organism>();
-
         /* Clears all organisms */
         organisms.clear();
 
         for(int i = 0; i < numPlants; i++){  // plants
             // create plants
-            organisms.add(new Organism("plant",id, createRandomPoint())); //create method for random location to initialize!
-            id++;
-            
-        }
-
-        for(int i = 0; i < numRabbits; i++){ // rabbits
-            // create rabbits
-            organisms.add(new Organism("mouse",id, createRandomPoint())); //create method for random location to initialize!
+            organisms.add(new Plant(id, createRandomPoint()));
             id++;
         }
 
-
-        //creates a cop with velocity = 10 and acceleration = 0
-		//copSim = new trooperSimulator(copInitX, copInitY, 0.0, 12, delT, true, "cop    ");
-        //creates a speeder with v = 100 and a = 0
-		//speederSim = new trooperSimulator(speederInitX, speederInitY, 100, 0, delT, false, "speeder");
+        for(int i = 0; i < numMice; i++){ // mice
+            // create mice
+            organisms.add(new Mouse(id, createRandomPoint())); //create method for random location to initialize!
+            id++;
+        }
 
 
     }
 
-////////////////////////////////////////////////////
-//Drawing
 
+    //Drawing
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
@@ -99,14 +82,15 @@ public class animalSimGUI extends JPanel {
         Color plantColor = new Color(51,102,0);
         Color mouseColor = new Color(128,128,128);
 
+
         // Draw all organisms
         for(Organism o:organisms){
             // draw o
-            if(o.type == "plant"){
+            if(o.getType() == "Plant"){
                 g.setColor(plantColor);
                 g.fillRect(o.getX(), o.getY(), 10, 10);
             }
-            else if(o.type == "mouse"){
+            else if(o.getType() == "Mouse"){
                 g.setColor(mouseColor);
                 g.fillRect(o.getX(), o.getY(), 10, 10);
             }
@@ -129,61 +113,55 @@ public class animalSimGUI extends JPanel {
 
         }
 
-
-    //Animation
-
-        /* Takes input from GUI text boxes */
-
-        void getNumOrganismsFromEntryField(){
+    /* Get input from GUI text boxes */
+    void getNumOrganismsFromEntryField(){ // called in reset()
         // Get numPlants from entry field
-            try{
-                numPlants = Integer.parseInt(numPlantsField.getText());
-                if(numPlants < 0){
-                    numPlants = 0;
-                    numPlantsField.setText("0");
-                    System.out.println("--Error: numPlants cannot be less than 0! Defaulting to 0.");
-                }
-            }
-            catch(NumberFormatException e){
-                System.out.println("--Error: Entry fields must have integer values! Defaulting numPlants to 0.");
+        try{
+            numPlants = Integer.parseInt(numPlantsField.getText());
+            if(numPlants < 0){
                 numPlants = 0;
                 numPlantsField.setText("0");
+                System.out.println("--Error: numPlants cannot be less than 0! Defaulting to 0.");
             }
-
-        // Get numRabbits from entry field
-            try{
-                numRabbits = Integer.parseInt(numRabbitsField.getText());
-                if(numRabbits < 0){
-                    numRabbits = 0;
-                    numRabbitsField.setText("0");
-                    System.out.println("--Error: numRabbits cannot be less than 0! Defaulting to 0.");
-                }
-            }
-            catch(NumberFormatException e){
-                System.out.println("--Error: Entry fields must have integer values! Defaulting numRabbits to 0.");
-                numRabbits = 0;
-                numRabbitsField.setText("0");
-            }
-
-            System.out.printf("  numPlants = %d\n  numRabbits  = %d  \n", numPlants, numRabbits);
+        }
+        catch(NumberFormatException e){
+            System.out.println("--Error: Entry fields must have integer values! Defaulting numPlants to 0.");
+            numPlants = 0;
+            numPlantsField.setText("0");
         }
 
+        // Get numMice from entry field
+        try{
+            numMice = Integer.parseInt(numMiceField.getText());
+            if(numMice < 0){
+                numMice = 0;
+                numMiceField.setText("0");
+                System.out.println("--Error: numMice cannot be less than 0! Defaulting to 0.");
+            }
+        }
+        catch(NumberFormatException e){
+            System.out.println("--Error: Entry fields must have integer values! Defaulting numMice to 0.");
+            numMice = 0;
+            numMiceField.setText("0");
+        }
 
-    //TODO
-    //need to make this fail gracefully...capture conversion errors with try/catch
-        void reset() {
-            System.out.println("\nReset:");
+        System.out.printf("  numPlants = %d\n  numMice  = %d  \n", numPlants, numMice);
+    }
+
+
+    void reset() {
+        System.out.println("\nReset:");
 
         // Read values from bottom entry fields
-            getNumOrganismsFromEntryField();
+        getNumOrganismsFromEntryField();
 
         // Create animals
-            createAnimals();
+        createAnimals();
 
-            this.repaint();
-        }
+        this.repaint();
+    }
 
-        void go () {
+    void go () {
         stopAnimationThread ();    // To ensure only one thread.
         
         currentThread = new Thread () {
@@ -217,7 +195,6 @@ public class animalSimGUI extends JPanel {
     			break;
     		}
 
-    		//topMessage = "Time: " + df.format(copSim.getTime());
     		this.repaint ();
 
     		try {
@@ -228,7 +205,6 @@ public class animalSimGUI extends JPanel {
     		}
         } //endwhile
         
-        //topMessage = "Time: " + df.format(copSim.getTime()) + " trooperSpeed: " + df.format(copSim.getV());
         this.repaint ();
     }
 
@@ -239,8 +215,7 @@ public class animalSimGUI extends JPanel {
     	}
     }
 
-//GUI Contructions
-
+    //GUI Contructions
     JPanel makeControlPanel() {
     	JPanel panel = new JPanel();
 
@@ -307,13 +282,12 @@ public class animalSimGUI extends JPanel {
         // Mice
         JLabel mouseLabel = new JLabel("Mice");
         panel.add(mouseLabel);
-        numRabbitsField = new JTextField(5);
-        numRabbitsField.setText("0");
-        panel.add(numRabbitsField);
+        numMiceField = new JTextField(5);
+        numMiceField.setText("0");
+        panel.add(numMiceField);
 
         return panel;
     }
-
 
 
     JPanel makeBottomPanel () {

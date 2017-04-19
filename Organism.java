@@ -2,36 +2,17 @@ import java.awt.*;
 import java.awt.geom.*;
 
 
-public class Organism{
-	
-	int id;
-	int X, Y;
-	String type;
+public interface Organism{
 
-	Organism(String type, int id, int x, int y){
-		this.type = type;
-		this.id = id;
-		this.X = x;
-		this.Y = y;
-	}
+	public int getID();
+	public String getType();
+	public int getX();
+	public int getY();
 
-	Organism(String type, int id, Point2D.Double randPoint) {
-		this.type = type;
-		this.id = id;
-		this.X = (int)randPoint.x;
-		this.Y = (int)randPoint.y;
-	}
+	public void setX(int x);
+	public void setY(int y);
+	public void setXY(Point2D.Double point);
 
-	int getID(){
-		return this.id;
-	}
-	String getType(){
-		return this.type;
-	}
-	int getX(){
-		return this.X;
-	}
-	int getY(){
-		return this.Y;
-	}
+	public String toString();
 }
+
