@@ -7,30 +7,17 @@ import javax.swing.*;
 
 public class animalSimulator {
 
-    public double x;
-    public double y;
-    public double v; 
-    public double a;
+
 
     public double t = 0;
     public double delT;
 
-    public double totalDistance = 0;
+    ArrayList<Organism> organisms;
 
-    public boolean isCop;
-    public int lightsCount;
+    public animalSimulator(ArrayList<Organism> organisms, double initDelT) {
 
-    public String type = "";
-
-
-    public animalSimulator(double initX, double initY, double initV, double initA, double initDelT, boolean initIsCop, String initType) {
-    	x = initX;
-        y = initY;
-        v = initV;
-        a = initA;
+        this.organisms = organisms;
         delT = initDelT;
-        isCop = initIsCop;
-        type = initType;
     }
     
     public void draw (Graphics2D g2, Dimension D) {

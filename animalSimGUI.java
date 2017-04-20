@@ -18,9 +18,17 @@ import javax.swing.border.*;
 public class animalSimGUI extends JPanel {
 
 
+    // Initial numbers of organisms
+    int numPlants = 10;
+    int numMice = 20;
+
+    /* Animation Options */
+    boolean drawOrganismAxes = false;
+    int sleepTime = 150;
+
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /* Global variables for the GUI and set up methods */
-    int numPlants;
-    int numMice;
     int id = 1;
     double delT = 0.1;
 
@@ -32,12 +40,8 @@ public class animalSimGUI extends JPanel {
     JTextField numPlantsField, numMiceField;
     Dimension D;
 
-    /* Animation Options */
-    boolean drawOrganismAxes = false;
-
-
     /* List of all organisms */
-    ArrayList<Organism> organisms = new ArrayList<Organism>(); // fix this
+    ArrayList<Organism> organisms = new ArrayList<Organism>();
 
     // Note from Karl:
     // We can also make lists of specific organisms.
@@ -78,7 +82,6 @@ public class animalSimGUI extends JPanel {
         /* Makes center panel background light green */
         g.setColor(new Color(150, 243, 152));
         g.fillRect(0,0, D.width, D.height);
-
 
         // Draw all organisms
         for(Organism o:organisms){
@@ -154,12 +157,16 @@ public class animalSimGUI extends JPanel {
 
     /* Creates a random cartesian point */
     Point2D.Double createRandomPoint() {
+        int screenWidth = D.width;
+        int screenHeight = D.height;
 
         /* Creates random x coordinate */
-        int cartX = RandTool.uniform(0, D.width);
+        // int cartX = RandTool.uniform(0, screenWidth);
+        int cartX = (int)(Math.random()*screenWidth);
 
         /* Creates random y coordinate */
-        int javaY = RandTool.uniform(0, D.height);
+        // int javaY = RandTool.uniform(0, screenHeight);
+        int javaY = (int)(Math.random()*screenHeight);
         int cartY = D.height - javaY;
 
         Point2D.Double randPoint = new Point2D.Double(cartX, cartY);
@@ -230,6 +237,10 @@ public class animalSimGUI extends JPanel {
 
     boolean nextStep() {
 
+        for(Organism o : organisms){
+            o.randomWalk();
+        }
+
     	//Call nextstep for the cop and speedingCar
     	// copSim.nextStep(delT);
     	// speederSim.nextStep(delT);
@@ -253,7 +264,7 @@ public class animalSimGUI extends JPanel {
     		this.repaint ();
 
     		try {
-    			Thread.sleep (25);
+    			Thread.sleep (sleepTime);
     		}
     		catch (InterruptedException e){
     			break;
@@ -287,26 +298,26 @@ public class animalSimGUI extends JPanel {
 
         resetB.addActionListener (
             new ActionListener () {
-             public void actionPerformed (ActionEvent a)
-             {
-                 reset ();
-             }
-         }
-         );
-        goButton.addActionListener(
-          new ActionListener () {
-             public void actionPerformed (ActionEvent a) {
-                go();
+                public void actionPerformed (ActionEvent a)
+                {
+                    reset ();
+                }
             }
-        }
+        );
+        goButton.addActionListener(
+            new ActionListener () {
+                public void actionPerformed (ActionEvent a) {
+                    go();
+                }
+            }
         );
 
         quitButton.addActionListener(
-          new ActionListener () {
-             public void actionPerformed (ActionEvent a) {
-                System.exit(0);
+            new ActionListener () {
+                public void actionPerformed (ActionEvent a) {
+                    System.exit(0);
+                }
             }
-        }
         );
 
         panel.add (resetB);
@@ -331,14 +342,14 @@ public class animalSimGUI extends JPanel {
         JLabel plantLabel = new JLabel("Plants");
         panel.add(plantLabel);
         numPlantsField = new JTextField(5);
-        numPlantsField.setText("10");
+        numPlantsField.setText(Integer.toString(numPlants));
         panel.add(numPlantsField);
 
         // Mice
         JLabel mouseLabel = new JLabel("Mice");
         panel.add(mouseLabel);
         numMiceField = new JTextField(5);
-        numMiceField.setText("10"); 
+        numMiceField.setText(Integer.toString(numMice)); 
         panel.add(numMiceField);
 
         return panel;
@@ -377,6 +388,10 @@ public class animalSimGUI extends JPanel {
     	//cPane.setBackground(Color.black);
     	//cPane.repaint();
     	frame.setVisible (true);
+
+        D = this.getSize();
+
+        reset();
     }
 
     public static void main(String[] args) {

@@ -26,6 +26,11 @@ public class Plant implements Organism{
 		this.Y = (int)randomPoint.y;
 	}
 
+	// Control Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	public void randomWalk(){
+		//do nothing. plants don't move!
+	}
+
 
 	// Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

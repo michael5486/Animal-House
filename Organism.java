@@ -13,6 +13,8 @@ public interface Organism{
 	public void setY(int y);
 	public void setXY(Point2D.Double point);
 
+	public void randomWalk();
+
 	public String toString();
 }
 
