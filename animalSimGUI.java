@@ -228,7 +228,7 @@ public class animalSimGUI extends JPanel {
 
     void go () {
 
-        System.out.println("Going...");
+        System.out.println("Go:");
 
         if (isPaused) {
             isPaused = false;
@@ -247,7 +247,7 @@ public class animalSimGUI extends JPanel {
     }
 
     void pause() {
-        System.out.println("Pausing...");
+        System.out.println("Pause:");
         isPaused = true;
     }
 
@@ -270,7 +270,6 @@ public class animalSimGUI extends JPanel {
 
     void animate () {
     	while (true) {
-
 
             if (!isPaused) {
                 boolean done = nextStep();
@@ -309,6 +308,9 @@ public class animalSimGUI extends JPanel {
     //GUI Contructions
     JPanel makeControlPanel() {
     	JPanel panel = new JPanel();
+        panel.setLayout (new GridLayout(2,1));
+
+
 
         /* set the border and give it a title */
         TitledBorder border = new TitledBorder("Controls");
@@ -316,7 +318,10 @@ public class animalSimGUI extends JPanel {
         border.setTitlePosition(TitledBorder.TOP);
         panel.setBorder (border);
 
-    	//panel.setLayout(1,5);
+
+        /* make a panel for the buttons */
+        JPanel buttonPanel = new JPanel();
+
         JButton resetB = new JButton ("Reset");
         JButton goButton = new JButton("Go");
         JButton quitButton = new JButton("Quit");
@@ -354,37 +359,45 @@ public class animalSimGUI extends JPanel {
             }
         );
 
-        speedSlider = new JSlider (0, 10, 5);
+
+        buttonPanel.add(quitButton);
+        buttonPanel.add(resetB);
+        buttonPanel.add(goButton);
+        buttonPanel.add(pauseButton);
+
+        panel.add(buttonPanel); // add button panel to control panel
+
+
+        /* make a panel for the speed slider */
+        JPanel sliderPanel = new JPanel();
+
+        speedSlider = new JSlider (0, 20, 15);
         speedSlider.setInverted(true);
-        speedSlider.setPaintLabels(true);
-        Hashtable<Integer, JLabel> labelDict = new Hashtable<Integer, JLabel>();
-        labelDict.put(0, new JLabel("slow"));
-        labelDict.put(1, new JLabel("medium"));
-        labelDict.put(2, new JLabel("fast"));
-        speedSlider.setLabelTable(labelDict);
         speedSlider.setMajorTickSpacing(5);
         speedSlider.setMinorTickSpacing(1);
         speedSlider.setPaintTicks(true);
-        speedSlider.setPaintLabels(true);
+        speedSlider.setPaintLabels(false); // true/false
         speedSlider.addChangeListener (
             new ChangeListener () {
                 public void stateChanged (ChangeEvent c) {
-                    sleepTime = speedSlider.getValue() * 30;
-                    System.out.println("Changing sleeptime to " + sleepTime + " ...");
+                    sleepTime = speedSlider.getValue() * 20;
+                    System.out.println("Sleeptime: " + sleepTime + " ms");
                 }
             }
         );
 
-        panel.add (resetB);
-        panel.add(goButton);
-        panel.add(pauseButton);
-        panel.add(quitButton);
-        panel.add(speedSlider);
+        sliderPanel.add(new JLabel("slow"));
+        sliderPanel.add(speedSlider);
+        sliderPanel.add(new JLabel("fast"));
+
+        panel.add(sliderPanel); // add slider panel to control panel
+
         return panel;
     }
 
     JPanel makeEntryPanel() {
         JPanel panel = new JPanel();
+
         
         /* Set the border and give it a title */
         TitledBorder border = new TitledBorder("Enter the number of organisms");
@@ -419,7 +432,7 @@ public class animalSimGUI extends JPanel {
     	/* creates a GridLayout with two rows and one column */
     	panel.setLayout (new GridLayout (1,1));
 
-    	/* creates a panel with Reset, Go, and Quit buttons */
+    	/* creates a control panel with Reset, Go, and Quit buttons as well as slider bar for sleep time*/
     	JPanel sPanel = makeControlPanel ();
     	panel.add (sPanel);
 
@@ -442,8 +455,6 @@ public class animalSimGUI extends JPanel {
     	cPane = frame.getContentPane();
     	cPane.add (makeBottomPanel(), BorderLayout.SOUTH);
     	cPane.add (this, BorderLayout.CENTER);
-    	//cPane.setBackground(Color.black);
-    	//cPane.repaint();
     	frame.setVisible (true);
 
         D = this.getSize();
