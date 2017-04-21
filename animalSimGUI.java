@@ -75,6 +75,176 @@ public class animalSimGUI extends JPanel {
     }
 
 
+
+    /* Creates a random cartesian point */
+    Point2D.Double createRandomPoint() {
+        int screenWidth = D.width;
+        int screenHeight = D.height;
+
+        /* Creates random x coordinate */
+        // int cartX = RandTool.uniform(0, screenWidth);
+        int cartX = (int)(Math.random()*screenWidth);
+
+        /* Creates random y coordinate */
+        // int javaY = RandTool.uniform(0, screenHeight);
+        int javaY = (int)(Math.random()*screenHeight);
+        int cartY = D.height - javaY;
+
+        Point2D.Double randPoint = new Point2D.Double(cartX, cartY);
+
+        return randPoint; 
+
+    }
+
+    /* Check to see if a point is within screen boundary */
+    boolean isPointWithinBoundary(Point2D.Double point){
+        int x = (int)point.x;
+        int y = (int)point.y;
+        int screenWidth = D.width;
+        int screenHeight = D.height;
+
+        if(x >= 0 && y >= 0 && x < screenWidth && y < screenHeight){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    /* Get input from GUI text boxes */
+    void getNumOrganismsFromEntryField(){ // called in reset()
+        // Get numPlants from entry field
+        try{
+            numPlants = Integer.parseInt(numPlantsField.getText());
+            if(numPlants < 0){
+                numPlants = 0;
+                numPlantsField.setText("0");
+                System.out.println("--Error: numPlants cannot be less than 0! Defaulting to 0.");
+            }
+        }
+        catch(NumberFormatException e){
+            System.out.println("--Error: Entry fields must have integer values! Defaulting numPlants to 0.");
+            numPlants = 0;
+            numPlantsField.setText("0");
+        }
+
+        // Get numMice from entry field
+        try{
+            numMice = Integer.parseInt(numMiceField.getText());
+            if(numMice < 0){
+                numMice = 0;
+                numMiceField.setText("0");
+                System.out.println("--Error: numMice cannot be less than 0! Defaulting to 0.");
+            }
+        }
+        catch(NumberFormatException e){
+            System.out.println("--Error: Entry fields must have integer values! Defaulting numMice to 0.");
+            numMice = 0;
+            numMiceField.setText("0");
+        }
+
+        System.out.printf("  numPlants = %d\n  numMice  = %d  \n", numPlants, numMice);
+    }
+
+    boolean nextStep() {
+        for(Organism o : organisms){
+            
+            // initialize newLocation point that is not within boundary
+            Point2D.Double newLocation = new Point2D.Double(-1,-1); 
+            
+            // loop until generated point is within boundary
+            while(!isPointWithinBoundary(newLocation)){
+                newLocation = o.randomWalk();
+            }
+            o.setXY(newLocation);
+        }
+
+        //Call nextstep for the cop and speedingCar
+        // copSim.nextStep(delT);
+        // speederSim.nextStep(delT);
+
+     //    copX.add(copSim.getTime(), copSim.getX());
+     //    speederX.add(speederSim.getTime(), speederSim.getX());
+
+        //check if cop has caught up to speeder, return true or false
+        return false;
+    }
+
+    void reset() {
+        System.out.println("\nReset:");
+
+        // Read values from bottom entry fields
+        getNumOrganismsFromEntryField();
+
+        // Create animals
+        createAnimals();
+
+        this.repaint();
+    }
+
+    void go () {
+
+        System.out.println("Go:");
+
+        if (isPaused) {
+            isPaused = false;
+            return;
+        }
+
+        stopAnimationThread ();    // To ensure only one thread.
+        
+        currentThread = new Thread () {
+        	public void run () 
+        	{
+        		animate ();
+        	}
+        };
+        currentThread.start();
+    }
+
+    void pause() {
+        System.out.println("Pause:");
+        isPaused = true;
+    }
+
+    void animate () {
+    	while (true) {
+
+            if (!isPaused) {
+                boolean done = nextStep();
+                if (done) {
+                    System.out.println ("DONE!");
+                    break;
+                }
+            }
+
+    		// boolean done = nextStep ();
+    		// if (done) {
+    		// 	System.out.println ("DONE!");
+    		// 	break;
+    		// }
+
+    		this.repaint ();
+
+    		try {
+    			Thread.sleep (sleepTime);
+    		}
+    		catch (InterruptedException e){
+    			break;
+    		}
+        } //endwhile
+        
+        this.repaint ();
+    }
+
+    void stopAnimationThread () {
+    	if (currentThread != null) {
+    		currentThread.interrupt ();
+    		currentThread = null;
+    	}
+    }
+
+
     //Drawing
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -156,153 +326,6 @@ public class animalSimGUI extends JPanel {
         g.drawLine(x-1, y+6, x-5, y+7);     // left bottom whisker
         g.drawLine(x+1, y+6, x+6, y+5);     // right top whisker
         g.drawLine(x+1, y+6, x+5, y+7);     // right bottom whisker
-    }
-
-    /* Creates a random cartesian point */
-    Point2D.Double createRandomPoint() {
-        int screenWidth = D.width;
-        int screenHeight = D.height;
-
-        /* Creates random x coordinate */
-        // int cartX = RandTool.uniform(0, screenWidth);
-        int cartX = (int)(Math.random()*screenWidth);
-
-        /* Creates random y coordinate */
-        // int javaY = RandTool.uniform(0, screenHeight);
-        int javaY = (int)(Math.random()*screenHeight);
-        int cartY = D.height - javaY;
-
-        Point2D.Double randPoint = new Point2D.Double(cartX, cartY);
-
-        return randPoint; 
-
-        }
-
-    /* Get input from GUI text boxes */
-    void getNumOrganismsFromEntryField(){ // called in reset()
-        // Get numPlants from entry field
-        try{
-            numPlants = Integer.parseInt(numPlantsField.getText());
-            if(numPlants < 0){
-                numPlants = 0;
-                numPlantsField.setText("0");
-                System.out.println("--Error: numPlants cannot be less than 0! Defaulting to 0.");
-            }
-        }
-        catch(NumberFormatException e){
-            System.out.println("--Error: Entry fields must have integer values! Defaulting numPlants to 0.");
-            numPlants = 0;
-            numPlantsField.setText("0");
-        }
-
-        // Get numMice from entry field
-        try{
-            numMice = Integer.parseInt(numMiceField.getText());
-            if(numMice < 0){
-                numMice = 0;
-                numMiceField.setText("0");
-                System.out.println("--Error: numMice cannot be less than 0! Defaulting to 0.");
-            }
-        }
-        catch(NumberFormatException e){
-            System.out.println("--Error: Entry fields must have integer values! Defaulting numMice to 0.");
-            numMice = 0;
-            numMiceField.setText("0");
-        }
-
-        System.out.printf("  numPlants = %d\n  numMice  = %d  \n", numPlants, numMice);
-    }
-
-
-    void reset() {
-        System.out.println("\nReset:");
-
-        // Read values from bottom entry fields
-        getNumOrganismsFromEntryField();
-
-        // Create animals
-        createAnimals();
-
-        this.repaint();
-    }
-
-    void go () {
-
-        System.out.println("Go:");
-
-        if (isPaused) {
-            isPaused = false;
-            return;
-        }
-
-        stopAnimationThread ();    // To ensure only one thread.
-        
-        currentThread = new Thread () {
-        	public void run () 
-        	{
-        		animate ();
-        	}
-        };
-        currentThread.start();
-    }
-
-    void pause() {
-        System.out.println("Pause:");
-        isPaused = true;
-    }
-
-    boolean nextStep() {
-
-        for(Organism o : organisms){
-            o.randomWalk();
-        }
-
-    	//Call nextstep for the cop and speedingCar
-    	// copSim.nextStep(delT);
-    	// speederSim.nextStep(delT);
-
-     //    copX.add(copSim.getTime(), copSim.getX());
-     //    speederX.add(speederSim.getTime(), speederSim.getX());
-
-    	//check if cop has caught up to speeder, return true or false
-    	return false;
-    }
-
-    void animate () {
-    	while (true) {
-
-            if (!isPaused) {
-                boolean done = nextStep();
-                if (done) {
-                    System.out.println ("DONE!");
-                    break;
-                }
-            }
-
-    		// boolean done = nextStep ();
-    		// if (done) {
-    		// 	System.out.println ("DONE!");
-    		// 	break;
-    		// }
-
-    		this.repaint ();
-
-    		try {
-    			Thread.sleep (sleepTime);
-    		}
-    		catch (InterruptedException e){
-    			break;
-    		}
-        } //endwhile
-        
-        this.repaint ();
-    }
-
-    void stopAnimationThread () {
-    	if (currentThread != null) {
-    		currentThread.interrupt ();
-    		currentThread = null;
-    	}
     }
 
     //GUI Contructions
@@ -425,7 +448,6 @@ public class animalSimGUI extends JPanel {
         return panel;
     }
 
-
     JPanel makeBottomPanel () {
     	JPanel panel = new JPanel ();
 
@@ -444,7 +466,6 @@ public class animalSimGUI extends JPanel {
         return panel;
     }
 
-
     void makeFrame () {
     	JFrame frame = new JFrame ();
     	frame.setSize (1000, 700);
@@ -462,6 +483,7 @@ public class animalSimGUI extends JPanel {
         reset();
     }
 
+    // Main
     public static void main(String[] args) {
     	animalSimGUI gui = new animalSimGUI();
     	gui.makeFrame();

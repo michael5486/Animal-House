@@ -27,8 +27,9 @@ public class Plant implements Organism{
 	}
 
 	// Control Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	public void randomWalk(){
+	public Point2D.Double randomWalk(){
 		//do nothing. plants don't move!
+		return (new Point2D.Double(this.X, this.Y));
 	}
 
 
@@ -46,6 +47,9 @@ public class Plant implements Organism{
 	}
 	public int getY(){
 		return this.Y;
+	}
+	public Point2D.Double getXY(){
+		return new Point2D.Double(this.X, this.Y);
 	}
 
 	// Set

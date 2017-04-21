@@ -6,18 +6,21 @@ import java.util.*;
 public class Mouse implements Organism{
 	
 	// Constants (specific to this animal type)
-	String type = "Mouse";
-	int maxHealth = 5;
-	int speed = 5;
+	static final String type = "Mouse";
+	static final int maxHealth = 5;
+	static final int maxSpeed = 5;
 
-	// Variables (to be set)
+	// Variables (to be set and changed)
 	int id;
 	int X, Y;
 	int prevX, prevY;
-
+	Dimension D;           // current screen size
+	int speed = maxSpeed;
 
 
 	// Constructors ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
+	// Create a mouse at a location X,Y
 	Mouse(int id, int x, int y){
 		this.id = id;
 		this.X = x;
@@ -26,6 +29,7 @@ public class Mouse implements Organism{
 		this.prevY = y;
 	}
 
+	// Create a mouse at a location X,Y
 	Mouse(int id, Point2D.Double randomPoint){
 		this.id = id;
 		this.X = (int)randomPoint.x;
@@ -37,9 +41,11 @@ public class Mouse implements Organism{
 
 	// Control Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	public void randomWalk(){
+	public Point2D.Double randomWalk(){
 		
 		String prevDirection = "none";
+		int newX = this.X;
+		int newY = this.Y;
 
 		// get previous direction of travel from X,Y and prevX and prevY
 		if(this.X - this.prevX == 0 && this.Y - this.prevY < 0){
@@ -66,16 +72,16 @@ public class Mouse implements Organism{
 		if(Math.random() < sameDirectionChance){
 			// continue moving in same direction as previous move
 			if(prevDirection == "north"){
-				this.Y -= speed;
+				newY -= speed;
 			}
 			else if(prevDirection == "south"){
-				this.Y += speed;
+				newY += speed;
 			}
 			else if(prevDirection == "east"){
-				this.X += speed;
+				newX += speed;
 			}
 			else if(prevDirection == "west"){
-				this.X -= speed;
+				newX -= speed;
 			}
 			else if(prevDirection == "none"){
 				// do nothing
@@ -86,26 +92,29 @@ public class Mouse implements Organism{
 			double newDirection = Math.random();
 
 	        if(newDirection < 0.2){ // north
-	        	this.Y -= speed;
+	        	newY -= speed;
 	        }
 	        else if(newDirection < 0.4){ // south
-	        	this.Y += speed;
+	        	newY += speed;
 	        }
 	        else if(newDirection < 0.6){ // east
-	        	this.X += speed;
+	        	newX += speed;
 	        }
 	        else if(newDirection < 0.8){ // west
-	        	this.X -= speed;
+	        	newX -= speed;
 	        }
 	        else if(newDirection < 1.0){ // same spot
 	        	// do nothing
 	        }
 		}
 
-		// update prevX and prevY
-		this.prevX = this.X;
-		this.prevY = this.Y;
+		// // update prevX and prevY
+		// this.prevX = this.X;
+		// this.prevY = this.Y;
+
+		return (new Point2D.Double(newX,newY));
 	}
+
 
 
 	// Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -123,6 +132,10 @@ public class Mouse implements Organism{
 	public int getY(){
 		return this.Y;
 	}
+	public Point2D.Double getXY(){
+		return (new Point2D.Double(this.X, this.Y));
+	}
+
 
 	// Set
 	public void setX(int x){
@@ -132,6 +145,11 @@ public class Mouse implements Organism{
 		this.Y = y;
 	}
 	public void setXY(Point2D.Double point){
+		// update prevX and prevY
+		this.prevX = this.X;
+		this.prevY = this.Y;
+
+		// set new X and Y
 		this.X = (int)point.x;
 		this.Y = (int)point.y;
 	}
