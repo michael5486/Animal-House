@@ -24,7 +24,6 @@ public class animalSimGUI extends JPanel {
 
     /* Animation Options */
     boolean drawOrganismAxes = false;
-    int sleepTime = 150;
 
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,10 +34,13 @@ public class animalSimGUI extends JPanel {
     /* GUI Animation stuff */
     Thread currentThread;
     boolean isPaused = false;
+    int sleepTime = 150;
+
 
     /* GUI Construction stuff */
     Container cPane = null;
     JTextField numPlantsField, numMiceField;
+    JSlider speedSlider;
     Dimension D;
 
     /* List of all organisms */
@@ -226,6 +228,8 @@ public class animalSimGUI extends JPanel {
 
     void go () {
 
+        System.out.println("Going...");
+
         if (isPaused) {
             isPaused = false;
             return;
@@ -312,7 +316,7 @@ public class animalSimGUI extends JPanel {
         border.setTitlePosition(TitledBorder.TOP);
         panel.setBorder (border);
 
-    	//panel.setLayout(2,1);
+    	//panel.setLayout(1,5);
         JButton resetB = new JButton ("Reset");
         JButton goButton = new JButton("Go");
         JButton quitButton = new JButton("Quit");
@@ -350,10 +354,32 @@ public class animalSimGUI extends JPanel {
             }
         );
 
+        speedSlider = new JSlider (0, 10, 5);
+        speedSlider.setInverted(true);
+        speedSlider.setPaintLabels(true);
+        Hashtable<Integer, JLabel> labelDict = new Hashtable<Integer, JLabel>();
+        labelDict.put(0, new JLabel("slow"));
+        labelDict.put(1, new JLabel("medium"));
+        labelDict.put(2, new JLabel("fast"));
+        speedSlider.setLabelTable(labelDict);
+        speedSlider.setMajorTickSpacing(5);
+        speedSlider.setMinorTickSpacing(1);
+        speedSlider.setPaintTicks(true);
+        speedSlider.setPaintLabels(true);
+        speedSlider.addChangeListener (
+            new ChangeListener () {
+                public void stateChanged (ChangeEvent c) {
+                    sleepTime = speedSlider.getValue() * 30;
+                    System.out.println("Changing sleeptime to " + sleepTime + " ...");
+                }
+            }
+        );
+
         panel.add (resetB);
         panel.add(goButton);
         panel.add(pauseButton);
         panel.add(quitButton);
+        panel.add(speedSlider);
         return panel;
     }
 
