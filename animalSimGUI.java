@@ -34,6 +34,7 @@ public class animalSimGUI extends JPanel {
 
     /* GUI Animation stuff */
     Thread currentThread;
+    boolean isPaused = false;
 
     /* GUI Construction stuff */
     Container cPane = null;
@@ -224,6 +225,12 @@ public class animalSimGUI extends JPanel {
     }
 
     void go () {
+
+        if (isPaused) {
+            isPaused = false;
+            return;
+        }
+
         stopAnimationThread ();    // To ensure only one thread.
         
         currentThread = new Thread () {
@@ -233,6 +240,11 @@ public class animalSimGUI extends JPanel {
         	}
         };
         currentThread.start();
+    }
+
+    void pause() {
+        System.out.println("Pausing...");
+        isPaused = true;
     }
 
     boolean nextStep() {
@@ -255,11 +267,20 @@ public class animalSimGUI extends JPanel {
     void animate () {
     	while (true) {
 
-    		boolean done = nextStep ();
-    		if (done) {
-    			System.out.println ("DONE!");
-    			break;
-    		}
+
+            if (!isPaused) {
+                boolean done = nextStep();
+                if (done) {
+                    System.out.println ("DONE!");
+                    break;
+                }
+            }
+
+    		// boolean done = nextStep ();
+    		// if (done) {
+    		// 	System.out.println ("DONE!");
+    		// 	break;
+    		// }
 
     		this.repaint ();
 
@@ -295,6 +316,7 @@ public class animalSimGUI extends JPanel {
         JButton resetB = new JButton ("Reset");
         JButton goButton = new JButton("Go");
         JButton quitButton = new JButton("Quit");
+        JButton pauseButton = new JButton("Pause");
 
         resetB.addActionListener (
             new ActionListener () {
@@ -320,8 +342,17 @@ public class animalSimGUI extends JPanel {
             }
         );
 
+        pauseButton.addActionListener(
+            new ActionListener () {
+                public void actionPerformed (ActionEvent a) {
+                    pause();
+                }
+            }
+        );
+
         panel.add (resetB);
         panel.add(goButton);
+        panel.add(pauseButton);
         panel.add(quitButton);
         return panel;
     }
