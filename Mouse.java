@@ -62,7 +62,7 @@ public class Mouse implements Organism{
 		}
 
 		// chance of this animal moving in the same direction
-		double sameDirectionChance = 0.99999;
+		double sameDirectionChance = 0.8;
 
 		// chance of this animal staying in the same location
 		if(prevDirection == "none"){
@@ -107,10 +107,6 @@ public class Mouse implements Organism{
 	        	// do nothing
 	        }
 		}
-
-		// // update prevX and prevY
-		// this.prevX = this.X;
-		// this.prevY = this.Y;
 
 		return (new Point2D.Double(newX,newY));
 	}

@@ -15,8 +15,12 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
 
+
 public class animalSimGUI extends JPanel {
 
+
+    // Animal Simulator
+    AnimalSimulator animalSimulator;
 
     // Initial numbers of organisms
     int numPlants = 10;
@@ -28,7 +32,7 @@ public class animalSimGUI extends JPanel {
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /* Global variables for the GUI and set up methods */
-    int id = 1;
+    
     double delT = 0.1;
 
     /* GUI Animation stuff */
@@ -36,80 +40,18 @@ public class animalSimGUI extends JPanel {
     boolean isPaused = false;
     int sleepTime = 150;
 
-
     /* GUI Construction stuff */
     Container cPane = null;
     JTextField numPlantsField, numMiceField;
     JSlider speedSlider;
     Dimension D;
 
-    /* List of all organisms */
-    ArrayList<Organism> organisms = new ArrayList<Organism>();
-
-    // Note from Karl:
-    // We can also make lists of specific organisms.
-    // For example:
-    //      ArrayList<Plant> plants = new ArrayList<Plant>();
-    // Then we can call specific methods from the Plant class that are not defined in the organism interface.
 
 
 
-    public void createAnimals() { // called from reset()
-    	System.out.println("  Animals created.");
-
-        // Initialize the number of animals
-        /* Clears all organisms */
-        organisms.clear();
-
-        for(int i = 0; i < numPlants; i++){  // plants
-            // create plants
-            organisms.add(new Plant(id, createRandomPoint()));
-            id++;
-        }
-
-        for(int i = 0; i < numMice; i++){ // mice
-            // create mice
-            organisms.add(new Mouse(id, createRandomPoint())); //create method for random location to initialize!
-            id++;
-        }
-    }
 
 
 
-    /* Creates a random cartesian point */
-    Point2D.Double createRandomPoint() {
-        int screenWidth = D.width;
-        int screenHeight = D.height;
-
-        /* Creates random x coordinate */
-        // int cartX = RandTool.uniform(0, screenWidth);
-        int cartX = (int)(Math.random()*screenWidth);
-
-        /* Creates random y coordinate */
-        // int javaY = RandTool.uniform(0, screenHeight);
-        int javaY = (int)(Math.random()*screenHeight);
-        int cartY = D.height - javaY;
-
-        Point2D.Double randPoint = new Point2D.Double(cartX, cartY);
-
-        return randPoint; 
-
-    }
-
-    /* Check to see if a point is within screen boundary */
-    boolean isPointWithinBoundary(Point2D.Double point){
-        int x = (int)point.x;
-        int y = (int)point.y;
-        int screenWidth = D.width;
-        int screenHeight = D.height;
-
-        if(x >= 0 && y >= 0 && x < screenWidth && y < screenHeight){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
 
     /* Get input from GUI text boxes */
     void getNumOrganismsFromEntryField(){ // called in reset()
@@ -147,18 +89,23 @@ public class animalSimGUI extends JPanel {
     }
 
     boolean nextStep() {
-        for(Organism o : organisms){
-            
-            // initialize newLocation point that is not within boundary
-            Point2D.Double newLocation = new Point2D.Double(-1,-1); 
-            
-            // loop until generated point is within boundary
-            while(!isPointWithinBoundary(newLocation)){
-                newLocation = o.randomWalk();
-            }
-            o.setXY(newLocation);
-        }
 
+        animalSimulator.nextStep(delT);
+
+        // for(Organism o : organisms){
+            
+        //     // initialize newLocation point that is not within boundary
+        //     Point2D.Double newLocation = new Point2D.Double(-1,-1); 
+            
+        //     // loop until generated point is within boundary
+        //     while(!isPointWithinBoundary(newLocation)){
+        //         newLocation = o.randomWalk();
+        //     }
+        //     o.setXY(newLocation);
+        // }
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~`
         //Call nextstep for the cop and speedingCar
         // copSim.nextStep(delT);
         // speederSim.nextStep(delT);
@@ -167,7 +114,7 @@ public class animalSimGUI extends JPanel {
      //    speederX.add(speederSim.getTime(), speederSim.getX());
 
         //check if cop has caught up to speeder, return true or false
-        return false;
+        return false; // done = true
     }
 
     void reset() {
@@ -176,8 +123,11 @@ public class animalSimGUI extends JPanel {
         // Read values from bottom entry fields
         getNumOrganismsFromEntryField();
 
-        // Create animals
-        createAnimals();
+        // Initialize animal simulator
+        animalSimulator = new AnimalSimulator(D, delT, numPlants, numMice);
+
+        // // Create animals 
+        // createAnimals(); ----- get rid of this. now called in AnimalSimulator
 
         this.repaint();
     }
@@ -257,25 +207,28 @@ public class animalSimGUI extends JPanel {
         g.fillRect(0,0, D.width, D.height);
 
         // Draw all organisms
-        for(Organism o:organisms){
-            int x = o.getX();
-            int y = o.getY();
+        if(animalSimulator != null){
+            for(Organism o : animalSimulator.organisms){
+                int x = o.getX();
+                int y = o.getY();
 
-            // Draw the x-y axes of the organism.
-            if(drawOrganismAxes){
-                g.setColor(Color.BLACK);
-                g.drawLine(x-20, y, x+20, y); // x-axis
-                g.drawLine(x, y-20, x, y+20); // y-axis
-            }
-           
-            // draw organism o
-            if(o.getType() == "Plant"){
-                drawPlant(x, y, g);
-            }
-            else if(o.getType() == "Mouse"){
-                drawMouse(x, y, g);
+                // Draw the x-y axes of the organism.
+                if(drawOrganismAxes){
+                    g.setColor(Color.BLACK);
+                    g.drawLine(x-20, y, x+20, y); // x-axis
+                    g.drawLine(x, y-20, x, y+20); // y-axis
+                }
+               
+                // draw organism o
+                if(o.getType() == "Plant"){
+                    drawPlant(x, y, g);
+                }
+                else if(o.getType() == "Mouse"){
+                    drawMouse(x, y, g);
+                }
             }
         }
+        
     }
 
     void drawPlant(int x, int y, Graphics g){
