@@ -41,12 +41,13 @@ public class AnimalSimulator {
         // create animals
         createAnimals();
 
-        for(Organism o : organisms){
-            if(o.getType() == "Plant"){
-                Plant p = (Plant)o;
-                p.whatIAm();
-            }
-        }
+        // For testing purposes
+        // for(Organism o : organisms){
+        //     if(o.getType() == "Plant"){
+        //         Plant p = (Plant)o;
+        //         p.whatIAm();
+        //     }
+        // }
     }
 
 

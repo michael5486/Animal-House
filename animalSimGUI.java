@@ -28,6 +28,7 @@ public class animalSimGUI extends JPanel {
 
     /* Animation Options */
     boolean drawOrganismAxes = false;
+    boolean displayOrganismHealth = true;
 
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -221,17 +222,21 @@ public class animalSimGUI extends JPanel {
                
                 // draw organism o
                 if(o.getType() == "Plant"){
-                    drawPlant(x, y, g);
+                    drawPlant(o, g);
                 }
                 else if(o.getType() == "Mouse"){
-                    drawMouse(x, y, g);
+                    drawMouse(o, g);
                 }
             }
         }
         
     }
 
-    void drawPlant(int x, int y, Graphics g){
+    void drawPlant(Organism o, Graphics g){
+        int x = o.getX();
+        int y = o.getY();
+        int health = o.getHealth();
+
         Color plantColor = new Color(51,102,0);
         g.setColor(plantColor);
 
@@ -262,9 +267,25 @@ public class animalSimGUI extends JPanel {
         g.drawLine(x+1, y, x+6, y-25);
         g.drawLine(x, y, x+4, y-27);
         g.drawLine(x, y, x+2, y-25);
+
+        if(displayOrganismHealth){
+            // health bar
+            g.setColor(Color.RED);
+            int healthBarValue = health/2; // 50 pixels = 100 health for plants (max health)
+            g.fillRect(x-25, y-32, healthBarValue, 1);
+
+            // health bar edges
+            g.setColor(Color.BLACK);
+            g.fillRect(x-26, y-33, 1, 3);
+            g.fillRect(x+26, y-33, 1, 3);
+        }
     }
 
-    void drawMouse(int x, int y, Graphics g){
+    void drawMouse(Organism o, Graphics g){
+        int x = o.getX();
+        int y = o.getY();
+        int health = o.getHealth();
+
         Color mouseColor = new Color(128,128,128);
         g.setColor(mouseColor);
         g.fillOval(x-5, y-8, 10, 16); // body
@@ -279,6 +300,19 @@ public class animalSimGUI extends JPanel {
         g.drawLine(x-1, y+6, x-5, y+7);     // left bottom whisker
         g.drawLine(x+1, y+6, x+6, y+5);     // right top whisker
         g.drawLine(x+1, y+6, x+5, y+7);     // right bottom whisker
+
+
+        if(displayOrganismHealth){
+            // health bar
+            g.setColor(Color.RED);
+            int healthBarValue = health*4; // 20 pixels = 5 health for mice (max health)
+            g.fillRect(x-10, y-14, healthBarValue, 1);
+
+            // health bar edges
+            g.setColor(Color.BLACK);
+            g.fillRect(x-11, y-15, 1, 3);
+            g.fillRect(x+11, y-15, 1, 3);
+        }
     }
 
     //GUI Contructions

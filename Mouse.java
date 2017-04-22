@@ -16,26 +16,20 @@ public class Mouse implements Organism{
 	int prevX, prevY;
 	Dimension D;           // current screen size
 	int speed = maxSpeed;
+	int health;
 
 
 	// Constructors ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	
-	// Create a mouse at a location X,Y
-	Mouse(int id, int x, int y){
-		this.id = id;
-		this.X = x;
-		this.Y = y;
-		this.prevX = x;
-		this.prevY = y;
-	}
-
-	// Create a mouse at a location X,Y
 	Mouse(int id, Point2D.Double randomPoint){
+		// Create a mouse at a location X,Y
 		this.id = id;
 		this.X = (int)randomPoint.x;
 		this.Y = (int)randomPoint.y;
 		this.prevX = this.X;
 		this.prevY = this.Y;
+
+		// set initial health
+		this.health = generateRandomInitialHealth();
 	}
 
 
@@ -111,7 +105,14 @@ public class Mouse implements Organism{
 		return (new Point2D.Double(newX,newY));
 	}
 
-
+	public int generateRandomInitialHealth(){
+		// generate a starting health point value between 0.4*maxHealth and maxHealth
+		Random rn = new Random();
+		int minimum = (int)(0.4*maxHealth);
+		int range = maxHealth - minimum + 1;
+		int h = rn.nextInt(range) + minimum;
+		return h;
+	}
 
 	// Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -130,6 +131,9 @@ public class Mouse implements Organism{
 	}
 	public Point2D.Double getXY(){
 		return (new Point2D.Double(this.X, this.Y));
+	}
+	public int getHealth(){
+		return this.health;
 	}
 
 
@@ -160,6 +164,6 @@ public class Mouse implements Organism{
 	// Methods specific to this class. These are not in the Organism interface.
 
 	public void whatIAm(){ // can be called from a Mouse object, not from organism object
-		System.out.println("I'm a mouse!");
+		System.out.println("I'm a mouse! My health is "+health+" / "+maxHealth);
 	}
 }

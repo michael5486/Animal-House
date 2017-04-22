@@ -1,35 +1,43 @@
 import java.awt.*;
 import java.awt.geom.*;
-
+import java.util.*;
 
 public class Plant implements Organism{
 	
 	// Constants (specific to this animal type)
-	String type = "Plant";
-	int maxHealth = 100;
+	static final String type = "Plant";
+	static final int maxHealth = 100;
 
 	// Variables (to be set)
 	int id;
 	int X, Y;
+	int health;
 
 
-	// Constructors ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	Plant(int id, int x, int y){
-		this.id = id;
-		this.X = x;
-		this.Y = y;
-	}
-
+	// Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Plant(int id, Point2D.Double randomPoint){
+		// Create a plant at a location X,Y
 		this.id = id;
 		this.X = (int)randomPoint.x;
 		this.Y = (int)randomPoint.y;
+
+		// set initial health
+		this.health = generateRandomInitialHealth();
 	}
 
 	// Control Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	public Point2D.Double randomWalk(){
 		//do nothing. plants don't move!
 		return (new Point2D.Double(this.X, this.Y));
+	}
+
+	public int generateRandomInitialHealth(){
+		// generate a starting health point value between 0.4*maxHealth and maxHealth
+		Random rn = new Random();
+		int minimum = (int)(0.4*maxHealth);
+		int range = maxHealth - minimum + 1;
+		int h = rn.nextInt(range) + minimum;
+		return h;
 	}
 
 
@@ -50,6 +58,9 @@ public class Plant implements Organism{
 	}
 	public Point2D.Double getXY(){
 		return new Point2D.Double(this.X, this.Y);
+	}
+	public int getHealth(){
+		return this.health;
 	}
 
 	// Set
@@ -74,6 +85,6 @@ public class Plant implements Organism{
 	// Methods specific to this class. These are not in the Organism interface.
 
 	public void whatIAm(){ // can be called from a Plant object, not from organism object
-		System.out.println("I'm a plant!");
+		System.out.println("I'm a plant! My health is "+health+" / "+maxHealth);
 	}
 }
