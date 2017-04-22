@@ -62,6 +62,9 @@ public class Plant implements Organism{
 	public int getHealth(){
 		return this.health;
 	}
+	public int getSightRadius(){
+		return 0;
+	}
 
 	// Set
 	public void setX(int x){

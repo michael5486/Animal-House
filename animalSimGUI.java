@@ -23,12 +23,13 @@ public class animalSimGUI extends JPanel {
     AnimalSimulator animalSimulator;
 
     // Initial numbers of organisms
-    int numPlants = 10;
-    int numMice = 20;
+    int numPlants = 20;
+    int numMice = 30;
 
     /* Animation Options */
-    boolean drawOrganismAxes = false;
-    boolean displayOrganismHealth = true;
+    boolean displayAxes = false;
+    boolean displayHealth = true;
+    boolean displaySightRadius = false;
 
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -195,6 +196,35 @@ public class animalSimGUI extends JPanel {
     	}
     }
 
+    void toggleDisplayHealth (){
+        if(displayHealth){
+            displayHealth = false;
+        }
+        else{
+            displayHealth = true;
+        }
+        this.repaint();
+    }
+
+    void toggleDisplayAxes (){
+        if(displayAxes){
+            displayAxes = false;
+        }
+        else{
+            displayAxes = true;
+        }
+        this.repaint();
+    }
+
+    void toggleDisplaySightRadius (){
+        if(displaySightRadius){
+            displaySightRadius = false;
+        }
+        else{
+            displaySightRadius = true;
+        }
+        this.repaint();
+    }
 
     //Drawing
     public void paintComponent(Graphics g) {
@@ -212,12 +242,19 @@ public class animalSimGUI extends JPanel {
             for(Organism o : animalSimulator.organisms){
                 int x = o.getX();
                 int y = o.getY();
+                int sightRadius = o.getSightRadius();
 
                 // Draw the x-y axes of the organism.
-                if(drawOrganismAxes){
-                    g.setColor(Color.BLACK);
+                if(displayAxes){
+                    g.setColor(Color.PINK);
                     g.drawLine(x-20, y, x+20, y); // x-axis
                     g.drawLine(x, y-20, x, y+20); // y-axis
+                }
+
+                // Draw the sight radius of the organism.
+                if(displaySightRadius && o.getType() != "Plant"){
+                    g.setColor(Color.YELLOW);
+                    g.drawOval(x-sightRadius, y-sightRadius, sightRadius*2, sightRadius*2);
                 }
                
                 // draw organism o
@@ -268,7 +305,7 @@ public class animalSimGUI extends JPanel {
         g.drawLine(x, y, x+4, y-27);
         g.drawLine(x, y, x+2, y-25);
 
-        if(displayOrganismHealth){
+        if(displayHealth){
             // health bar
             g.setColor(Color.RED);
             int healthBarValue = health/2; // 50 pixels = 100 health for plants (max health)
@@ -302,7 +339,7 @@ public class animalSimGUI extends JPanel {
         g.drawLine(x+1, y+6, x+5, y+7);     // right bottom whisker
 
 
-        if(displayOrganismHealth){
+        if(displayHealth){
             // health bar
             g.setColor(Color.RED);
             int healthBarValue = health*4; // 20 pixels = 5 health for mice (max health)
@@ -375,13 +412,14 @@ public class animalSimGUI extends JPanel {
         buttonPanel.add(goButton);
         buttonPanel.add(pauseButton);
 
-        panel.add(buttonPanel); // add button panel to control panel
+        // add button panel to control panel
+        panel.add(buttonPanel); 
 
 
         /* make a panel for the speed slider */
         JPanel sliderPanel = new JPanel();
 
-        speedSlider = new JSlider (0, 20, 15);
+        speedSlider = new JSlider (0, 15, 10);
         speedSlider.setInverted(true);
         speedSlider.setMajorTickSpacing(5);
         speedSlider.setMinorTickSpacing(1);
@@ -396,11 +434,64 @@ public class animalSimGUI extends JPanel {
             }
         );
 
+        // sliderPanel.add(new JLabel("Simulation speed:   "));
         sliderPanel.add(new JLabel("slow"));
         sliderPanel.add(speedSlider);
         sliderPanel.add(new JLabel("fast"));
 
-        panel.add(sliderPanel); // add slider panel to control panel
+        // add slider panel to control panel
+        panel.add(sliderPanel); 
+
+        return panel;
+    }
+
+    JPanel makeDisplayOptionPanel (){
+        JPanel panel = new JPanel();
+
+        /* creates a GridLayout with two rows and one column */
+        panel.setLayout (new GridLayout (2,1));
+
+        /* Set the border and give it a title */
+        TitledBorder border = new TitledBorder("Display Options");
+        border.setTitleJustification(TitledBorder.CENTER);
+        border.setTitlePosition(TitledBorder.TOP);
+        panel.setBorder (border);
+
+        // Show health bar check button
+        JCheckBox displayHealthCheckBox = new JCheckBox("Health",displayHealth);
+        displayHealthCheckBox.addActionListener (
+            new ActionListener () {
+                public void actionPerformed (ActionEvent a)
+                {
+                    toggleDisplayHealth();
+                }
+            }
+        );
+        panel.add(displayHealthCheckBox);
+
+        // Show axes check button
+        JCheckBox displayAxesCheckBox = new JCheckBox("Axes",displayAxes);
+        displayAxesCheckBox.addActionListener (
+            new ActionListener () {
+                public void actionPerformed (ActionEvent a)
+                {
+                    toggleDisplayAxes();
+                }
+            }
+        );
+        panel.add(displayAxesCheckBox);
+
+        // Show sight radius check button
+        JCheckBox displaySightRadiusCheckBox = new JCheckBox("Sight radius",displaySightRadius);
+        displaySightRadiusCheckBox.addActionListener (
+            new ActionListener () {
+                public void actionPerformed (ActionEvent a)
+                {
+                    toggleDisplaySightRadius();
+                }
+            }
+        );
+        panel.add(displaySightRadiusCheckBox);
 
         return panel;
     }
@@ -408,16 +499,13 @@ public class animalSimGUI extends JPanel {
     JPanel makeEntryPanel() {
         JPanel panel = new JPanel();
 
-        
         /* Set the border and give it a title */
         TitledBorder border = new TitledBorder("Enter the number of organisms");
         border.setTitleJustification(TitledBorder.CENTER);
         border.setTitlePosition(TitledBorder.TOP);
         panel.setBorder (border);
         
-
-        /* Labels and Entry fields for number of organisms */
-        
+        /* Labels and Entry fields for number of organisms */        
         // Plants
         JLabel plantLabel = new JLabel("Plants");
         panel.add(plantLabel);
@@ -438,13 +526,15 @@ public class animalSimGUI extends JPanel {
     JPanel makeBottomPanel () {
     	JPanel panel = new JPanel ();
 
-    	/* creates a GridLayout with two rows and one column */
+    	/* creates a GridLayout with one rows and one column */
     	panel.setLayout (new GridLayout (1,1));
 
     	/* creates a control panel with Reset, Go, and Quit buttons as well as slider bar for sleep time*/
     	JPanel sPanel = makeControlPanel ();
     	panel.add (sPanel);
 
+        JPanel dPanel = makeDisplayOptionPanel ();
+        panel.add (dPanel);
 
         /* creates a panel with Organism Entry Fields */
         JPanel ePanel = makeEntryPanel ();
@@ -455,7 +545,7 @@ public class animalSimGUI extends JPanel {
 
     void makeFrame () {
     	JFrame frame = new JFrame ();
-    	frame.setSize (1000, 700);
+    	frame.setSize (1100, 700);
     	frame.setTitle ("animalSimGUI");
 
     	//Obtains the content pane layer so we can add to it

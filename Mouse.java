@@ -9,6 +9,7 @@ public class Mouse implements Organism{
 	static final String type = "Mouse";
 	static final int maxHealth = 5;
 	static final int maxSpeed = 5;
+	static final int sightRadius = 40;
 
 	// Variables (to be set and changed)
 	int id;
@@ -134,6 +135,9 @@ public class Mouse implements Organism{
 	}
 	public int getHealth(){
 		return this.health;
+	}
+	public int getSightRadius(){
+		return this.sightRadius;
 	}
 
 
