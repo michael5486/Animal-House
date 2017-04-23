@@ -538,6 +538,8 @@ public class animalSimGUI extends JPanel {
     void makeFrame () {
     	JFrame frame = new JFrame ();
     	frame.setSize (1100, 700);
+        frame.setMinimumSize(new Dimension(1100, 700));
+        frame.setMaximumSize(new Dimension(1100, 700));
     	frame.setTitle ("animalSimGUI");
 
     	//Obtains the content pane layer so we can add to it
