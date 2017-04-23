@@ -6,12 +6,12 @@ import java.util.*;
 public class Mouse implements Organism{
 	
 	// Constants (specific to this animal type)
-	//static final String type = "Mouse";
+	static final String type = "Mouse";
 
-	public enum OrganismType {
-		MOUSE, PLANT
-	}
-	static final OrganismType type = MOUSE;
+	// public enum OrganismType {
+	// 	MOUSE, PLANT
+	// }
+	// static final OrganismType type = MOUSE;
 	static final int maxHealth = 5;
 	static final int maxSpeed = 5;
 	static final int sightRadius = 40;
@@ -144,26 +144,29 @@ public class Mouse implements Organism{
 	public int getSightRadius(){
 		return this.sightRadius;
 	}
-	public ArrayList<Integer> getNearbyPreyIds(ArrayList<Organism> organisms) {
+	public ArrayList<Integer> getNearbyPreyIDs(ArrayList<Organism> organisms) {
 		
-		ArrayList<Integer> nearbyOrganisms = new ArrayList<Integer>();
+		ArrayList<Integer> nearbyOrganismIDs = new ArrayList<Integer>();
 
 		//iterate through all organisms, if
 		for (int i = 0; i < organisms.size(); i++) {
 
-			Point2D.Double currPoint = Point2D.Double(this.X, thix.Y);
-			double distanceFromCurrPoint = currPoint.distance(organisms.get(i).getXY());
+			// Point2D.Double currPoint = new Point2D.Double(this.X, this.Y);
+			double distanceFromCurrPoint = getXY().distance(organisms.get(i).getXY());
 			
 			System.out.printf("Distance from id %d = %f", this.id, distanceFromCurrPoint);
 
 			if (distanceFromCurrPoint < this.sightRadius) { //
-				if (organisms.get(i).getType() == PLANT) {
-					nearbyOrganisms.add(organisms.get(i).getID());
+				if (organisms.get(i).getType() == "Plant") {
+					nearbyOrganismIDs.add(organisms.get(i).getID());
 				}
 			}
 		}
 
-		return nearbyOrganisms;
+		return nearbyOrganismIDs;
+	}
+	public int getState(){
+		return -1; //TODO
 	}
 
 

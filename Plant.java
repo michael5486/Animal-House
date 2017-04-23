@@ -5,12 +5,12 @@ import java.util.*;
 public class Plant implements Organism{
 	
 	// Constants (specific to this animal type)
-	//static final String type = "Plant";
+	static final String type = "Plant";
 
-		public enum OrganismType {
-		MOUSE, PLANT
-	}
-	static final OrganismType type = PLANT;
+	// public enum OrganismType {
+	// 	MOUSE, PLANT
+	// }
+	// static final OrganismType type = PLANT;
 	static final int maxHealth = 100;
 
 	// Variables (to be set)
@@ -71,8 +71,11 @@ public class Plant implements Organism{
 		return 0;
 	}
 
-	public ArrayList<Integer> getNearbyPreyIds(ArrayList<Organism> organisms) {
-		return null;
+	public ArrayList<Integer> getNearbyPreyIDs(ArrayList<Organism> organisms) {
+		return null; //TODO
+	}
+	public int getState(){
+		return -1; //TODO
 	}
 
 
