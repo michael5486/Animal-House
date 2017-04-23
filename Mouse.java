@@ -8,7 +8,8 @@ public class Mouse implements Organism{
 	// Constants (specific to this animal type)
 	static final String type = "Mouse";
 	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Plant"));
-	static final int maxHealth = 5;
+	static final double maxHealth = 5;
+	static final double healthLostPerGameTick = 0.25;
 	static final int maxSpeed = 5;
 	static final int sightRadius = 40;
 	static final int healthLossTicks = 4; // every 4 time ticks, lose 1 health
@@ -19,8 +20,9 @@ public class Mouse implements Organism{
 	int prevX, prevY;
 	Dimension D;           // current screen size
 	int speed = maxSpeed;
-	int health;
-	int healthDecrementCounter = RandTool.uniform(0,healthLossTicks); 
+	double health;
+	int state = 0;
+	//int healthDecrementCounter = RandTool.uniform(0,healthLossTicks); 
 
 
 
@@ -40,11 +42,11 @@ public class Mouse implements Organism{
 
 	// Control Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	public void updateHealthTime(){
-		if(healthDecrementCounter == 0){
-			this.health--;
-			healthDecrementCounter = 4;
-		}
-		healthDecrementCounter--;
+		//if(healthDecrementCounter == 0){
+		this.health = this.health - this.healthLostPerGameTick;
+		//healthDecrementCounter = 4;
+		//}
+		//healthDecrementCounter--;
 	}
 
 	public Point2D.Double randomWalk(){
@@ -117,11 +119,11 @@ public class Mouse implements Organism{
 		return (new Point2D.Double(newX,newY));
 	}
 
-	public int generateRandomInitialHealth(){
+	public double generateRandomInitialHealth(){
 		// generate a starting health point value between 0.4*maxHealth and maxHealth
 		Random rn = new Random();
 		int minimum = (int)(0.4*maxHealth);
-		int range = maxHealth - minimum + 1;
+		int range = (int)maxHealth - minimum + 1;
 		int h = rn.nextInt(range) + minimum;
 		return h;
 	}
@@ -143,7 +145,7 @@ public class Mouse implements Organism{
 	public Point2D.Double getXY(){
 		return (new Point2D.Double(this.X, this.Y));
 	}
-	public int getHealth(){
+	public double getHealth(){
 		return this.health;
 	}
 	public int getSightRadius(){
@@ -156,12 +158,13 @@ public class Mouse implements Organism{
 		//iterate through all organisms
 		for (Organism o : organisms){
 			double distToCurrPoint = this.getXY().distance(o.getXY());
-			if(distToCurrPoint <= this.getSightRadius()){
+			if(distToCurrPoint <= this.getSightRadius() && o.getID() != this.id){
 				organismsWithinRadius.add(o);
 			}
 		}
 		return organismsWithinRadius;
 	}
+
 	public ArrayList<Organism> getNearbyPrey(ArrayList<Organism> organisms){
 		/* Note: The 'organisms' argument can be all of the organisms or the 
 		         result of calling getIDsWithinSightRadius(), this method will 
@@ -206,7 +209,11 @@ public class Mouse implements Organism{
 
 	// To String
 	public String toString(){
-		return this.type + ": x=" + this.X + " y="+ this.Y;
+		return this.type + " " + this.id + ": x=" + this.X + " y="+ this.Y;
+	}
+
+	public void setState(int state) {
+		this.state = state;
 	}
 
 

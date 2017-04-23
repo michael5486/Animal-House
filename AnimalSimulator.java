@@ -59,7 +59,15 @@ public class AnimalSimulator {
         
         updateHealth();
         moveOrganisms();
-        
+        ArrayList<Organism> temp = getOrganismsType("Mouse");
+        for (Organism o : temp) {
+            ArrayList<Organism> nearbyPrey = o.getNearbyPrey(organisms);
+            if (nearbyPrey.size() > 0) {
+                System.out.println("ID=" + o.getID());           
+                System.out.println(o.getNearbyPrey(organisms));
+            }
+        }
+                
 
 
         // Update statistics
@@ -201,6 +209,16 @@ public class AnimalSimulator {
                 organisms.remove(o);
             }
         }
+    }
+
+    public ArrayList<Organism> getOrganismsType(String type) {
+        ArrayList<Organism> temp = new ArrayList<Organism>();  
+        for(Organism o : organisms){
+            if(o.getType() == type){
+                temp.add(o);
+            }
+        }
+        return temp;
     }
 
 

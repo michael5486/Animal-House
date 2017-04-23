@@ -8,7 +8,7 @@ public interface Organism{
 	// Control Methods
 	public void updateHealthTime();
 	public Point2D.Double randomWalk();
-	public int generateRandomInitialHealth();
+	public double generateRandomInitialHealth();
 
 	// Get
 	public int getID();
@@ -16,32 +16,30 @@ public interface Organism{
 	public int getX();
 	public int getY();
 	public Point2D.Double getXY();
-	public int getHealth();
+	public double getHealth();
 	public int getSightRadius();
-	public int getState();
 	public ArrayList<Organism> getIDsWithinSightRadius(ArrayList<Organism> organisms);
 	public ArrayList<Organism> getNearbyPrey(ArrayList<Organism> organisms);
+
+	/* Organisms can be in various states represented by an integer
+	1. idle
+	2. eating
+	3. beingEaten
+	4. hunting
+	5. escaping */
+	public int getState();
+
 
 	// Set
 	public void setX(int x);
 	public void setY(int y);
 	public void setXY(Point2D.Double point);
-	//public void setState(State state);
+	public void setState(int state);
 
 
 	// To String
 	public String toString();
 
-
-	/* Enum for state */
-	public enum State {
-		IDLING, EATING, BEING_EATEN, HUNTING, ESCAPING
-	}
-
-	/* Enum for all possible organisms */
-	public enum OrganismType {
-		MOUSE, PLANT
-	}
 
 }
 

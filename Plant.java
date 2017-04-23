@@ -7,12 +7,13 @@ public class Plant implements Organism{
 	// Constants (specific to this animal type)
 	static final String type = "Plant";
 	ArrayList<String> preyTypes = null;
-	static final int maxHealth = 100;
+	static final double maxHealth = 100;
 
 	// Variables (to be set)
 	int id;
 	int X, Y;
-	int health;
+	double health;
+	int state = 0;
 
 
 
@@ -39,11 +40,11 @@ public class Plant implements Organism{
 		return (new Point2D.Double(this.X, this.Y));
 	}
 
-	public int generateRandomInitialHealth(){
+	public double generateRandomInitialHealth(){
 		// generate a starting health point value between 0.4*maxHealth and maxHealth
 		Random rn = new Random();
 		int minimum = (int)(0.4*maxHealth);
-		int range = maxHealth - minimum + 1;
+		int range = (int)maxHealth - minimum + 1;
 		int h = rn.nextInt(range) + minimum;
 		return h;
 	}
@@ -65,7 +66,7 @@ public class Plant implements Organism{
 	public Point2D.Double getXY(){
 		return new Point2D.Double(this.X, this.Y);
 	}
-	public int getHealth(){
+	public double getHealth(){
 		return this.health;
 	}
 	public int getSightRadius(){
@@ -103,9 +104,13 @@ public class Plant implements Organism{
 		this.Y = (int)point.y;
 	}
 
+	public void setState(int state) {
+		this.state = state;
+	}
+
 	// To String
 	public String toString(){
-		return this.type + ": x=" + this.X + " y="+ this.Y;
+		return this.type + " " + this.id + ": x=" + this.X + " y="+ this.Y;
 	}
 
 

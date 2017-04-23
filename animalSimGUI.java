@@ -258,13 +258,12 @@ public class animalSimGUI extends JPanel {
                 }
             }
         }
-        
     }
 
     void drawPlant(Organism o, Graphics g){
         int x = o.getX();
         int y = o.getY();
-        int health = o.getHealth();
+        double health = o.getHealth();
 
         Color plantColor = new Color(51,102,0);
         g.setColor(plantColor);
@@ -300,8 +299,8 @@ public class animalSimGUI extends JPanel {
         if(displayHealth){
             // health bar
             g.setColor(Color.RED);
-            int healthBarValue = health/2; // 50 pixels = 100 health for plants (max health)
-            g.fillRect(x-25, y-32, healthBarValue, 1);
+            double healthBarValue = health/2; // 50 pixels = 100 health for plants (max health)
+            g.fillRect(x-25, y-32, (int)healthBarValue, 1);
 
             // health bar edges
             g.setColor(Color.BLACK);
@@ -313,7 +312,7 @@ public class animalSimGUI extends JPanel {
     void drawMouse(Organism o, Graphics g){
         int x = o.getX();
         int y = o.getY();
-        int health = o.getHealth();
+        double health = o.getHealth();
 
         Color mouseColor = new Color(128,128,128);
         g.setColor(mouseColor);
@@ -334,8 +333,8 @@ public class animalSimGUI extends JPanel {
         if(displayHealth){
             // health bar
             g.setColor(Color.RED);
-            int healthBarValue = health*4; // 20 pixels = 5 health for mice (max health)
-            g.fillRect(x-10, y-14, healthBarValue, 1);
+            double healthBarValue = health*4; // 20 pixels = 5 health for mice (max health)
+            g.fillRect(x-10, y-14, (int)healthBarValue, 1);
 
             // health bar edges
             g.setColor(Color.BLACK);
