@@ -50,11 +50,6 @@ public class animalSimGUI extends JPanel {
 
 
 
-
-
-
-
-
     /* Get input from GUI text boxes */
     void getNumOrganismsFromEntryField(){ // called in reset()
         // Get numPlants from entry field
@@ -127,9 +122,6 @@ public class animalSimGUI extends JPanel {
 
         // Initialize animal simulator
         animalSimulator = new AnimalSimulator(D, delT, numPlants, numMice);
-
-        // // Create animals 
-        // createAnimals(); ----- get rid of this. now called in AnimalSimulator
 
         this.repaint();
     }

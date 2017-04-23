@@ -21,17 +21,21 @@ public class AnimalSimulator {
 
     /* List of all organisms */
     ArrayList<Organism> organisms = new ArrayList<Organism>();
+    /* 
+    Note from Karl:
+        We can also make lists of specific organisms.
+        For example:
+                ArrayList<Plant> plants = new ArrayList<Plant>();
+        Then we can call specific methods from the Plant class that 
+        are not defined in the organism interface.
+    */
 
-    // Note from Karl:
-    // We can also make lists of specific organisms.
-    // For example:
-    //      ArrayList<Plant> plants = new ArrayList<Plant>();
-    // Then we can call specific methods from the Plant class that are not defined in the organism interface.
 
-
+    /* Statics */
+    Function plantPopulation = new Function("Plant population vs time");
+    Function mousePopulation = new Function("Mouse population vs time");
 
     // Constructor
-
     AnimalSimulator(Dimension D, double initDelT, int initNumPlants, int initNumMice){
         this.D = D;
         delT = initDelT;
@@ -50,18 +54,27 @@ public class AnimalSimulator {
         // }
     }
 
-
+// ~~~~~~~~~~~~~~~ Next Step Method ~~~~~~~~~~~~~~~~~~~~~
     public void nextStep (double delT) {
         
         updateHealth();
         moveOrganisms();
         
 
-        t = t + delT; // we don't use this yet. We will use it when we graph a function of time with organism populations.
+
+        // Update statistics
+        updatePopulationStatistics();
+
+        if(getNumOrganismType("Mouse") == 1){
+            displayPopulationGraph();
+        }
+        
+        // update time
+        t = t + delT;
     }
 
 
-
+// ~~~~~~~~~~~~~~~ Update State Methods ~~~~~~~~~~~~~~~~~~~~~
     public void moveOrganisms(){
         // Cycle through all organisms
         for(Organism o : organisms){
@@ -83,23 +96,6 @@ public class AnimalSimulator {
     }
 
     public void updateHealth(){
-        
-        // ListIterator<Organism> o = organisms.listIterator();
-        // while(o.hasNext()){
-
-        //     // if state = idling
-        //     o.next().updateHealthTime();
-
-        //     // if state = eating
-
-        //     // if dead
-        //     if(o.next().getHealth() <= 0){
-        //         o.remove();
-        //     }
-        // }
-
-
-
         // create empty list to fill up with dead organisms. This avoids concurrentModificationException
         ArrayList<Organism> dead = new ArrayList<Organism>(); 
 
@@ -150,7 +146,7 @@ public class AnimalSimulator {
     }
 
     /* Creates a random cartesian point */
-    Point2D.Double createRandomPoint() {
+    public Point2D.Double createRandomPoint() {
         int screenWidth = D.width;
         int screenHeight = D.height;
 
@@ -170,10 +166,10 @@ public class AnimalSimulator {
 
 
 
-// ~~~~~ Utility Methods ~~~~~~~~~~~~~~~~~~~~~`
+// ~~~~~~~~~~~~~~~ Utility Methods ~~~~~~~~~~~~~~~~~~~~~
 
     /* Check to see if a point is within screen boundary */
-    boolean isPointWithinBoundary(Point2D.Double point){
+    public boolean isPointWithinBoundary(Point2D.Double point){
         int x = (int)point.x;
         int y = (int)point.y;
         int screenWidth = D.width;
@@ -209,8 +205,34 @@ public class AnimalSimulator {
 
 
 
+// ~~~~~~~~~~~~~~~~~~ Statistics and Graph Methods ~~~~~~~~~~~~~~~~~~~~~
 
+    public int getNumOrganismType(String type){
+        int population = 0;
+        for(Organism o : organisms){
+            if(o.getType() == type){
+                population++;
+            }
+        }
+        return population;
+    }
 
+    public void updatePopulationStatistics(){
+        plantPopulation.add(t,getNumOrganismType("Plant"));
+        mousePopulation.add(t,getNumOrganismType("Mouse"));
+    }
+
+    public void displayPopulationGraph(){
+        // Need to fix this. 
+        // If you close the graph window, then press 'Reset,' a new graph will not appear.
+
+        Thread plotThread = new Thread(){
+            public void run () {
+                Function.show(plantPopulation,mousePopulation);
+            }
+        };
+        plotThread.start();
+    }
 }
 
 
