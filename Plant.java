@@ -6,11 +6,7 @@ public class Plant implements Organism{
 	
 	// Constants (specific to this animal type)
 	static final String type = "Plant";
-
-	// public enum OrganismType {
-	// 	MOUSE, PLANT
-	// }
-	// static final OrganismType type = PLANT;
+	ArrayList<String> preyTypes = null;
 	static final int maxHealth = 100;
 
 	// Variables (to be set)
@@ -70,10 +66,27 @@ public class Plant implements Organism{
 	public int getSightRadius(){
 		return 0;
 	}
-
-	public ArrayList<Integer> getNearbyPreyIDs(ArrayList<Organism> organisms) {
-		return null; //TODO
+	public ArrayList<Organism> getIDsWithinSightRadius(ArrayList<Organism> organisms){
+		/* 
+		Return null. Plants don't have a sight radius.
+		This will help us find bugs in code if we ever try to access this list for a Plant.
+		*/
+		return null;
 	}
+	public ArrayList<Organism> getNearbyPrey(ArrayList<Organism> organisms){
+		/* 
+		Return null. Plants don't have prey.
+		This will help us find bugs in code if we ever try to access this list for a Plant.
+		*/
+		return null;
+	}
+
+	// Old method ~~~~~~~~~~~~~~~~~~~~~~``
+	// public ArrayList<Integer> getNearbyPreyIDs(ArrayList<Organism> organisms) {
+	// 	return null; //TODO
+	// }
+
+
 	public int getState(){
 		return -1; //TODO
 	}

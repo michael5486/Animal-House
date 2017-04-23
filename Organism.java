@@ -13,7 +13,9 @@ public interface Organism{
 	public int getHealth();
 	public int getSightRadius();
 	public int getState();
-	public ArrayList<Integer> getNearbyPreyIDs(ArrayList<Organism> organisms);
+	public ArrayList<Organism> getIDsWithinSightRadius(ArrayList<Organism> organisms);
+	public ArrayList<Organism> getNearbyPrey(ArrayList<Organism> organisms);
+	// public ArrayList<Integer> getNearbyPreyIDs(ArrayList<Organism> organisms); // remove this method
 
 	public void setX(int x);
 	public void setY(int y);

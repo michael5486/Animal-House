@@ -7,11 +7,7 @@ public class Mouse implements Organism{
 	
 	// Constants (specific to this animal type)
 	static final String type = "Mouse";
-
-	// public enum OrganismType {
-	// 	MOUSE, PLANT
-	// }
-	// static final OrganismType type = MOUSE;
+	ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Plant"));
 	static final int maxHealth = 5;
 	static final int maxSpeed = 5;
 	static final int sightRadius = 40;
@@ -144,27 +140,62 @@ public class Mouse implements Organism{
 	public int getSightRadius(){
 		return this.sightRadius;
 	}
-	public ArrayList<Integer> getNearbyPreyIDs(ArrayList<Organism> organisms) {
+	public ArrayList<Organism> getIDsWithinSightRadius(ArrayList<Organism> organisms){
+		// Create emtpy list of organisms to fill up then return
+		ArrayList<Organism> organismsWithinRadius = new ArrayList<Organism>();
 		
-		ArrayList<Integer> nearbyOrganismIDs = new ArrayList<Integer>();
-
-		//iterate through all organisms, if
-		for (int i = 0; i < organisms.size(); i++) {
-
-			// Point2D.Double currPoint = new Point2D.Double(this.X, this.Y);
-			double distanceFromCurrPoint = getXY().distance(organisms.get(i).getXY());
-			
-			System.out.printf("Distance from id %d = %f", this.id, distanceFromCurrPoint);
-
-			if (distanceFromCurrPoint < this.sightRadius) { //
-				if (organisms.get(i).getType() == "Plant") {
-					nearbyOrganismIDs.add(organisms.get(i).getID());
-				}
+		//iterate through all organisms
+		for (Organism o : organisms){
+			double distToCurrPoint = this.getXY().distance(o.getXY());
+			if(distToCurrPoint <= this.getSightRadius()){
+				organismsWithinRadius.add(o);
 			}
 		}
-
-		return nearbyOrganismIDs;
+		return organismsWithinRadius;
 	}
+	public ArrayList<Organism> getNearbyPrey(ArrayList<Organism> organisms){
+		/* Note: The 'organisms' argument can be all of the organisms or the 
+		         result of calling getIDsWithinSightRadius(), this method will 
+		         return the same result either way. */
+
+		// create empty list of organisms to fill up then return
+		ArrayList<Organism> nearbyPrey = new ArrayList<Organism>();
+
+		// call getIDsWithinSightRadius()
+		ArrayList<Organism> nearbyOrganisms = this.getIDsWithinSightRadius(organisms);
+		
+		// iterate through nearbyOrganisms
+		for(Organism o : nearbyOrganisms){
+			if( this.preyTypes.contains(o.getType()) ){
+				nearbyPrey.add(o);
+			}
+		}
+		return nearbyPrey;
+	}
+
+
+	// Old method~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// public ArrayList<Integer> getNearbyPreyIDs(ArrayList<Organism> organisms) {
+		
+	// 	ArrayList<Integer> nearbyOrganismIDs = new ArrayList<Integer>();
+
+	// 	//iterate through all organisms
+	// 	for (int i = 0; i < organisms.size(); i++) {
+
+	// 		// Point2D.Double currPoint = new Point2D.Double(this.X, this.Y);
+	// 		double distanceFromCurrPoint = getXY().distance(organisms.get(i).getXY());
+			
+	// 		System.out.printf("Distance from id %d = %f", this.id, distanceFromCurrPoint);
+
+	// 		if (distanceFromCurrPoint < this.sightRadius) { //
+	// 			if (organisms.get(i).getType() == "Plant") {
+	// 				nearbyOrganismIDs.add(organisms.get(i).getID());
+	// 			}
+	// 		}
+	// 	}
+
+	// 	return nearbyOrganismIDs;
+	// }
 	public int getState(){
 		return -1; //TODO
 	}
