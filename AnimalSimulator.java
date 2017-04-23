@@ -56,6 +56,7 @@ public class AnimalSimulator {
             
             // initialize newLocation point that is not within boundary
             Point2D.Double newLocation = new Point2D.Double(-1,-1); 
+            //o.getNearbyPreyIDs(organisms);
             
             // loop until generated point is within boundary
             while(!isPointWithinBoundary(newLocation)){
