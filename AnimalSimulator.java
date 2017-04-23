@@ -143,8 +143,20 @@ public class AnimalSimulator {
         return organisms;
     }
 
-
-
+    public void removeOrganism(Organism organism){
+        for(Organism o : organisms){
+            if(o.equals(organism)){
+                organisms.remove(o);
+            }
+        }
+    }
+    public void removeOrganism(int id){
+        for(Organism o : organisms){
+            if(o.getID() == id){
+                organisms.remove(o);
+            }
+        }
+    }
 
 
 

@@ -239,7 +239,7 @@ public class animalSimGUI extends JPanel {
 
         // Draw all organisms
         if(animalSimulator != null){
-            for(Organism o : animalSimulator.organisms){
+            for(Organism o : animalSimulator.getOrganisms()){
                 int x = o.getX();
                 int y = o.getY();
                 int sightRadius = o.getSightRadius();
