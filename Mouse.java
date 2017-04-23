@@ -8,21 +8,20 @@ public class Mouse implements Organism{
 	// Constants (specific to this animal type)
 	static final String type = "Mouse";
 	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Plant"));
-	static final double maxHealth = 5;
-	static final double healthLostPerGameTick = 0.25;
-	static final int maxSpeed = 5;
-	static final int sightRadius = 40;
-	static final int healthLossTicks = 4; // every 4 time ticks, lose 1 health
+	static final double maxHealth = 5.0;
+	static final double hungerHealth = 2.5;
+	static final double healthLostPerGameTick = 0.1;
+	static final int maxSpeed = 5;     // pixels
+	static final int sightRadius = 40; // pixels
 
 	// Variables (to be set and changed)
 	int id;
 	int X, Y;
 	int prevX, prevY;
-	Dimension D;           // current screen size
+	Dimension D;
 	int speed = maxSpeed;
 	double health;
 	int state = 0;
-	//int healthDecrementCounter = RandTool.uniform(0,healthLossTicks); 
 
 
 
@@ -42,11 +41,8 @@ public class Mouse implements Organism{
 
 	// Control Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	public void updateHealthTime(){
-		//if(healthDecrementCounter == 0){
 		this.health = this.health - this.healthLostPerGameTick;
-		//healthDecrementCounter = 4;
-		//}
-		//healthDecrementCounter--;
+
 	}
 
 	public Point2D.Double randomWalk(){
@@ -120,12 +116,12 @@ public class Mouse implements Organism{
 	}
 
 	public double generateRandomInitialHealth(){
-		// generate a starting health point value between 0.4*maxHealth and maxHealth
-		Random rn = new Random();
-		int minimum = (int)(0.4*maxHealth);
-		int range = (int)maxHealth - minimum + 1;
-		int h = rn.nextInt(range) + minimum;
-		return h;
+		// generate a starting health point value between hungerHealth and maxHealth
+		Random r = new Random();
+		double rangeMin = (hungerHealth);
+		double range = maxHealth - rangeMin + 1.0;
+		double randomHealth = rangeMin + (range) * r.nextDouble();
+		return randomHealth;
 	}
 
 

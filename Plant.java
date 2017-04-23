@@ -8,6 +8,7 @@ public class Plant implements Organism{
 	static final String type = "Plant";
 	ArrayList<String> preyTypes = null;
 	static final double maxHealth = 100;
+	static final double healthLostPerGameTick = -1.0; // Plant gains health per game tick
 
 	// Variables (to be set)
 	int id;
@@ -31,7 +32,10 @@ public class Plant implements Organism{
 	// Control Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	public void updateHealthTime(){
 		if(this.health < this.maxHealth){
-			this.health++;
+			this.health = this.health - this.healthLostPerGameTick; // adds health
+			if(this.health > this.maxHealth){
+				this.health = this.maxHealth;
+			}
 		}
 	}
 
@@ -41,12 +45,12 @@ public class Plant implements Organism{
 	}
 
 	public double generateRandomInitialHealth(){
-		// generate a starting health point value between 0.4*maxHealth and maxHealth
-		Random rn = new Random();
-		int minimum = (int)(0.4*maxHealth);
-		int range = (int)maxHealth - minimum + 1;
-		int h = rn.nextInt(range) + minimum;
-		return h;
+		// generate a starting health point value between 0.5*maxHealth and maxHealth
+		Random r = new Random();
+		double rangeMin = (maxHealth/2.0);
+		double range = maxHealth - rangeMin + 1.0;
+		double randomHealth = rangeMin + (range) * r.nextDouble();
+		return randomHealth;
 	}
 
 

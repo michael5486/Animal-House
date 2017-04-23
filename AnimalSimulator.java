@@ -62,10 +62,10 @@ public class AnimalSimulator {
         ArrayList<Organism> temp = getOrganismsType("Mouse");
         for (Organism o : temp) {
             ArrayList<Organism> nearbyPrey = o.getNearbyPrey(organisms);
-            if (nearbyPrey.size() > 0) {
-                System.out.println("ID=" + o.getID());           
-                System.out.println(o.getNearbyPrey(organisms));
-            }
+            // if (nearbyPrey.size() > 0) {
+                // System.out.println("ID=" + o.getID());           
+                // System.out.println(o.getNearbyPrey(organisms));
+            // }
         }
                 
 

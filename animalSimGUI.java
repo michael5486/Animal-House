@@ -21,6 +21,7 @@ public class animalSimGUI extends JPanel {
 
     // Animal Simulator
     AnimalSimulator animalSimulator;
+    static final double delT = 0.1;
 
     // Initial numbers of organisms
     int numPlants = 20;
@@ -35,8 +36,6 @@ public class animalSimGUI extends JPanel {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /* Global variables for the GUI and set up methods */
     
-    double delT = 0.1;
-
     /* GUI Animation stuff */
     Thread currentThread;
     boolean isPaused = false;
@@ -89,28 +88,15 @@ public class animalSimGUI extends JPanel {
 
         animalSimulator.nextStep(delT);
 
-        // for(Organism o : organisms){
-            
-        //     // initialize newLocation point that is not within boundary
-        //     Point2D.Double newLocation = new Point2D.Double(-1,-1); 
-            
-        //     // loop until generated point is within boundary
-        //     while(!isPointWithinBoundary(newLocation)){
-        //         newLocation = o.randomWalk();
-        //     }
-        //     o.setXY(newLocation);
-        // }
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~`
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~`
         //Call nextstep for the cop and speedingCar
         // copSim.nextStep(delT);
         // speederSim.nextStep(delT);
 
-     //    copX.add(copSim.getTime(), copSim.getX());
-     //    speederX.add(speederSim.getTime(), speederSim.getX());
-
+        //    copX.add(copSim.getTime(), copSim.getX());
+        //    speederX.add(speederSim.getTime(), speederSim.getX());
         //check if cop has caught up to speeder, return true or false
+
         return false; // done = true
     }
 
@@ -299,7 +285,7 @@ public class animalSimGUI extends JPanel {
         if(displayHealth){
             // health bar
             g.setColor(Color.RED);
-            double healthBarValue = health/2; // 50 pixels = 100 health for plants (max health)
+            double healthBarValue = health/2.0; // 50 pixels = 100 health for plants (max health)
             g.fillRect(x-25, y-32, (int)healthBarValue, 1);
 
             // health bar edges
@@ -318,9 +304,10 @@ public class animalSimGUI extends JPanel {
         g.setColor(mouseColor);
         g.fillOval(x-5, y-8, 10, 16); // body
 
-        g.setColor(Color.BLACK);
+        g.setColor(new Color(110,110,110)); // ear color
         g.fillArc(x-5, y-1, 5, 7, 15, 180); // left ear
         g.fillArc(x, y-1, 5, 7, 345, 180);  // right ear
+        g.setColor(Color.BLACK);            // detail color
         g.fillRect(x-1, y+4, 1, 1);         // left eye
         g.fillRect(x+1, y+4, 1, 1);         // right eye
         g.drawArc(x-8,y-10, 8, 6, 0, 180);  // tail
@@ -329,11 +316,10 @@ public class animalSimGUI extends JPanel {
         g.drawLine(x+1, y+6, x+6, y+5);     // right top whisker
         g.drawLine(x+1, y+6, x+5, y+7);     // right bottom whisker
 
-
         if(displayHealth){
             // health bar
             g.setColor(Color.RED);
-            double healthBarValue = health*4; // 20 pixels = 5 health for mice (max health)
+            double healthBarValue = health*4.0; // 20 pixels = 5 health for mice (max health)
             g.fillRect(x-10, y-14, (int)healthBarValue, 1);
 
             // health bar edges
