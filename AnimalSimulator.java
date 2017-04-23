@@ -52,8 +52,24 @@ public class AnimalSimulator {
 
 
     public void nextStep (double delT) {
+        
+        updateHealth();
+        moveOrganisms();
+        
+
+        t = t + delT; // we don't use this yet. We will use it when we graph a function of time with organism populations.
+    }
+
+
+
+    public void moveOrganisms(){
+        // Cycle through all organisms
         for(Organism o : organisms){
             
+
+            // if state = idling
+
+            // Random walk
             // initialize newLocation point that is not within boundary
             Point2D.Double newLocation = new Point2D.Double(-1,-1); 
             //o.getNearbyPreyIDs(organisms);
@@ -64,16 +80,49 @@ public class AnimalSimulator {
             }
             o.setXY(newLocation);
         }
-
-
-        t = t + delT; // we don't use this yet. We will use it when we graph a function of time with organism populations.
     }
 
+    public void updateHealth(){
+        
+        // ListIterator<Organism> o = organisms.listIterator();
+        // while(o.hasNext()){
+
+        //     // if state = idling
+        //     o.next().updateHealthTime();
+
+        //     // if state = eating
+
+        //     // if dead
+        //     if(o.next().getHealth() <= 0){
+        //         o.remove();
+        //     }
+        // }
 
 
 
+        // create empty list to fill up with dead organisms. This avoids concurrentModificationException
+        ArrayList<Organism> dead = new ArrayList<Organism>(); 
+
+        // Cycle through all organisms
+        for(Organism o : organisms){
+           
+            // if state = idling
+            o.updateHealthTime();
+
+            // if state = eating
 
 
+            // if dead
+            if(o.getHealth() <= 0){
+                dead.add(o);
+            }
+        }
+
+        // remove dead organisms
+        for(Organism o : dead){
+            organisms.remove(o);
+        }
+    }
 
 
 

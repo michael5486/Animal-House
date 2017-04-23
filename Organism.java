@@ -5,6 +5,12 @@ import java.util.ArrayList;
 
 public interface Organism{
 
+	// Control Methods
+	public void updateHealthTime();
+	public Point2D.Double randomWalk();
+	public int generateRandomInitialHealth();
+
+	// Get
 	public int getID();
 	public String getType();
 	public int getX();
@@ -15,16 +21,15 @@ public interface Organism{
 	public int getState();
 	public ArrayList<Organism> getIDsWithinSightRadius(ArrayList<Organism> organisms);
 	public ArrayList<Organism> getNearbyPrey(ArrayList<Organism> organisms);
-	// public ArrayList<Integer> getNearbyPreyIDs(ArrayList<Organism> organisms); // remove this method
 
+	// Set
 	public void setX(int x);
 	public void setY(int y);
 	public void setXY(Point2D.Double point);
 	//public void setState(State state);
 
-	public Point2D.Double randomWalk();
-	public int generateRandomInitialHealth();
 
+	// To String
 	public String toString();
 
 

@@ -314,7 +314,7 @@ public class animalSimGUI extends JPanel {
             // health bar edges
             g.setColor(Color.BLACK);
             g.fillRect(x-26, y-33, 1, 3);
-            g.fillRect(x+26, y-33, 1, 3);
+            g.fillRect(x+25, y-33, 1, 3);
         }
     }
 
@@ -348,7 +348,7 @@ public class animalSimGUI extends JPanel {
             // health bar edges
             g.setColor(Color.BLACK);
             g.fillRect(x-11, y-15, 1, 3);
-            g.fillRect(x+11, y-15, 1, 3);
+            g.fillRect(x+10, y-15, 1, 3);
         }
     }
 

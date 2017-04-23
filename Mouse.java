@@ -7,10 +7,11 @@ public class Mouse implements Organism{
 	
 	// Constants (specific to this animal type)
 	static final String type = "Mouse";
-	ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Plant"));
+	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Plant"));
 	static final int maxHealth = 5;
 	static final int maxSpeed = 5;
 	static final int sightRadius = 40;
+	static final int healthLossTicks = 4; // every 4 time ticks, lose 1 health
 
 	// Variables (to be set and changed)
 	int id;
@@ -19,6 +20,8 @@ public class Mouse implements Organism{
 	Dimension D;           // current screen size
 	int speed = maxSpeed;
 	int health;
+	int healthDecrementCounter = RandTool.uniform(0,healthLossTicks); 
+
 
 
 	// Constructors ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -36,6 +39,13 @@ public class Mouse implements Organism{
 
 
 	// Control Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	public void updateHealthTime(){
+		if(healthDecrementCounter == 0){
+			this.health--;
+			healthDecrementCounter = 4;
+		}
+		healthDecrementCounter--;
+	}
 
 	public Point2D.Double randomWalk(){
 		
@@ -116,9 +126,8 @@ public class Mouse implements Organism{
 		return h;
 	}
 
-	// Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	// Get
+	// Get ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	public int getID(){
 		return this.id;
 	}
@@ -173,35 +182,12 @@ public class Mouse implements Organism{
 		return nearbyPrey;
 	}
 
-
-	// Old method~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	// public ArrayList<Integer> getNearbyPreyIDs(ArrayList<Organism> organisms) {
-		
-	// 	ArrayList<Integer> nearbyOrganismIDs = new ArrayList<Integer>();
-
-	// 	//iterate through all organisms
-	// 	for (int i = 0; i < organisms.size(); i++) {
-
-	// 		// Point2D.Double currPoint = new Point2D.Double(this.X, this.Y);
-	// 		double distanceFromCurrPoint = getXY().distance(organisms.get(i).getXY());
-			
-	// 		System.out.printf("Distance from id %d = %f", this.id, distanceFromCurrPoint);
-
-	// 		if (distanceFromCurrPoint < this.sightRadius) { //
-	// 			if (organisms.get(i).getType() == "Plant") {
-	// 				nearbyOrganismIDs.add(organisms.get(i).getID());
-	// 			}
-	// 		}
-	// 	}
-
-	// 	return nearbyOrganismIDs;
-	// }
 	public int getState(){
 		return -1; //TODO
 	}
 
 
-	// Set
+	// Set ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	public void setX(int x){
 		this.X = x;
 	}

@@ -15,6 +15,7 @@ public class Plant implements Organism{
 	int health;
 
 
+
 	// Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Plant(int id, Point2D.Double randomPoint){
 		// Create a plant at a location X,Y
@@ -27,6 +28,12 @@ public class Plant implements Organism{
 	}
 
 	// Control Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	public void updateHealthTime(){
+		if(this.health < this.maxHealth){
+			this.health++;
+		}
+	}
+
 	public Point2D.Double randomWalk(){
 		//do nothing. plants don't move!
 		return (new Point2D.Double(this.X, this.Y));
@@ -42,9 +49,7 @@ public class Plant implements Organism{
 	}
 
 
-	// Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-	// Get
+	// Get ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	public int getID(){
 		return this.id;
 	}
@@ -81,18 +86,12 @@ public class Plant implements Organism{
 		return null;
 	}
 
-	// Old method ~~~~~~~~~~~~~~~~~~~~~~``
-	// public ArrayList<Integer> getNearbyPreyIDs(ArrayList<Organism> organisms) {
-	// 	return null; //TODO
-	// }
-
-
 	public int getState(){
 		return -1; //TODO
 	}
 
 
-	// Set
+	// Set ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	public void setX(int x){
 		this.X = x;
 	}
