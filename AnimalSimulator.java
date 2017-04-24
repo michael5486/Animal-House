@@ -59,7 +59,7 @@ public class AnimalSimulator {
         
         updateHealth();
         moveOrganisms();
-        
+
         ArrayList<Organism> temp = getOrganismsType("Mouse");
         for (Organism o : temp) {
             ArrayList<Organism> nearbyPrey = o.getNearbyPrey(organisms);
@@ -70,14 +70,15 @@ public class AnimalSimulator {
         }
                 
 
-
-        // Update statistics
+        /* ~~~~~~~~~~ Don't touch this, or uncomment it ~~~~~~~~~~~~~
+        // Update statistics 
         updatePopulationStatistics();
 
         if(getNumOrganismType("Mouse") == 1){
             displayPopulationGraph();
         }
-        
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
         // update time
         t = t + delT;
     }
