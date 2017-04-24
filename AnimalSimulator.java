@@ -56,8 +56,10 @@ public class AnimalSimulator {
 
 // ~~~~~~~~~~~~~~~ Next Step Method ~~~~~~~~~~~~~~~~~~~~~
     public void nextStep (double delT) {
-        
+        /* Step 1 */ 
         updateHealth();
+
+        /* Step 2 */
         moveOrganisms();
 
         ArrayList<Organism> temp = getOrganismsType("Mouse");
@@ -106,24 +108,20 @@ public class AnimalSimulator {
     }
 
     public void updateHealth(){
+        // Every animal's health is always updated with time. Regardless of any state that it is in.
+
         // create empty list to fill up with dead organisms. This avoids concurrentModificationException
         ArrayList<Organism> dead = new ArrayList<Organism>(); 
 
         // Cycle through all organisms
         for(Organism o : organisms){
+            o.updateHealthTime(); // update health
            
-            // if state = idling
-            o.updateHealthTime();
-
-            // if state = eating
-
-
             // if dead
-            if(o.getHealth() <= 0){
-                dead.add(o);
+            if(o.getHealth() <= 0){  
+                dead.add(o); // add to list of dead
             }
         }
-
         // remove dead organisms
         for(Organism o : dead){
             organisms.remove(o);
