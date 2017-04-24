@@ -59,6 +59,7 @@ public class AnimalSimulator {
         
         updateHealth();
         moveOrganisms();
+        
         ArrayList<Organism> temp = getOrganismsType("Mouse");
         for (Organism o : temp) {
             ArrayList<Organism> nearbyPrey = o.getNearbyPrey(organisms);
