@@ -213,6 +213,45 @@ public class Mouse implements Organism{
 		this.state = state;
 	}
 
+	// Drawing ~~~~~~~~~~~~~~~~~~~~~~~~
+    public void drawOrganism(Organism o, Graphics g, boolean displayAxes, boolean displayHealth, boolean displaySightRadius, boolean displayOrganismID){
+        int x = o.getX();
+        int y = o.getY();
+        double health = this.getHealth();
+
+        Color mouseColor = new Color(128,128,128);
+        g.setColor(mouseColor);
+        g.fillOval(x-5, y-8, 10, 16); // body
+
+        g.setColor(new Color(110,110,110)); // ear color
+        g.fillArc(x-5, y-1, 5, 7, 15, 180); // left ear
+        g.fillArc(x, y-1, 5, 7, 345, 180);  // right ear
+        g.setColor(Color.BLACK);            // detail color
+        g.fillRect(x-1, y+4, 1, 1);         // left eye
+        g.fillRect(x+1, y+4, 1, 1);         // right eye
+        g.drawArc(x-8,y-10, 8, 6, 0, 180);  // tail
+        g.drawLine(x-1, y+6, x-6, y+5);     // left top whisker
+        g.drawLine(x-1, y+6, x-5, y+7);     // left bottom whisker
+        g.drawLine(x+1, y+6, x+6, y+5);     // right top whisker
+        g.drawLine(x+1, y+6, x+5, y+7);     // right bottom whisker
+
+        if(displayHealth){
+            // health bar
+            g.setColor(Color.RED);
+            double healthBarValue = health*4.0; // 20 pixels = 5 health for mice (max health)
+            g.fillRect(x-10, y-14, (int)healthBarValue, 1);
+
+            // health bar edges
+            g.setColor(Color.BLACK);
+            g.fillRect(x-11, y-15, 1, 3);
+            g.fillRect(x+10, y-15, 1, 3);
+        }
+        if (displayOrganismID) {
+            //Organism ID
+            g.setColor(Color.BLACK);
+            g.drawString(Integer.toString(o.getID()), x-10, y+20);
+        }
+    }
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Methods specific to this class. These are not in the Organism interface.

@@ -36,6 +36,9 @@ public interface Organism{
 	public void setXY(Point2D.Double point);
 	public void setState(int state);
 
+	//Drawing
+    public void drawOrganism(Organism o, Graphics g, boolean displayAxes, boolean displayHealth, boolean displaySightRadius, boolean displayOrganismID);
+
 
 	// To String
 	public String toString();

@@ -31,6 +31,7 @@ public class animalSimGUI extends JPanel {
     boolean displayAxes = false;
     boolean displayHealth = true;
     boolean displaySightRadius = false;
+    boolean displayOrganismID = false;
 
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -204,6 +205,16 @@ public class animalSimGUI extends JPanel {
         this.repaint();
     }
 
+    void toggleDisplayOrganismID() {
+        if (displayOrganismID) {
+            displayOrganismID = false;
+        }
+        else {
+            displayOrganismID = true;
+        }
+        this.repaint();
+    }
+
     //Drawing
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -235,97 +246,9 @@ public class animalSimGUI extends JPanel {
                     g.drawOval(x-sightRadius, y-sightRadius, sightRadius*2, sightRadius*2);
                 }
                
-                // draw organism o
-                if(o.getType() == "Plant"){
-                    drawPlant(o, g);
-                }
-                else if(o.getType() == "Mouse"){
-                    drawMouse(o, g);
-                }
+                //draws each organism
+                o.drawOrganism(o, g, displayAxes, displayHealth, displaySightRadius, displayOrganismID);
             }
-        }
-    }
-
-    void drawPlant(Organism o, Graphics g){
-        int x = o.getX();
-        int y = o.getY();
-        double health = o.getHealth();
-
-        Color plantColor = new Color(51,102,0);
-        g.setColor(plantColor);
-
-        // lower left
-        g.drawArc(x-38, y-22, 38, 44, 0, 70);
-        g.drawArc(x-36, y-20, 36, 40, 0, 80);
-        g.drawArc(x-34, y-18, 34, 36, 0, 80);
-        g.drawArc(x-32, y-16, 32, 32, 0, 100);
-        g.drawArc(x-30, y-14, 30, 28, 0, 120);
-        g.drawArc(x-28, y-12, 28, 24, 0, 140);
-
-        // lower right
-        g.drawArc(x, y-22, 38, 44, 110, 70);
-        g.drawArc(x, y-20, 36, 40, 100, 80);
-        g.drawArc(x, y-18, 34, 36, 100, 80);
-        g.drawArc(x, y-16, 32, 32, 80, 100);
-        g.drawArc(x, y-14, 30, 28, 60, 120);
-        g.drawArc(x, y-12, 28, 24, 40, 140);
-
-        // center left
-        g.drawLine(x-1, y, x-9, y-24);
-        g.drawLine(x-1, y, x-6, y-25);
-        g.drawLine(x, y, x-4, y-27);
-        g.drawLine(x, y, x-2, y-25);
-
-        // center right
-        g.drawLine(x+1, y, x+9, y-24);
-        g.drawLine(x+1, y, x+6, y-25);
-        g.drawLine(x, y, x+4, y-27);
-        g.drawLine(x, y, x+2, y-25);
-
-        if(displayHealth){
-            // health bar
-            g.setColor(Color.RED);
-            double healthBarValue = health/2.0; // 50 pixels = 100 health for plants (max health)
-            g.fillRect(x-25, y-32, (int)healthBarValue, 1);
-
-            // health bar edges
-            g.setColor(Color.BLACK);
-            g.fillRect(x-26, y-33, 1, 3);
-            g.fillRect(x+25, y-33, 1, 3);
-        }
-    }
-
-    void drawMouse(Organism o, Graphics g){
-        int x = o.getX();
-        int y = o.getY();
-        double health = o.getHealth();
-
-        Color mouseColor = new Color(128,128,128);
-        g.setColor(mouseColor);
-        g.fillOval(x-5, y-8, 10, 16); // body
-
-        g.setColor(new Color(110,110,110)); // ear color
-        g.fillArc(x-5, y-1, 5, 7, 15, 180); // left ear
-        g.fillArc(x, y-1, 5, 7, 345, 180);  // right ear
-        g.setColor(Color.BLACK);            // detail color
-        g.fillRect(x-1, y+4, 1, 1);         // left eye
-        g.fillRect(x+1, y+4, 1, 1);         // right eye
-        g.drawArc(x-8,y-10, 8, 6, 0, 180);  // tail
-        g.drawLine(x-1, y+6, x-6, y+5);     // left top whisker
-        g.drawLine(x-1, y+6, x-5, y+7);     // left bottom whisker
-        g.drawLine(x+1, y+6, x+6, y+5);     // right top whisker
-        g.drawLine(x+1, y+6, x+5, y+7);     // right bottom whisker
-
-        if(displayHealth){
-            // health bar
-            g.setColor(Color.RED);
-            double healthBarValue = health*4.0; // 20 pixels = 5 health for mice (max health)
-            g.fillRect(x-10, y-14, (int)healthBarValue, 1);
-
-            // health bar edges
-            g.setColor(Color.BLACK);
-            g.fillRect(x-11, y-15, 1, 3);
-            g.fillRect(x+10, y-15, 1, 3);
         }
     }
 
@@ -469,6 +392,15 @@ public class animalSimGUI extends JPanel {
             }
         );
         panel.add(displaySightRadiusCheckBox);
+        JCheckBox displayOrganismIDCheckBox = new JCheckBox("Organism ID", displayOrganismID);
+        displayOrganismIDCheckBox.addActionListener (
+            new ActionListener() {
+                public void actionPerformed (ActionEvent a) {
+                    toggleDisplayOrganismID();
+                }
+            }
+        );
+        panel.add(displayOrganismIDCheckBox);
 
         return panel;
     }

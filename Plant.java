@@ -118,6 +118,62 @@ public class Plant implements Organism{
 	}
 
 
+	// Drawing
+	public void drawOrganism(Organism o, Graphics g, boolean displayAxes, boolean displayHealth, boolean displaySightRadius, boolean displayOrganismID){
+        int x = o.getX();
+        int y = o.getY();
+        double health = o.getHealth();
+
+        Color plantColor = new Color(51,102,0);
+        g.setColor(plantColor);
+
+        // lower left
+        g.drawArc(x-38, y-22, 38, 44, 0, 70);
+        g.drawArc(x-36, y-20, 36, 40, 0, 80);
+        g.drawArc(x-34, y-18, 34, 36, 0, 80);
+        g.drawArc(x-32, y-16, 32, 32, 0, 100);
+        g.drawArc(x-30, y-14, 30, 28, 0, 120);
+        g.drawArc(x-28, y-12, 28, 24, 0, 140);
+
+        // lower right
+        g.drawArc(x, y-22, 38, 44, 110, 70);
+        g.drawArc(x, y-20, 36, 40, 100, 80);
+        g.drawArc(x, y-18, 34, 36, 100, 80);
+        g.drawArc(x, y-16, 32, 32, 80, 100);
+        g.drawArc(x, y-14, 30, 28, 60, 120);
+        g.drawArc(x, y-12, 28, 24, 40, 140);
+
+        // center left
+        g.drawLine(x-1, y, x-9, y-24);
+        g.drawLine(x-1, y, x-6, y-25);
+        g.drawLine(x, y, x-4, y-27);
+        g.drawLine(x, y, x-2, y-25);
+
+        // center right
+        g.drawLine(x+1, y, x+9, y-24);
+        g.drawLine(x+1, y, x+6, y-25);
+        g.drawLine(x, y, x+4, y-27);
+        g.drawLine(x, y, x+2, y-25);
+
+        if(displayHealth){
+            // health bar
+            g.setColor(Color.RED);
+            double healthBarValue = health/2.0; // 50 pixels = 100 health for plants (max health)
+            g.fillRect(x-25, y-32, (int)healthBarValue, 1);
+
+            // health bar edges
+            g.setColor(Color.BLACK);
+            g.fillRect(x-26, y-33, 1, 3);
+            g.fillRect(x+25, y-33, 1, 3);
+        }
+        if (displayOrganismID) {
+            //Organism ID
+            g.setColor(Color.BLACK);
+            g.drawString(Integer.toString(o.getID()), x-10, y+14);
+        }
+    }
+
+
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Methods specific to this class. These are not in the Organism interface.
 
