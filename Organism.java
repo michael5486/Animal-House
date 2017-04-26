@@ -22,11 +22,11 @@ public interface Organism{
 	public ArrayList<Organism> getNearbyPrey(ArrayList<Organism> organisms);
 
 	/* Organisms can be in various states represented by an integer
-	1. idle
-	2. eating
-	3. beingEaten
-	4. hunting
-	5. escaping */
+	0. idle
+	1. eating
+	2. beingEaten
+	3. hunting
+	4. escaping */
 	public int getState();
 
 
@@ -34,7 +34,13 @@ public interface Organism{
 	public void setX(int x);
 	public void setY(int y);
 	public void setXY(Point2D.Double point);
-	public void setState(int state);
+
+	//Moving
+	public Point2D.Double move(ArrayList<Organism> organism);
+
+	//Updating state
+	public void updateState(ArrayList<Organism> organisms);
+	//public void setState(int state);
 
 	//Drawing
     public void drawOrganism(Organism o, Graphics g, boolean displayAxes, boolean displayHealth, boolean displaySightRadius, boolean displayOrganismID);

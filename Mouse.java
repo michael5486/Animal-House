@@ -209,9 +209,79 @@ public class Mouse implements Organism{
 		return this.type + " " + this.id + ": x=" + this.X + " y="+ this.Y;
 	}
 
-	public void setState(int state) {
-		this.state = state;
+
+	public Point2D.Double move(ArrayList<Organism> organisms) {
+		Point2D.Double temp = null;
+
+
+
+
+		switch (state) {
+			//idle, random walk
+			case 0:
+				temp = randomWalk();
+			break;
+			//eating, stop moving
+			case 1:
+				//mouse can move one space closer until it overlaps prey
+					//gets X value of first prey, can change this to sort prey by closest distance and move to closest prey
+				int preyX = this.getNearbyPrey(organisms).get(0).getX();
+				int preyY = this.getNearbyPrey(organisms).get(0).getY();
+
+
+				if (preyX < this.X) { //west
+					if (preyY > this.Y) { //southwest
+						temp = new Point2D.Double(this.X - 1, (double)this.Y + 1.0);
+					}
+					else if (preyY == this.Y) { //west
+						temp = new Point2D.Double(this.X - 1.0, this.Y);
+					}
+					else { //northwest
+						temp = new Point2D.Double(this.X - 1.0, this.Y - 1.0);
+					}
+
+				}
+				else if (preyX == this.X) {
+					if (preyY > this.Y) { //south
+						temp = new Point2D.Double(this.X, this.Y + 1.0);
+					}
+					else if (preyY == this.Y) { //same pixel
+						temp = new Point2D.Double(this.X, this.Y);
+					}
+					else { //north
+						temp = new Point2D.Double(this.X, this.Y - 1.0);
+					}
+				}
+				else { //prey to the right of organism
+					if (preyY > this.Y) { //southeast
+						temp = new Point2D.Double(this.X + 1.0, this.Y + 1.0);
+					}
+					else if (preyY == this.Y) { //east
+						temp = new Point2D.Double(this.X + 1.0, this.Y);
+					}
+					else { //north
+						temp = new Point2D.Double(this.X + 1.0, this.Y - 1.0);
+					}
+				}
+			break;
+			default:
+				temp = randomWalk();
+			break;
+
+		}
+
+		return temp;
 	}
+
+	//updating state
+	public void updateState(ArrayList<Organism> organisms) {
+		//if mouse sees prey, stop moving
+		if (getNearbyPrey(organisms).size() > 0) {
+			//System.out.printf("ID %d sees prey", this.id);
+			this.state = 1;
+		}
+	}
+
 
 	// Drawing ~~~~~~~~~~~~~~~~~~~~~~~~
     public void drawOrganism(Organism o, Graphics g, boolean displayAxes, boolean displayHealth, boolean displaySightRadius, boolean displayOrganismID){

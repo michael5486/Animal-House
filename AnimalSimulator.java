@@ -60,6 +60,9 @@ public class AnimalSimulator {
         updateHealth();
 
         /* Step 2 */
+        updateState();
+
+        /* Step 3 */
         moveOrganisms();
 
         ArrayList<Organism> temp = getOrganismsType("Mouse");
@@ -101,9 +104,16 @@ public class AnimalSimulator {
             
             // loop until generated point is within boundary
             while(!isPointWithinBoundary(newLocation)){
-                newLocation = o.randomWalk();
+                newLocation = o.move(organisms);
             }
             o.setXY(newLocation);
+        }
+    }
+
+    public void updateState() {
+        //cycle through all organisms
+        for (Organism o : organisms) {
+            o.updateState(organisms);
         }
     }
 

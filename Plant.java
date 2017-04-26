@@ -108,13 +108,22 @@ public class Plant implements Organism{
 		this.Y = (int)point.y;
 	}
 
-	public void setState(int state) {
-		this.state = state;
-	}
 
 	// To String
 	public String toString(){
 		return this.type + " " + this.id + ": x=" + this.X + " y="+ this.Y;
+	}
+
+
+	public Point2D.Double move(ArrayList<Organism> organism) {
+		//plant doesnt move
+		Point2D.Double temp = new Point2D.Double(this.X, this.Y);
+		return temp;
+	}
+
+	//Changing state
+	public void updateState(ArrayList<Organism> organisms) {
+		//the plant can't move, it never changes state
 	}
 
 
