@@ -55,7 +55,7 @@ public class AnimalSimulator {
     }
 
 // ~~~~~~~~~~~~~~~ Next Step Method ~~~~~~~~~~~~~~~~~~~~~
-    public void nextStep (double delT) {
+    public boolean nextStep (double delT) {
         /* Step 1 */ 
         updateHealth();
 
@@ -75,17 +75,19 @@ public class AnimalSimulator {
         }
                 
 
-        /* ~~~~~~~~~~ Don't touch this, or uncomment it ~~~~~~~~~~~~~
+        // ~~~~~~~~~~ Don't touch this, or uncomment it ~~~~~~~~~~~~~
         // Update statistics 
         updatePopulationStatistics();
 
-        if(getNumOrganismType("Mouse") == 1){
+        if(getNumOrganismType("Mouse") == 0){
             displayPopulationGraph();
+            return true;
         }
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
         // update time
         t = t + delT;
+        return false;
     }
 
 

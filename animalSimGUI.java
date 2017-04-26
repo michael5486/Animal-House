@@ -87,7 +87,7 @@ public class animalSimGUI extends JPanel {
 
     boolean nextStep() {
 
-        animalSimulator.nextStep(delT);
+        //animalSimulator.nextStep(delT);
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~`
         //Call nextstep for the cop and speedingCar
@@ -98,7 +98,7 @@ public class animalSimGUI extends JPanel {
         //    speederX.add(speederSim.getTime(), speederSim.getX());
         //check if cop has caught up to speeder, return true or false
 
-        return false; // done = true
+        return animalSimulator.nextStep(delT); // done = true
     }
 
     void reset() {

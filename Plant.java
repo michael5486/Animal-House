@@ -8,7 +8,7 @@ public class Plant implements Organism{
 	static final String type = "Plant";
 	ArrayList<String> preyTypes = null;
 	static final double maxHealth = 100;
-	static final double healthLostPerGameTick = -1.0; // Plant gains health per game tick
+	static final double healthLostPerGameTick = 0; // Plant gains health per game tick
 
 	// Variables (to be set)
 	int id;
@@ -92,7 +92,7 @@ public class Plant implements Organism{
 	}
 
 	public int getState(){
-		return -1; //TODO
+		return state;
 	}
 
 
@@ -106,6 +106,10 @@ public class Plant implements Organism{
 	public void setXY(Point2D.Double point){
 		this.X = (int)point.x;
 		this.Y = (int)point.y;
+	}
+
+	public void setHealth(double health) {
+		this.health = health;
 	}
 
 
@@ -124,6 +128,10 @@ public class Plant implements Organism{
 	//Changing state
 	public void updateState(ArrayList<Organism> organisms) {
 		//the plant can't move, it never changes state
+	}
+
+	public void eatPrey(ArrayList<Organism> organisms) {
+		//plants cant eat, do nothing
 	}
 
 

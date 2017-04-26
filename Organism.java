@@ -34,13 +34,15 @@ public interface Organism{
 	public void setX(int x);
 	public void setY(int y);
 	public void setXY(Point2D.Double point);
+	public void setHealth(double newHealth);
 
 	//Moving
 	public Point2D.Double move(ArrayList<Organism> organism);
 
-	//Updating state
+	//State related updates
 	public void updateState(ArrayList<Organism> organisms);
-	//public void setState(int state);
+	public void eatPrey(ArrayList<Organism> organisms);
+
 
 	//Drawing
     public void drawOrganism(Organism o, Graphics g, boolean displayAxes, boolean displayHealth, boolean displaySightRadius, boolean displayOrganismID);
