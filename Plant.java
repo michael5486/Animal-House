@@ -52,7 +52,7 @@ public class Plant implements Organism{
 		double randomHealth = rangeMin + (range) * r.nextDouble();
 		return randomHealth;
 	}
-
+	public void eatPrey(Organism organism){}
 
 	// Get ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	public int getID(){
@@ -76,7 +76,7 @@ public class Plant implements Organism{
 	public int getSightRadius(){
 		return 0;
 	}
-	public ArrayList<Organism> getIDsWithinSightRadius(ArrayList<Organism> organisms){
+	public ArrayList<Organism> getOrganismsWithinSightRadius(ArrayList<Organism> organisms){
 		/* 
 		Return null. Plants don't have a sight radius.
 		This will help us find bugs in code if we ever try to access this list for a Plant.

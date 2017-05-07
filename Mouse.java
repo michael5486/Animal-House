@@ -9,12 +9,12 @@ public class Mouse implements Organism{
 	static final String type = "Mouse";
 	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Plant"));
 	static final double maxHealth = 5.0;
-	static final double hungerHealth = 2.5;
-	static final double healthLostPerGameTick = 0.1;
-	static final double healthGainedEatingPerGameTick = 4;
+	static final double hungerHealth = 2.55;
+	static final double healthLostPerGameTick = 0.01;
+	static final double healthGainedEatingPerGameTick = 0.5;
 	static final int maxSpeed = 5;     // pixels
 	static final int sightRadius = 40; // pixels
-	static final int eatingRadius = 20; // pixels
+	static final int eatingRadius = 10; // pixels
 
 	// Variables (to be set and changed)
 	int id;
@@ -23,6 +23,15 @@ public class Mouse implements Organism{
 	Dimension D;
 	int speed = maxSpeed;
 	double health;
+	Point2D.Double targetLocation;
+	Organism currentPrey;
+	
+	/* 	Organisms can be in various states represented by an integer
+		0. idle
+		1. eating
+		2. beingEaten
+		3. hunting
+		4. escaping */
 	int state = 0;
 
 
@@ -44,7 +53,6 @@ public class Mouse implements Organism{
 	// Control Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	public void updateHealthTime(){
 		this.health = this.health - this.healthLostPerGameTick;
-
 	}
 
 	public Point2D.Double randomWalk(){
@@ -126,6 +134,235 @@ public class Mouse implements Organism{
 		return randomHealth;
 	}
 
+	public Point2D.Double hunt(){
+		// System.out.println("hunt()");
+		
+
+		if(targetLocation == null){
+			System.out.println("we got a huge problem here in hunt()");
+			return (new Point2D.Double(this.X, this.Y));
+		}
+		// System.out.println(" this.X="+this.X+" this.Y="+this.Y);
+
+		double xDist = this.X - targetLocation.x;
+		double yDist = this.Y - targetLocation.y;
+
+		if(Math.abs(xDist) > maxSpeed){
+			if(xDist < 0){
+				xDist = -1*maxSpeed;
+			}
+			else{
+				xDist = maxSpeed;
+			}
+		}
+		if(Math.abs(yDist) > maxSpeed){
+			if(yDist < 0){
+				yDist = -1*maxSpeed;
+			}
+			else{
+				yDist = maxSpeed;
+			}
+		}
+
+		// System.out.println("    xDist:"+xDist+" yDist:"+yDist);
+		if(Math.abs(xDist) >= Math.abs(yDist)){
+			// move along x at top speed
+			return (new Point2D.Double(this.X-xDist, this.Y));
+		}
+		else{
+			// move along y at top speed
+			return (new Point2D.Double(this.X, this.Y-yDist));
+		}
+
+
+		/*
+		//mouse can move one space closer until it overlaps prey
+		//gets X value of first prey, can change this to sort prey by closest distance and move to closest prey
+
+		//code would get an error when checking bounds immediately after a plant dies
+		if (this.getNearbyPrey(organisms).size() == 0) {
+			temp = new Point2D.Double(this.X, this.Y);
+			break;
+		}
+		int preyX = this.getNearbyPrey(organisms).get(0).getX();
+		int preyY = this.getNearbyPrey(organisms).get(0).getY();
+
+
+		if (preyX < this.X) { //west
+			if (preyY > this.Y) { //southwest
+				temp = new Point2D.Double(this.X - 1, (double)this.Y + 1.0);
+			}
+			else if (preyY == this.Y) { //west
+				temp = new Point2D.Double(this.X - 1.0, this.Y);
+			}
+			else { //northwest
+				temp = new Point2D.Double(this.X - 1.0, this.Y - 1.0);
+			}
+
+		}
+		else if (preyX == this.X) {
+			if (preyY > this.Y) { //south
+				temp = new Point2D.Double(this.X, this.Y + 1.0);
+			}
+			else if (preyY == this.Y) { //same pixel
+				temp = new Point2D.Double(this.X, this.Y);
+			}
+			else { //north
+				temp = new Point2D.Double(this.X, this.Y - 1.0);
+			}
+		}
+		else { //prey to the right of organism
+			if (preyY > this.Y) { //southeast
+				temp = new Point2D.Double(this.X + 1.0, this.Y + 1.0);
+			}
+			else if (preyY == this.Y) { //east
+				temp = new Point2D.Double(this.X + 1.0, this.Y);
+			}
+			else { //north
+				temp = new Point2D.Double(this.X + 1.0, this.Y - 1.0);
+			}
+		}
+		return temp;
+		*/
+	}
+
+	public Point2D.Double move(ArrayList<Organism> organisms) {
+		// System.out.println(toString()+"state="+state+" move()");
+
+		Point2D.Double temp = null;
+
+		/* 	Organisms can be in various states represented by an integer
+			0. idle
+			1. eating
+			2. beingEaten
+			3. hunting
+			4. escaping */
+		switch (state) {
+			
+			case 0: /* Idle - random walk */
+				temp = randomWalk();
+				break;
+			
+			case 1: /* Eating (no movement) */
+				temp = getXY();
+				break;
+			
+			case 2: /* Being eaten (no movement) */
+				temp = getXY();
+				break;
+			
+			case 3: /* Hunting */
+				temp = hunt();
+				break;
+
+			case 4: /* Escaping */
+				break;
+
+			default:
+				temp = randomWalk();
+				break;
+		}
+
+		return temp;
+	}
+
+
+	public void eatPrey(Organism prey) {
+		System.out.println(this.type+" id:"+this.id + " eating...");
+
+		// does this even work ?
+		if(health < maxHealth){
+			health += healthGainedEatingPerGameTick;
+			double h = prey.getHealth() - healthGainedEatingPerGameTick;
+			prey.setHealth(h);
+		}
+		else{
+			// finish eating, go back to random walk
+			state = 0;
+		}
+
+		// //would sometimes crash when mouse tries to eat a plant that has just disappeared
+		// if (this.health < this.maxHealth && this.getNearbyPrey(organisms).size() > 0) {
+		// 	this.health = this.health + healthGainedEatingPerGameTick;
+		// 	double currPreyHealth = this.getNearbyPrey(organisms).get(0).getHealth();
+		// 	this.getNearbyPrey(organisms).get(0).setHealth(currPreyHealth - healthGainedEatingPerGameTick);
+		// }
+	}
+
+	public Organism getClosestPrey(ArrayList<Organism> nearbyPrey){
+		Organism org = nearbyPrey.get(0);
+		double dist = getXY().distance(org.getXY());
+
+		// find closest prey
+		for(Organism o : nearbyPrey){
+			double d = getXY().distance(o.getXY());
+			if(d < dist){
+				dist = d;
+				org = o;
+			}
+		}
+		return org;
+	}
+
+	//updating state
+	public void updateState(ArrayList<Organism> organisms) {
+		/* 	
+		Organisms can be in various states represented by an integer
+			0. idle
+			1. eating
+			2. beingEaten
+			3. hunting
+			4. escaping
+		*/
+		ArrayList<Organism> nearbyOrganisms = getOrganismsWithinSightRadius(organisms);
+		ArrayList<Organism> nearbyPrey = getNearbyPrey(nearbyOrganisms);
+
+		
+		if(state == 1){ // If organism is already eating, continue eating
+			// System.out.println(toString()+" state = 1, continue eating");
+			eatPrey(currentPrey);
+		}
+		else if(health <= hungerHealth){ // Else if organism is below hungerHealth and there exists prey within sight radius
+			if(!nearbyPrey.isEmpty()){
+				Organism newPrey = getClosestPrey(nearbyPrey);
+				if(getXY().distance(newPrey.getXY()) <= eatingRadius){
+					// eating
+					// System.out.println(toString()+" state = 1, begin eating");
+					state = 1;
+					currentPrey = newPrey;
+					eatPrey(currentPrey);
+				}
+				else{
+					// hunting
+					// System.out.println(toString()+" state = 3, hunting");
+					state = 3;
+					setTargetLocation(newPrey.getXY());
+				}
+			}
+			
+		}
+		else{
+			// else - Idle, Random Walk
+			state = 0;
+		}
+		// ArrayList<Organism> prey = getNearbyPrey(organisms);
+		// if (prey.size() > 0) {
+		// 	//System.out.printf("ID %d sees prey", this.id);
+		// 	double distToPrey = getXY().distance(prey.get(0).getXY());
+		// 	if (distToPrey < sightRadius && health < hungerHealth) {
+		// 		//eating prey
+		// 		this.state = 2;
+		// 		return;
+		// 	}
+		// 	else {
+		// 		this.state = 1;
+		// 		return;
+		// 	}
+		// }
+
+		
+	}
+
 
 	// Get ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	public int getID(){
@@ -149,7 +386,7 @@ public class Mouse implements Organism{
 	public int getSightRadius(){
 		return this.sightRadius;
 	}
-	public ArrayList<Organism> getIDsWithinSightRadius(ArrayList<Organism> organisms){
+	public ArrayList<Organism> getOrganismsWithinSightRadius(ArrayList<Organism> organisms){
 		// Create emtpy list of organisms to fill up then return
 		ArrayList<Organism> organismsWithinRadius = new ArrayList<Organism>();
 		
@@ -163,16 +400,14 @@ public class Mouse implements Organism{
 		return organismsWithinRadius;
 	}
 
-	public ArrayList<Organism> getNearbyPrey(ArrayList<Organism> organisms){
-		/* Note: The 'organisms' argument can be all of the organisms or the 
-		         result of calling getIDsWithinSightRadius(), this method will 
-		         return the same result either way. */
+	public ArrayList<Organism> getNearbyPrey(ArrayList<Organism> nearbyOrganisms){
+		/* Argument is result of calling getOrganismsWithinSightRadius() */
 
 		// create empty list of organisms to fill up then return
 		ArrayList<Organism> nearbyPrey = new ArrayList<Organism>();
 
-		// call getIDsWithinSightRadius()
-		ArrayList<Organism> nearbyOrganisms = this.getIDsWithinSightRadius(organisms);
+		// call getOrganismsWithinSightRadius()
+		// ArrayList<Organism> nearbyOrganisms = this.getOrganismsWithinSightRadius(organisms);
 		
 		// iterate through nearbyOrganisms
 		for(Organism o : nearbyOrganisms){
@@ -204,6 +439,9 @@ public class Mouse implements Organism{
 		this.X = (int)point.x;
 		this.Y = (int)point.y;
 	}
+	public void setTargetLocation(Point2D.Double point){
+		targetLocation = new Point2D.Double(point.x, point.y);
+	}
 
 	public void setHealth(double health) {
 		this.health = health;
@@ -211,133 +449,11 @@ public class Mouse implements Organism{
 
 	// To String
 	public String toString(){
-		return this.type + " " + this.id + ": x=" + this.X + " y="+ this.Y;
+		return this.type + " " + this.id + ": ";
 	}
 
 
-	public Point2D.Double move(ArrayList<Organism> organisms) {
-		Point2D.Double temp = null;
 
-
-
-
-		switch (state) {
-			//idle, random walk
-			case 0:
-				temp = randomWalk();
-			break;
-			//eating, stop moving
-			case 1:
-				//mouse can move one space closer until it overlaps prey
-					//gets X value of first prey, can change this to sort prey by closest distance and move to closest prey
-				
-				//code would get an error when checking bounds immediately after a plant dies
-				if (this.getNearbyPrey(organisms).size() == 0) {
-					temp = new Point2D.Double(this.X, this.Y);
-					break;
-				}
-				int preyX = this.getNearbyPrey(organisms).get(0).getX();
-				int preyY = this.getNearbyPrey(organisms).get(0).getY();
-
-
-				if (preyX < this.X) { //west
-					if (preyY > this.Y) { //southwest
-						temp = new Point2D.Double(this.X - 1, (double)this.Y + 1.0);
-					}
-					else if (preyY == this.Y) { //west
-						temp = new Point2D.Double(this.X - 1.0, this.Y);
-					}
-					else { //northwest
-						temp = new Point2D.Double(this.X - 1.0, this.Y - 1.0);
-					}
-
-				}
-				else if (preyX == this.X) {
-					if (preyY > this.Y) { //south
-						temp = new Point2D.Double(this.X, this.Y + 1.0);
-					}
-					else if (preyY == this.Y) { //same pixel
-						temp = new Point2D.Double(this.X, this.Y);
-					}
-					else { //north
-						temp = new Point2D.Double(this.X, this.Y - 1.0);
-					}
-				}
-				else { //prey to the right of organism
-					if (preyY > this.Y) { //southeast
-						temp = new Point2D.Double(this.X + 1.0, this.Y + 1.0);
-					}
-					else if (preyY == this.Y) { //east
-						temp = new Point2D.Double(this.X + 1.0, this.Y);
-					}
-					else { //north
-						temp = new Point2D.Double(this.X + 1.0, this.Y - 1.0);
-					}
-				}
-			break;
-			//eating, predator gains health, prey loses health...no movement
-			case 2:
-				eatPrey(organisms);
-				temp = new Point2D.Double(this.X, this.Y);
-
-			break;
-			default:
-				temp = randomWalk();
-			break;
-
-		}
-
-		return temp;
-	}
-
-	// public Organism findOrganismWithID(ArrayList<Organism> organisms, int id) {
-	// 	// for (Organism o: organisms) {
-	// 	// 	if (o.getID() == id) {
-	// 	// 		return
-	// 	// 	}
-	// 	// }
-	// 	for (int i = 0; i < organisms.size(); i++) {
-	// 		if (organisms.get(i).getID() == id) {
-	// 			return organisms.get(i);
-	// 		}
-	// 	}
-	// 	return null;
-	// }
-
-	public void eatPrey(ArrayList<Organism> organisms) {
-		System.out.println(this.id + " eating...");
-
-		//would sometimes crash when mouse tries to eat a plant that has just disappeared
-		if (this.health < this.maxHealth && this.getNearbyPrey(organisms).size() > 0) {
-			this.health = this.health + healthGainedEatingPerGameTick;
-			double currPreyHealth = this.getNearbyPrey(organisms).get(0).getHealth();
-			this.getNearbyPrey(organisms).get(0).setHealth(currPreyHealth - healthGainedEatingPerGameTick);
-		}
-
-	}
-
-	//updating state
-	public void updateState(ArrayList<Organism> organisms) {
-		//if mouse sees prey, stop moving
-		//future addition, sort this to find closest prey
-		ArrayList<Organism> prey = getNearbyPrey(organisms);
-		if (prey.size() > 0) {
-			//System.out.printf("ID %d sees prey", this.id);
-			double distToPrey = getXY().distance(prey.get(0).getXY());
-			if (distToPrey < eatingRadius && health < hungerHealth) {
-				//eating prey
-				this.state = 2;
-				return;
-			}
-			else {
-				this.state = 1;
-				return;
-			}
-		}
-
-		//else
-		this.state = 0;
-	}
 
 
 	// Drawing ~~~~~~~~~~~~~~~~~~~~~~~~

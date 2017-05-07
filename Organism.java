@@ -18,7 +18,7 @@ public interface Organism{
 	public Point2D.Double getXY();
 	public double getHealth();
 	public int getSightRadius();
-	public ArrayList<Organism> getIDsWithinSightRadius(ArrayList<Organism> organisms);
+	public ArrayList<Organism> getOrganismsWithinSightRadius(ArrayList<Organism> organisms);
 	public ArrayList<Organism> getNearbyPrey(ArrayList<Organism> organisms);
 
 	/* Organisms can be in various states represented by an integer
@@ -41,7 +41,7 @@ public interface Organism{
 
 	//State related updates
 	public void updateState(ArrayList<Organism> organisms);
-	public void eatPrey(ArrayList<Organism> organisms);
+	public void eatPrey(Organism organism);
 
 
 	//Drawing

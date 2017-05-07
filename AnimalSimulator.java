@@ -95,14 +95,8 @@ public class AnimalSimulator {
     public void moveOrganisms(){
         // Cycle through all organisms
         for(Organism o : organisms){
-            
-
-            // if state = idling
-
-            // Random walk
             // initialize newLocation point that is not within boundary
             Point2D.Double newLocation = new Point2D.Double(-1,-1); 
-            //o.getNearbyPreyIDs(organisms);
             
             // loop until generated point is within boundary
             while(!isPointWithinBoundary(newLocation)){
