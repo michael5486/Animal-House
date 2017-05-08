@@ -38,6 +38,7 @@ public class AnimalSimulator {
     Function mousePopulation = new Function("Mouse population vs time");
     Function foxPopulation = new Function("Fox population vs time");
     Function rabbitPopulation = new Function("Rabbit population vs time");
+    Function bearPopulation = new Function("Bear population vs time");
 
     // Constructor
     AnimalSimulator(Dimension D, double initDelT, int initNumPlants, int initNumMice, int initNumFoxes, int initNumRabbits){
@@ -72,7 +73,7 @@ public class AnimalSimulator {
         // Update statistics 
         updatePopulationStatistics();
 
-        if(getNumOrganismType("Mouse") == 0 && getNumOrganismType("Fox") == 0 && getNumOrganismType("Rabbit") == 0){
+        if(getNumOrganismType("Mouse") == 0 && getNumOrganismType("Fox") == 0 && getNumOrganismType("Rabbit") == 0 && getNumOrganismType("Bear")){
             displayPopulationGraph();
             return true;
         }
@@ -158,6 +159,9 @@ public class AnimalSimulator {
         for (int i = 0; i < numRabbits; i++) { //rabbits
             organisms.add(new Rabbit(id, createRandomPoint(), D));
             id++;
+        }
+        for (int i = 0; i < numRabbits; i++) { //bears
+            organism.add(new Bear(id, createRandomPoint(), D));
         }
     }
 
@@ -248,6 +252,7 @@ public class AnimalSimulator {
         mousePopulation.add(t,getNumOrganismType("Mouse"));
         foxPopulation.add(t,getNumOrganismType("Fox"));
         rabbitPopulation.add(t, getNumOrganismType("Rabbit"));
+        bearPopulation.add(t, getNumOrganismType("Bear"));
     }
 
     public void displayPopulationGraph(){
@@ -256,7 +261,7 @@ public class AnimalSimulator {
 
         Thread plotThread = new Thread(){
             public void run () {
-                Function.show(plantPopulation,mousePopulation, foxPopulation);
+                Function.show(plantPopulation,mousePopulation,foxPopulation, rabbitPopulation);
             }
         };
         plotThread.start();
