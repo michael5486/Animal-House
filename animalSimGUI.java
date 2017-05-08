@@ -27,6 +27,7 @@ public class animalSimGUI extends JPanel {
     int numPlants = 20;
     int numMice = 30;
     int numFoxes = 10;
+    int numRabbits = 20;
 
     /* Animation Options */
     boolean displayAxes = false;
@@ -45,7 +46,7 @@ public class animalSimGUI extends JPanel {
 
     /* GUI Construction stuff */
     Container cPane = null;
-    JTextField numPlantsField, numMiceField, numFoxesField;
+    JTextField numPlantsField, numMiceField, numFoxesField, numRabbitsField;
     JSlider speedSlider;
     Dimension D;
 
@@ -98,7 +99,22 @@ public class animalSimGUI extends JPanel {
             numMiceField.setText("0");
         }
 
-        System.out.printf("  numPlants = %d\n  numMice  = %d  \n numFoxes  = %d\n", numPlants, numMice, numFoxes);
+        // Get numRabbits from entry field
+        try{
+            numRabbits = Integer.parseInt(numRabbitsField.getText());
+            if(numRabbits < 0){
+                numRabbits = 0;
+                numRabbitsField.setText("0");
+                System.out.println("--Error: numRabbits cannot be less than 0! Defaulting to 0.");
+            }
+        }
+        catch(NumberFormatException e){
+            System.out.println("--Error: Entry fields must have integer values! Defaulting numRabbits to 0.");
+            numRabbits = 0;
+            numRabbitsField.setText("0");
+        }
+
+        System.out.printf("  numPlants = %d\n  numMice  = %d  \n  numFoxes  = %d\n  numRabbits  = %d\n", numPlants, numMice, numFoxes, numRabbits);
     }
 
     boolean nextStep() {
@@ -112,7 +128,7 @@ public class animalSimGUI extends JPanel {
         getNumOrganismsFromEntryField();
 
         // Initialize animal simulator
-        animalSimulator = new AnimalSimulator(D, delT, numPlants, numMice, numFoxes);
+        animalSimulator = new AnimalSimulator(D, delT, numPlants, numMice, numFoxes, numRabbits);
 
         this.repaint();
     }
@@ -254,6 +270,9 @@ public class animalSimGUI extends JPanel {
                     else if (o.getType() == "Fox") {
                         drawFox(o, g);
                     }
+                    else if (o.getType() == "Rabbit") {
+                        drawRabbit(o, g);
+                    }
                 }
             }
             catch(ConcurrentModificationException e){
@@ -368,7 +387,7 @@ public class animalSimGUI extends JPanel {
         catch (IOException e) {
                 System.out.println("Fox.png not found");
         }
-        
+
         if(displayHealth){
             // health bar
             g.setColor(Color.RED);
@@ -386,6 +405,40 @@ public class animalSimGUI extends JPanel {
             g.drawString(Integer.toString(o.getID()), x-9, y+17);
         }
     }
+
+    public void drawRabbit(Organism o, Graphics g) {
+        int x = o.getX();
+        int y = o.getY();
+        double health = o.getHealth();
+
+        try {
+            BufferedImage open = ImageIO.read(new File("Rabbit.png"));
+            g.drawImage(open, x-15, y-15, 30, 30, null);
+
+        }
+        catch (IOException e) {
+                System.out.println("Rabbit.png not found");
+        }
+
+        if(displayHealth){
+            // health bar
+            g.setColor(Color.RED);
+            double healthBarValue = health * 3; // I'm lazy, make it 30 pixels for full health and reuse fox code
+            g.fillRect(x-15, y-15, (int)Math.ceil(healthBarValue), 1);
+
+            // health bar edges
+            g.setColor(Color.BLACK);
+            g.fillRect(x-15, y-16, 1, 3);
+            g.fillRect(x+15, y-16, 1, 3);
+        }
+        if (displayOrganismID) {
+            //Organism ID
+            g.setColor(Color.BLACK);
+            g.drawString(Integer.toString(o.getID()), x-9, y+17);
+        }        
+    }
+
+
 
     //GUI Contructions
     JPanel makeControlPanel() {
@@ -566,6 +619,12 @@ public class animalSimGUI extends JPanel {
         numFoxesField = new JTextField(5);
         numFoxesField.setText(Integer.toString(numFoxes));
         panel.add(numFoxesField);
+
+        JLabel rabbitLabel = new JLabel("Rabbits");
+        panel.add(rabbitLabel);
+        numRabbitsField = new JTextField(5);
+        numRabbitsField.setText(Integer.toString(numRabbits));
+        panel.add(numRabbitsField);
 
         return panel;
     }

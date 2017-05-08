@@ -15,6 +15,7 @@ public class AnimalSimulator {
     int numPlants;
     int numMice;
     int numFoxes;
+    int numRabbits;
     
     // Variables 
     double t = 0; // Current time step. Initialized to zero.
@@ -36,14 +37,16 @@ public class AnimalSimulator {
     Function plantPopulation = new Function("Plant population vs time");
     Function mousePopulation = new Function("Mouse population vs time");
     Function foxPopulation = new Function("Fox population vs time");
+    Function rabbitPopulation = new Function("Rabbit population vs time");
 
     // Constructor
-    AnimalSimulator(Dimension D, double initDelT, int initNumPlants, int initNumMice, int initNumFoxes){
+    AnimalSimulator(Dimension D, double initDelT, int initNumPlants, int initNumMice, int initNumFoxes, int initNumRabbits){
         this.D = D;
         delT = initDelT;
         numPlants = initNumPlants;
         numMice = initNumMice;
         numFoxes = initNumFoxes;
+        numRabbits = initNumRabbits;
 
         // create animals
         createAnimals();
@@ -69,7 +72,7 @@ public class AnimalSimulator {
         // Update statistics 
         updatePopulationStatistics();
 
-        if(getNumOrganismType("Mouse") == 0 && getNumOrganismType("Fox") == 0){
+        if(getNumOrganismType("Mouse") == 0 && getNumOrganismType("Fox") == 0 && getNumOrganismType("Rabbit") == 0){
             displayPopulationGraph();
             return true;
         }
@@ -150,6 +153,10 @@ public class AnimalSimulator {
         for (int i = 0; i < numFoxes; i++) { // foxes
             //create foxes
             organisms.add(new Fox(id, createRandomPoint()));
+            id++;
+        }
+        for (int i = 0; i < numRabbits; i++) { //rabbits
+            organisms.add(new Rabbit(id, createRandomPoint()));
             id++;
         }
     }
@@ -240,6 +247,7 @@ public class AnimalSimulator {
         plantPopulation.add(t,getNumOrganismType("Plant"));
         mousePopulation.add(t,getNumOrganismType("Mouse"));
         foxPopulation.add(t,getNumOrganismType("Fox"));
+        rabbitPopulation.add(t, getNumOrganismType("Rabbit"));
     }
 
     public void displayPopulationGraph(){

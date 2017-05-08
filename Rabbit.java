@@ -3,17 +3,17 @@ import java.awt.geom.*;
 import java.util.*;
 
 
-public class Fox implements Organism{
+public class Rabbit implements Organism{
 	
 	// Constants (specific to this animal type)
-	static final String type = "Fox";
-	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Mouse","Rabbit"));
-	static final ArrayList<String> predatorTypes = new ArrayList<String>(Arrays.asList("Wolf"));
-	static final double maxHealth = 30.0;
-	static final double hungerHealth = 15;
-	static final double healthLostPerGameTick = 0.05;
+	static final String type = "Rabbit";
+	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Plants"));
+	static final ArrayList<String> predatorTypes = new ArrayList<String>(Arrays.asList("Fox", "Wolf"));
+	static final double maxHealth = 10;
+	static final double hungerHealth = 5;
+	static final double healthLostPerGameTick = 0.02;
 	static final double healthGainedEatingPerGameTick = 0.5;
-	static final int maxSpeed = 8;     // pixels
+	static final int maxSpeed = 12;     // pixels
 	static final int sightRadius = 60; // pixels
 	static final int eatingRadius = 10; // pixels
 
@@ -39,7 +39,7 @@ public class Fox implements Organism{
 
 
 	// Constructors ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	Fox(int id, Point2D.Double randomPoint){
+	Rabbit(int id, Point2D.Double randomPoint){
 		// Create a mouse at a location X,Y
 		this.id = id;
 		this.X = (int)randomPoint.x;
