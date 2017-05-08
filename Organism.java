@@ -23,10 +23,13 @@ public interface Organism{
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 	public Point2D.Double randomWalk();
 	public Point2D.Double hunt();
+	public Point2D.Double escape();
 	public ArrayList<Organism> getOrganismsWithinSightRadius(ArrayList<Organism> organisms);
 	public ArrayList<Organism> getNearbyPrey(ArrayList<Organism> organisms);
 	public Organism getClosestPrey(ArrayList<Organism> nearbyPrey);
-	public void eatPrey(Organism organism);
+	public ArrayList<Organism> getNearbyPredators(ArrayList<Organism> nearbyOrganisms);
+	public Organism getClosestPredator(ArrayList<Organism> nearbyPrey);
+	public void eatPrey();
 	public double generateRandomInitialHealth();
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
