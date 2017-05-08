@@ -28,6 +28,7 @@ public class animalSimGUI extends JPanel {
     int numMice = 30;
     int numFoxes = 4;
     int numRabbits = 15;
+    int numBears = 2;
 
     /* Animation Options */
     boolean displayAxes = false;
@@ -46,7 +47,7 @@ public class animalSimGUI extends JPanel {
 
     /* GUI Construction stuff */
     Container cPane = null;
-    JTextField numPlantsField, numMiceField, numFoxesField, numRabbitsField;
+    JTextField numPlantsField, numMiceField, numFoxesField, numRabbitsField, numBearsField;
     JSlider speedSlider;
     Dimension D;
 
@@ -113,8 +114,22 @@ public class animalSimGUI extends JPanel {
             numRabbits = 0;
             numRabbitsField.setText("0");
         }
+        // Get numBears from entry field
+        try{
+            numBears = Integer.parseInt(numBearsField.getText());
+            if(numBears < 0){
+                numBears = 0;
+                numBearsField.setText("0");
+                System.out.println("--Error: numBears cannot be less than 0! Defaulting to 0.");
+            }
+        }
+        catch(NumberFormatException e){
+            System.out.println("--Error: Entry fields must have integer values! Defaulting numBears to 0.");
+            numBears = 0;
+            numBearsField.setText("0");
+        }        
 
-        System.out.printf("  numPlants = %d\n  numMice  = %d  \n  numFoxes  = %d\n  numRabbits  = %d\n", numPlants, numMice, numFoxes, numRabbits);
+        System.out.printf("  numPlants = %d\n  numMice  = %d  \n  numFoxes  = %d\n  numRabbits  = %d\n  numBears = %d\n", numPlants, numMice, numFoxes, numRabbits, numBears);
     }
 
     boolean nextStep() {
@@ -128,7 +143,7 @@ public class animalSimGUI extends JPanel {
         getNumOrganismsFromEntryField();
 
         // Initialize animal simulator
-        animalSimulator = new AnimalSimulator(D, delT, numPlants, numMice, numFoxes, numRabbits);
+        animalSimulator = new AnimalSimulator(D, delT, numPlants, numMice, numFoxes, numRabbits, numBears);
 
         this.repaint();
     }
@@ -272,6 +287,9 @@ public class animalSimGUI extends JPanel {
                     }
                     else if (o.getType() == "Rabbit") {
                         drawRabbit(o, g);
+                    }
+                    else if (o.getType() == "Bear") {
+                        drawBear(o, g);
                     }
                 }
             }
@@ -438,6 +456,37 @@ public class animalSimGUI extends JPanel {
         }        
     }
 
+    public void drawBear(Organism o, Graphics g) {
+        int x = o.getX();
+        int y = o.getY();
+        double health = o.getHealth();
+
+        try {
+            BufferedImage open = ImageIO.read(new File("Bear.png"));
+            g.drawImage(open, x-20, y-20, 40, 40, null);
+
+        }
+        catch (IOException e) {
+                System.out.println("Bear.png not found");
+        }
+
+        if(displayHealth){
+            // health bar
+            g.setColor(Color.RED);
+            double healthBarValue = health/2; // I'm lazy, make it 30 pixels for full health and reuse fox code
+            g.fillRect(x-15, y-15, (int)Math.ceil(healthBarValue), 1);
+
+            // health bar edges
+            g.setColor(Color.BLACK);
+            g.fillRect(x-15, y-16, 1, 3);
+            g.fillRect(x+15, y-16, 1, 3);
+        }
+        if (displayOrganismID) {
+            //Organism ID
+            g.setColor(Color.BLACK);
+            g.drawString(Integer.toString(o.getID()), x-9, y+17);
+        }        
+    }
 
 
     //GUI Contructions
@@ -625,6 +674,12 @@ public class animalSimGUI extends JPanel {
         numRabbitsField = new JTextField(5);
         numRabbitsField.setText(Integer.toString(numRabbits));
         panel.add(numRabbitsField);
+
+        JLabel bearLabel = new JLabel("Bears");
+        panel.add(bearLabel);
+        numBearsField = new JTextField(5);
+        numBearsField.setText(Integer.toString(numBears));
+        panel.add(numBearsField);
 
         return panel;
     }

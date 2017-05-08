@@ -16,6 +16,7 @@ public class AnimalSimulator {
     int numMice;
     int numFoxes;
     int numRabbits;
+    int numBears;
     
     // Variables 
     double t = 0; // Current time step. Initialized to zero.
@@ -41,13 +42,14 @@ public class AnimalSimulator {
     Function bearPopulation = new Function("Bear population vs time");
 
     // Constructor
-    AnimalSimulator(Dimension D, double initDelT, int initNumPlants, int initNumMice, int initNumFoxes, int initNumRabbits){
+    AnimalSimulator(Dimension D, double initDelT, int initNumPlants, int initNumMice, int initNumFoxes, int initNumRabbits, int initNumBears){
         this.D = D;
         delT = initDelT;
         numPlants = initNumPlants;
         numMice = initNumMice;
         numFoxes = initNumFoxes;
         numRabbits = initNumRabbits;
+        numBears = initNumBears;
 
         // create animals
         createAnimals();
@@ -73,7 +75,7 @@ public class AnimalSimulator {
         // Update statistics 
         updatePopulationStatistics();
 
-        if(getNumOrganismType("Mouse") == 0 && getNumOrganismType("Fox") == 0 && getNumOrganismType("Rabbit") == 0 && getNumOrganismType("Bear")){
+        if(getNumOrganismType("Mouse") == 0 && getNumOrganismType("Fox") == 0 && getNumOrganismType("Rabbit") == 0 && getNumOrganismType("Bear") == 0){
             displayPopulationGraph();
             return true;
         }
@@ -160,8 +162,9 @@ public class AnimalSimulator {
             organisms.add(new Rabbit(id, createRandomPoint(), D));
             id++;
         }
-        for (int i = 0; i < numRabbits; i++) { //bears
-            organism.add(new Bear(id, createRandomPoint(), D));
+        for (int i = 0; i < numBears; i++) { //bears
+            organisms.add(new Bear(id, createRandomPoint(), D));
+            id++;
         }
     }
 
