@@ -259,10 +259,30 @@ public class Mouse implements Organism{
 	}
 	public Point2D.Double escape(){ // Called in move()
 		// System.out.println(" this.X="+this.X+" this.Y="+this.Y);
+
+		double distance = getXY().distance(predator.getXY());
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
 		Point2D.Double predatorXY = predator.getXY();
 
 		double xDist = this.X - predatorXY.x;
 		double yDist = this.Y - predatorXY.y;
+
+
 
 		if(Math.abs(xDist) > maxSpeed){
 			if(xDist < 0){
@@ -363,7 +383,7 @@ public class Mouse implements Organism{
 	public void eatPrey(){
 		// System.out.println(this.type+" id:"+this.id + " eating...");
 
-		if(health < maxHealth){
+		if(health < maxHealth && prey.getHealth() > 0){
 			health += healthGainedEatingPerGameTick;
 			double h = prey.getHealth() - healthGainedEatingPerGameTick;
 			prey.setHealth(h);

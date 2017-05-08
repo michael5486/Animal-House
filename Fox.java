@@ -7,8 +7,7 @@ public class Fox implements Organism{
 	
 	// Constants (specific to this animal type)
 	static final String type = "Fox";
-		//TODO add rabbit
-	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Mouse", "Rabbit"));
+	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Mouse","Rabbit"));
 	static final ArrayList<String> predatorTypes = new ArrayList<String>(Arrays.asList("Wolf"));
 	static final double maxHealth = 30.0;
 	static final double hungerHealth = 15;
@@ -41,7 +40,7 @@ public class Fox implements Organism{
 
 	// Constructors ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Fox(int id, Point2D.Double randomPoint){
-		// Create a fox at a location X,Y
+		// Create a mouse at a location X,Y
 		this.id = id;
 		this.X = (int)randomPoint.x;
 		this.Y = (int)randomPoint.y;
@@ -143,6 +142,7 @@ public class Fox implements Organism{
 				break;
 
 			case 4: /* Escaping */
+				temp = escape();
 				break;
 
 			default:
@@ -224,13 +224,11 @@ public class Fox implements Organism{
 		return (new Point2D.Double(newX,newY));
 	}
 	public Point2D.Double hunt(){ // Called in move()
-		if(targetLocation == null){
-			return (new Point2D.Double(this.X, this.Y));
-		}
 		// System.out.println(" this.X="+this.X+" this.Y="+this.Y);
+		Point2D.Double preyXY = prey.getXY();
 
-		double xDist = this.X - targetLocation.x;
-		double yDist = this.Y - targetLocation.y;
+		double xDist = this.X - preyXY.x;
+		double yDist = this.Y - preyXY.y;
 
 		if(Math.abs(xDist) > maxSpeed){
 			if(xDist < 0){
@@ -261,10 +259,30 @@ public class Fox implements Organism{
 	}
 	public Point2D.Double escape(){ // Called in move()
 		// System.out.println(" this.X="+this.X+" this.Y="+this.Y);
+
+		double distance = getXY().distance(predator.getXY());
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
 		Point2D.Double predatorXY = predator.getXY();
 
 		double xDist = this.X - predatorXY.x;
 		double yDist = this.Y - predatorXY.y;
+
+
 
 		if(Math.abs(xDist) > maxSpeed){
 			if(xDist < 0){
@@ -365,7 +383,7 @@ public class Fox implements Organism{
 	public void eatPrey(){
 		// System.out.println(this.type+" id:"+this.id + " eating...");
 
-		if(health < maxHealth){
+		if(health < maxHealth && prey.getHealth() > 0){
 			health += healthGainedEatingPerGameTick;
 			double h = prey.getHealth() - healthGainedEatingPerGameTick;
 			prey.setHealth(h);
