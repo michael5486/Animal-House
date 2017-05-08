@@ -14,6 +14,7 @@ public class AnimalSimulator {
     Dimension D;
     int numPlants;
     int numMice;
+    int numFoxes;
     
     // Variables 
     double t = 0; // Current time step. Initialized to zero.
@@ -34,13 +35,15 @@ public class AnimalSimulator {
     /* Statics */
     Function plantPopulation = new Function("Plant population vs time");
     Function mousePopulation = new Function("Mouse population vs time");
+    Function foxPopulation = new Function("Fox population vs time");
 
     // Constructor
-    AnimalSimulator(Dimension D, double initDelT, int initNumPlants, int initNumMice){
+    AnimalSimulator(Dimension D, double initDelT, int initNumPlants, int initNumMice, int initNumFoxes){
         this.D = D;
         delT = initDelT;
         numPlants = initNumPlants;
         numMice = initNumMice;
+        numFoxes = initNumFoxes;
 
         // create animals
         createAnimals();
@@ -144,6 +147,11 @@ public class AnimalSimulator {
             organisms.add(new Mouse(id, createRandomPoint()));
             id++;
         }
+        for (int i = 0; i < numFoxes; i++) { // foxes
+            //create foxes
+            organisms.add(new Fox(id, createRandomPoint()));
+            id++;
+        }
     }
 
     /* Creates a random cartesian point */
@@ -231,6 +239,7 @@ public class AnimalSimulator {
     public void updatePopulationStatistics(){
         plantPopulation.add(t,getNumOrganismType("Plant"));
         mousePopulation.add(t,getNumOrganismType("Mouse"));
+        foxPopulation.add(t,getNumOrganismType("Fox"));
     }
 
     public void displayPopulationGraph(){
@@ -239,7 +248,7 @@ public class AnimalSimulator {
 
         Thread plotThread = new Thread(){
             public void run () {
-                Function.show(plantPopulation,mousePopulation);
+                Function.show(plantPopulation,mousePopulation, foxPopulation);
             }
         };
         plotThread.start();

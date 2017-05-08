@@ -26,6 +26,7 @@ public class animalSimGUI extends JPanel {
     // Initial numbers of organisms
     int numPlants = 20;
     int numMice = 30;
+    int numFoxes = 10;
 
     /* Animation Options */
     boolean displayAxes = false;
@@ -44,7 +45,7 @@ public class animalSimGUI extends JPanel {
 
     /* GUI Construction stuff */
     Container cPane = null;
-    JTextField numPlantsField, numMiceField;
+    JTextField numPlantsField, numMiceField, numFoxesField;
     JSlider speedSlider;
     Dimension D;
 
@@ -82,7 +83,22 @@ public class animalSimGUI extends JPanel {
             numMiceField.setText("0");
         }
 
-        System.out.printf("  numPlants = %d\n  numMice  = %d  \n", numPlants, numMice);
+        // Get numFoxes from entry field
+        try{
+            numFoxes = Integer.parseInt(numFoxesField.getText());
+            if(numFoxes < 0){
+                numFoxes = 0;
+                numFoxesField.setText("0");
+                System.out.println("--Error: numFoxes cannot be less than 0! Defaulting to 0.");
+            }
+        }
+        catch(NumberFormatException e){
+            System.out.println("--Error: Entry fields must have integer values! Defaulting numFoxes to 0.");
+            numMice = 0;
+            numMiceField.setText("0");
+        }
+
+        System.out.printf("  numPlants = %d\n  numMice  = %d  \n numFoxes  = %d\n", numPlants, numMice, numFoxes);
     }
 
     boolean nextStep() {
@@ -96,7 +112,7 @@ public class animalSimGUI extends JPanel {
         getNumOrganismsFromEntryField();
 
         // Initialize animal simulator
-        animalSimulator = new AnimalSimulator(D, delT, numPlants, numMice);
+        animalSimulator = new AnimalSimulator(D, delT, numPlants, numMice, numFoxes);
 
         this.repaint();
     }
@@ -235,6 +251,9 @@ public class animalSimGUI extends JPanel {
                     else if(o.getType() == "Mouse"){
                         drawMouse(o, g);
                     }
+                    else if (o.getType() == "Fox") {
+                        drawFox(o, g);
+                    }
                 }
             }
             catch(ConcurrentModificationException e){
@@ -333,6 +352,39 @@ public class animalSimGUI extends JPanel {
             //Organism ID
             g.setColor(Color.BLACK);
             g.drawString(Integer.toString(o.getID()), x-10, y+14);
+        }
+    }
+
+    public void drawFox(Organism o, Graphics g) {
+        int x = o.getX();
+        int y = o.getY();
+        double health = o.getHealth();
+
+        try {
+            BufferedImage open = ImageIO.read(new File("Fox.png"));
+            g.drawImage(open, x-15, y-15, 30, 30, null);
+
+        }
+        catch (IOException e) {
+                System.out.println("Fox.png not found");
+        }
+        
+
+        if(displayHealth){
+            // health bar
+            g.setColor(Color.RED);
+            double healthBarValue = health; // 30 pixels for full health
+            g.fillRect(x-15, y-15, (int)Math.ceil(healthBarValue), 1);
+
+            // health bar edges
+            g.setColor(Color.BLACK);
+            g.fillRect(x-15, y-16, 1, 3);
+            g.fillRect(x+15, y-16, 1, 3);
+        }
+        if (displayOrganismID) {
+            //Organism ID
+            g.setColor(Color.BLACK);
+            g.drawString(Integer.toString(o.getID()), x-9, y+17);
         }
     }
 
@@ -510,6 +562,12 @@ public class animalSimGUI extends JPanel {
         numMiceField.setText(Integer.toString(numMice)); 
         panel.add(numMiceField);
 
+        JLabel foxLabel = new JLabel("Foxes");
+        panel.add(foxLabel);
+        numFoxesField = new JTextField(5);
+        numFoxesField.setText(Integer.toString(numFoxes));
+        panel.add(numFoxesField);
+
         return panel;
     }
 
@@ -538,8 +596,8 @@ public class animalSimGUI extends JPanel {
     	frame.setSize (1100, 700);
         frame.setMinimumSize(new Dimension(1100, 700));
         frame.setMaximumSize(new Dimension(1100, 700));
-    	frame.setTitle ("animalSimGUI");
-
+    	frame.setTitle ("animalSimGUI")
+;
     	//Obtains the content pane layer so we can add to it
     	//Container is part of Abstract Window Toolkit, used to create GUIs
     	cPane = frame.getContentPane();
