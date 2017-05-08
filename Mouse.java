@@ -280,7 +280,8 @@ public class Mouse implements Organism{
         for(Point2D.Double p : invalidLocations){
             for(Point2D.Double n : newLocations){
 	            if(n.equals(p)){
-	                newLocations.remove(n);
+	                newLocations.remove(p);
+	                break;
 	            }
 	        }
         }

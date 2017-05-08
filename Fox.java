@@ -9,9 +9,9 @@ public class Fox implements Organism{
 	static final String type = "Fox";
 	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Mouse","Rabbit"));
 	static final ArrayList<String> predatorTypes = new ArrayList<String>(Arrays.asList("Wolf"));
-	static final double maxHealth = 30.0;
-	static final double hungerHealth = 15;
-	static final double healthLostPerGameTick = 0.05;
+	static final double maxHealth = 12.0;
+	static final double hungerHealth = 6;
+	static final double healthLostPerGameTick = 0.03;
 	static final double healthGainedEatingPerGameTick = 0.5;
 	static final int maxSpeed = 8;     // pixels
 	static final int sightRadius = 60; // pixels
@@ -260,57 +260,46 @@ public class Fox implements Organism{
 	}
 	public Point2D.Double escape(){ // Called in move()
 		// System.out.println(" this.X="+this.X+" this.Y="+this.Y);
+		ArrayList<Point2D.Double> newLocations = new ArrayList<Point2D.Double>();
 
-		double distance = getXY().distance(predator.getXY());
+		// add 5 locations: NSEW and same spot
+		newLocations.add(getXY()); // same spot
+		newLocations.add(new Point2D.Double(X+maxSpeed, Y)); // east
+		newLocations.add(new Point2D.Double(X-maxSpeed, Y)); // west
+		newLocations.add(new Point2D.Double(X, Y+maxSpeed)); // south
+		newLocations.add(new Point2D.Double(X, Y-maxSpeed)); // north
 
-		
+		// Cycle through newLocations and locations that are not within the boundaries
+		ArrayList<Point2D.Double> invalidLocations = new ArrayList<Point2D.Double>();
+        for(Point2D.Double p : newLocations){
+            // if out of bounds
+            if(!isPointWithinBoundary(p)){
+                invalidLocations.add(p); // add to invalidLocations
+            }
+        }
+        // remove invalidLocations from newLocations
+        for(Point2D.Double p : invalidLocations){
+            for(Point2D.Double n : newLocations){
+	            if(n.equals(p)){
+	                newLocations.remove(p);
+	                break;
+	            }
+	        }
+        }
 
+        // Choose newLocation that is furthest away from predator
+		double dist = predator.getXY().distance(newLocations.get(0));
+		Point2D.Double furthestPoint = newLocations.get(0);
 
-
-
-
-
-
-
-
-
-
-
-
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
-		Point2D.Double predatorXY = predator.getXY();
-
-		double xDist = this.X - predatorXY.x;
-		double yDist = this.Y - predatorXY.y;
-
-
-
-		if(Math.abs(xDist) > maxSpeed){
-			if(xDist < 0){
-				xDist = -1*maxSpeed;
-			}
-			else{
-				xDist = maxSpeed;
-			}
-		}
-		if(Math.abs(yDist) > maxSpeed){
-			if(yDist < 0){
-				yDist = -1*maxSpeed;
-			}
-			else{
-				yDist = maxSpeed;
+		// find point furthest from predator
+		for(Point2D.Double p : newLocations){
+			double d = predator.getXY().distance(p);
+			if(d > dist){
+				dist = d;
+				furthestPoint = p;
 			}
 		}
-
-		// System.out.println("    xDist:"+xDist+" yDist:"+yDist);
-		if(Math.abs(xDist) >= Math.abs(yDist)){
-			// move along x at top speed
-			return (new Point2D.Double(this.X-xDist, this.Y));
-		}
-		else{
-			// move along y at top speed
-			return (new Point2D.Double(this.X, this.Y-yDist));
-		}
+		return furthestPoint;
 	}
 	public ArrayList<Organism> getOrganismsWithinSightRadius(ArrayList<Organism> organisms){
 		// Create emtpy list of organisms to fill up then return

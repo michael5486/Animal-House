@@ -26,8 +26,8 @@ public class animalSimGUI extends JPanel {
     // Initial numbers of organisms
     int numPlants = 20;
     int numMice = 30;
-    int numFoxes = 10;
-    int numRabbits = 20;
+    int numFoxes = 4;
+    int numRabbits = 15;
 
     /* Animation Options */
     boolean displayAxes = false;
@@ -391,7 +391,7 @@ public class animalSimGUI extends JPanel {
         if(displayHealth){
             // health bar
             g.setColor(Color.RED);
-            double healthBarValue = health; // 30 pixels for full health
+            double healthBarValue = health*30/12; // 30 pixels for full health
             g.fillRect(x-15, y-15, (int)Math.ceil(healthBarValue), 1);
 
             // health bar edges
