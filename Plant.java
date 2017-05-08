@@ -15,15 +15,17 @@ public class Plant implements Organism{
 	int X, Y;
 	double health;
 	int state = 0;
+	Dimension D;
 
 
 
 	// Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	Plant(int id, Point2D.Double randomPoint){
+	Plant(int id, Point2D.Double randomPoint, Dimension D){
 		// Create a plant at a location X,Y
 		this.id = id;
 		this.X = (int)randomPoint.x;
 		this.Y = (int)randomPoint.y;
+		this.D = D;
 
 		// set initial health
 		this.health = generateRandomInitialHealth();
@@ -93,6 +95,20 @@ public class Plant implements Organism{
 		// Plants dont eat prey
 		// 
 	}
+	public boolean isPointWithinBoundary(Point2D.Double point){
+        /* Check to see if a point is within screen boundary */
+        int x = (int)point.x;
+        int y = (int)point.y;
+        int screenWidth = D.width;
+        int screenHeight = D.height;
+
+        if(x >= 0 && y >= 0 && x < screenWidth && y < screenHeight){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 	public double generateRandomInitialHealth(){ // Called by constructor
 		// generate a starting health point value between 0.5*maxHealth and maxHealth
 		Random r = new Random();

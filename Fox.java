@@ -39,13 +39,14 @@ public class Fox implements Organism{
 
 
 	// Constructors ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	Fox(int id, Point2D.Double randomPoint){
+	Fox(int id, Point2D.Double randomPoint, Dimension D){
 		// Create a mouse at a location X,Y
 		this.id = id;
 		this.X = (int)randomPoint.x;
 		this.Y = (int)randomPoint.y;
 		this.prevX = this.X;
 		this.prevY = this.Y;
+		this.D = D;
 
 		// set initial health
 		this.health = generateRandomInitialHealth();
@@ -393,6 +394,20 @@ public class Fox implements Organism{
 			state = 0;
 		}
 	}
+	public boolean isPointWithinBoundary(Point2D.Double point){
+        /* Check to see if a point is within screen boundary */
+        int x = (int)point.x;
+        int y = (int)point.y;
+        int screenWidth = D.width;
+        int screenHeight = D.height;
+
+        if(x >= 0 && y >= 0 && x < screenWidth && y < screenHeight){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 	public double generateRandomInitialHealth(){ // Called by constructor
 		// generate a starting health point value between hungerHealth and maxHealth
 		Random r = new Random();

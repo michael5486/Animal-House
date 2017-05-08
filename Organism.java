@@ -30,6 +30,7 @@ public interface Organism{
 	public ArrayList<Organism> getNearbyPredators(ArrayList<Organism> nearbyOrganisms);
 	public Organism getClosestPredator(ArrayList<Organism> nearbyPrey);
 	public void eatPrey();
+	public boolean isPointWithinBoundary(Point2D.Double point);
 	public double generateRandomInitialHealth();
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

@@ -138,18 +138,18 @@ public class AnimalSimulator {
 
         for(int i = 0; i < numPlants; i++){  // plants
             // create plants
-            organisms.add(new Plant(id, createRandomPoint()));
+            organisms.add(new Plant(id, createRandomPoint(), D));
             id++;
         }
 
         for(int i = 0; i < numMice; i++){ // mice
             // create mice
-            organisms.add(new Mouse(id, createRandomPoint()));
+            organisms.add(new Mouse(id, createRandomPoint(), D));
             id++;
         }
         for (int i = 0; i < numFoxes; i++) { // foxes
             //create foxes
-            organisms.add(new Fox(id, createRandomPoint()));
+            organisms.add(new Fox(id, createRandomPoint(), D));
             id++;
         }
     }
