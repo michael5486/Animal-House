@@ -45,12 +45,8 @@ public class AnimalSimulator {
         // create animals
         createAnimals();
 
-        // For testing purposes
+        /* --------For testing purposes------- */
         // for(Organism o : organisms){
-        //     if(o.getType() == "Plant"){
-        //         Plant p = (Plant)o;
-        //         p.whatIAm();
-        //     }
         // }
     }
 
@@ -64,16 +60,7 @@ public class AnimalSimulator {
 
         /* Step 3 */
         moveOrganisms();
-
-        ArrayList<Organism> temp = getOrganismsType("Mouse");
-        for (Organism o : temp) {
-            ArrayList<Organism> nearbyPrey = o.getNearbyPrey(organisms);
-            // if (nearbyPrey.size() > 0) {
-                // System.out.println("ID=" + o.getID());           
-                // System.out.println(o.getNearbyPrey(organisms));
-            // }
-        }
-                
+  
 
         // ~~~~~~~~~~ Don't touch this, or uncomment it ~~~~~~~~~~~~~
         // Update statistics 
@@ -140,7 +127,7 @@ public class AnimalSimulator {
 //~~~~~~~~~ Methods for initializing AnimalSimulator instance ~~~~~~~~~~~~~~
 
     public void createAnimals() { // called from reset()
-        System.out.println("  Animals created.");
+        // System.out.println("  Animals created.");
 
         // Initialize the number of animals
         /* Clears all organisms */

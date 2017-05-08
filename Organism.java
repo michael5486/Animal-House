@@ -4,12 +4,34 @@ import java.util.ArrayList;
 
 
 public interface Organism{
+	/* Organisms can be in various states represented by an integer
+	0. idle
+	1. eating
+	2. beingEaten
+	3. hunting
+	4. escaping */
 
-	// Control Methods
+	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+	/* ~~~~~~~~~~~~~ Control Methods: To be called by AnimalSimulator ~~~~~~~~~~~~~ */
+	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 	public void updateHealthTime();
+	public void updateState(ArrayList<Organism> organisms);
+	public Point2D.Double move(ArrayList<Organism> organism);
+
+	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+	/* ~~~~~~~~~~~~~~ Utility methods - called by control methods ~~~~~~~~~~~~~~~~~ */
+	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 	public Point2D.Double randomWalk();
+	public Point2D.Double hunt();
+	public ArrayList<Organism> getOrganismsWithinSightRadius(ArrayList<Organism> organisms);
+	public ArrayList<Organism> getNearbyPrey(ArrayList<Organism> organisms);
+	public Organism getClosestPrey(ArrayList<Organism> nearbyPrey);
+	public void eatPrey(Organism organism);
 	public double generateRandomInitialHealth();
 
+	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+	/* ~~~~~~~~~~ Get and Set (These should be the same for all organisms) ~~~~~~~~ */
+	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 	// Get
 	public int getID();
 	public String getType();
@@ -18,39 +40,14 @@ public interface Organism{
 	public Point2D.Double getXY();
 	public double getHealth();
 	public int getSightRadius();
-	public ArrayList<Organism> getOrganismsWithinSightRadius(ArrayList<Organism> organisms);
-	public ArrayList<Organism> getNearbyPrey(ArrayList<Organism> organisms);
-
-	/* Organisms can be in various states represented by an integer
-	0. idle
-	1. eating
-	2. beingEaten
-	3. hunting
-	4. escaping */
 	public int getState();
-
-
 	// Set
 	public void setX(int x);
 	public void setY(int y);
 	public void setXY(Point2D.Double point);
+	public void setTargetLocation(Point2D.Double point);
 	public void setHealth(double newHealth);
-
-	//Moving
-	public Point2D.Double move(ArrayList<Organism> organism);
-
-	//State related updates
-	public void updateState(ArrayList<Organism> organisms);
-	public void eatPrey(Organism organism);
-
-
-	//Drawing
-    public void drawOrganism(Organism o, Graphics g, boolean displayAxes, boolean displayHealth, boolean displaySightRadius, boolean displayOrganismID);
-
-
 	// To String
 	public String toString();
-
-
 }
 

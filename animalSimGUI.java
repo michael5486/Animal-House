@@ -86,18 +86,6 @@ public class animalSimGUI extends JPanel {
     }
 
     boolean nextStep() {
-
-        //animalSimulator.nextStep(delT);
-
-        //~~~~~~~~~~~~~~~~~~~~~~~~~~`
-        //Call nextstep for the cop and speedingCar
-        // copSim.nextStep(delT);
-        // speederSim.nextStep(delT);
-
-        //    copX.add(copSim.getTime(), copSim.getX());
-        //    speederX.add(speederSim.getTime(), speederSim.getX());
-        //check if cop has caught up to speeder, return true or false
-
         return animalSimulator.nextStep(delT); // done = true
     }
 
@@ -148,13 +136,6 @@ public class animalSimGUI extends JPanel {
                     break;
                 }
             }
-
-    		// boolean done = nextStep ();
-    		// if (done) {
-    		// 	System.out.println ("DONE!");
-    		// 	break;
-    		// }
-
     		this.repaint ();
 
     		try {
@@ -228,27 +209,130 @@ public class animalSimGUI extends JPanel {
 
         // Draw all organisms
         if(animalSimulator != null){
-            for(Organism o : animalSimulator.getOrganisms()){
-                int x = o.getX();
-                int y = o.getY();
-                int sightRadius = o.getSightRadius();
+            try{
+                for(Organism o : animalSimulator.getOrganisms()){
+                    int x = o.getX();
+                    int y = o.getY();
+                    int sightRadius = o.getSightRadius();
 
-                // Draw the x-y axes of the organism.
-                if(displayAxes){
-                    g.setColor(Color.PINK);
-                    g.drawLine(x-20, y, x+20, y); // x-axis
-                    g.drawLine(x, y-20, x, y+20); // y-axis
-                }
+                    // Draw the x-y axes of the organism.
+                    if(displayAxes){
+                        g.setColor(Color.PINK);
+                        g.drawLine(x-20, y, x+20, y); // x-axis
+                        g.drawLine(x, y-20, x, y+20); // y-axis
+                    }
 
-                // Draw the sight radius of the organism.
-                if(displaySightRadius && o.getType() != "Plant"){
-                    g.setColor(Color.YELLOW);
-                    g.drawOval(x-sightRadius, y-sightRadius, sightRadius*2, sightRadius*2);
+                    // Draw the sight radius of the organism.
+                    if(displaySightRadius && o.getType() != "Plant"){
+                        g.setColor(Color.YELLOW);
+                        g.drawOval(x-sightRadius, y-sightRadius, sightRadius*2, sightRadius*2);
+                    }
+                   
+                    //draws each organism - this gives concurrent modification exception!
+                    if(o.getType() == "Plant"){
+                        drawPlant(o, g);
+                    }
+                    else if(o.getType() == "Mouse"){
+                        drawMouse(o, g);
+                    }
                 }
-               
-                //draws each organism
-                o.drawOrganism(o, g, displayAxes, displayHealth, displaySightRadius, displayOrganismID);
             }
+            catch(ConcurrentModificationException e){
+
+            }
+        }
+    }
+
+    public void drawMouse(Organism o, Graphics g){
+        int x = o.getX();
+        int y = o.getY();
+        double health = o.getHealth();
+
+        Color mouseColor = new Color(128,128,128);
+        g.setColor(mouseColor);
+        g.fillOval(x-5, y-8, 10, 16); // body
+
+        g.setColor(new Color(110,110,110)); // ear color
+        g.fillArc(x-5, y-1, 5, 7, 15, 180); // left ear
+        g.fillArc(x, y-1, 5, 7, 345, 180);  // right ear
+        g.setColor(Color.BLACK);            // detail color
+        g.fillRect(x-1, y+4, 1, 1);         // left eye
+        g.fillRect(x+1, y+4, 1, 1);         // right eye
+        g.drawArc(x-8,y-10, 8, 6, 0, 180);  // tail
+        g.drawLine(x-1, y+6, x-6, y+5);     // left top whisker
+        g.drawLine(x-1, y+6, x-5, y+7);     // left bottom whisker
+        g.drawLine(x+1, y+6, x+6, y+5);     // right top whisker
+        g.drawLine(x+1, y+6, x+5, y+7);     // right bottom whisker
+
+        if(displayHealth){
+            // health bar
+            g.setColor(Color.RED);
+            double healthBarValue = health*4.0; // 20 pixels = 5 health for mice (max health)
+            g.fillRect(x-10, y-14, (int)Math.ceil(healthBarValue), 1);
+
+            // health bar edges
+            g.setColor(Color.BLACK);
+            g.fillRect(x-11, y-15, 1, 3);
+            g.fillRect(x+10, y-15, 1, 3);
+        }
+        if (displayOrganismID) {
+            //Organism ID
+            g.setColor(Color.BLACK);
+            g.drawString(Integer.toString(o.getID()), x-10, y+20);
+        }
+    }
+
+    public void drawPlant(Organism o, Graphics g){
+        int x = o.getX();
+        int y = o.getY();
+        double health = o.getHealth();
+
+        Color plantColor = new Color(51,102,0);
+        g.setColor(plantColor);
+
+        // lower left
+        g.drawArc(x-38, y-22, 38, 44, 0, 70);
+        g.drawArc(x-36, y-20, 36, 40, 0, 80);
+        g.drawArc(x-34, y-18, 34, 36, 0, 80);
+        g.drawArc(x-32, y-16, 32, 32, 0, 100);
+        g.drawArc(x-30, y-14, 30, 28, 0, 120);
+        g.drawArc(x-28, y-12, 28, 24, 0, 140);
+
+        // lower right
+        g.drawArc(x, y-22, 38, 44, 110, 70);
+        g.drawArc(x, y-20, 36, 40, 100, 80);
+        g.drawArc(x, y-18, 34, 36, 100, 80);
+        g.drawArc(x, y-16, 32, 32, 80, 100);
+        g.drawArc(x, y-14, 30, 28, 60, 120);
+        g.drawArc(x, y-12, 28, 24, 40, 140);
+
+        // center left
+        g.drawLine(x-1, y, x-9, y-24);
+        g.drawLine(x-1, y, x-6, y-25);
+        g.drawLine(x, y, x-4, y-27);
+        g.drawLine(x, y, x-2, y-25);
+
+        // center right
+        g.drawLine(x+1, y, x+9, y-24);
+        g.drawLine(x+1, y, x+6, y-25);
+        g.drawLine(x, y, x+4, y-27);
+        g.drawLine(x, y, x+2, y-25);
+
+        if(displayHealth){
+            // health bar
+            g.setColor(Color.RED);
+            double healthBarValue = health/2.0; // 50 pixels = 100 health for plants (max health)
+            g.fillRect(x-25, y-32, (int)Math.ceil(healthBarValue), 1);
+
+            // health bar edges
+            g.setColor(Color.BLACK);
+            g.fillRect(x-26, y-33, 1, 3);
+            g.fillRect(x+25, y-33, 1, 3);
+        }
+        if (displayOrganismID) {
+            //Organism ID
+            g.setColor(Color.BLACK);
+            g.drawString(Integer.toString(o.getID()), x-10, y+14);
         }
     }
 
@@ -257,14 +341,11 @@ public class animalSimGUI extends JPanel {
     	JPanel panel = new JPanel();
         panel.setLayout (new GridLayout(2,1));
 
-
-
         /* set the border and give it a title */
         TitledBorder border = new TitledBorder("Controls");
         border.setTitleJustification(TitledBorder.CENTER);
         border.setTitlePosition(TitledBorder.TOP);
         panel.setBorder (border);
-
 
         /* make a panel for the buttons */
         JPanel buttonPanel = new JPanel();
@@ -319,7 +400,7 @@ public class animalSimGUI extends JPanel {
         /* make a panel for the speed slider */
         JPanel sliderPanel = new JPanel();
 
-        speedSlider = new JSlider (0, 15, 10);
+        speedSlider = new JSlider (0, 15, 8);
         speedSlider.setInverted(true);
         speedSlider.setMajorTickSpacing(5);
         speedSlider.setMinorTickSpacing(1);
@@ -329,7 +410,7 @@ public class animalSimGUI extends JPanel {
             new ChangeListener () {
                 public void stateChanged (ChangeEvent c) {
                     sleepTime = speedSlider.getValue() * 20;
-                    System.out.println("Sleeptime: " + sleepTime + " ms");
+                    // System.out.println("Sleeptime: " + sleepTime + " ms");
                 }
             }
         );
