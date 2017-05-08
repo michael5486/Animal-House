@@ -8,7 +8,7 @@ public class Plant implements Organism{
 	static final String type = "Plant";
 	ArrayList<String> preyTypes = null;
 	static final double maxHealth = 100;
-	static final double healthLostPerGameTick = -0.5; // Plant gains health per game tick
+	static final double healthLostPerGameTick = -0.1; // Plant gains health per game tick
 
 	// Variables (to be set)
 	int id;
@@ -65,6 +65,10 @@ public class Plant implements Organism{
 		//plant doesnt move
 		return (new Point2D.Double(this.X, this.Y));
 	}
+	public Point2D.Double escape(){
+		// Plants can't escape. The just die.
+		return (new Point2D.Double(this.X, this.Y));
+	}
 	public ArrayList<Organism> getOrganismsWithinSightRadius(ArrayList<Organism> organisms){
 		// Plants can't see
 		return null;
@@ -77,7 +81,15 @@ public class Plant implements Organism{
 		// Plants don't have prey
 		return null;
 	}
-	public void eatPrey(Organism prey){
+	public ArrayList<Organism> getNearbyPredators(ArrayList<Organism> nearbyOrganisms){
+		// plant can't see Predators, so who cares?
+		return null;
+	}
+	public Organism getClosestPredator(ArrayList<Organism> nearbyPrey){
+		// plant can't run away from predators, so who cares?
+		return null;
+	}
+	public void eatPrey(){
 		// Plants dont eat prey
 		// 
 	}
