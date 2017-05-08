@@ -69,7 +69,7 @@ public class AnimalSimulator {
         // Update statistics 
         updatePopulationStatistics();
 
-        if(getNumOrganismType("Mouse") == 0){
+        if(getNumOrganismType("Mouse") == 0 && getNumOrganismType("Fox") == 0){
             displayPopulationGraph();
             return true;
         }
@@ -114,7 +114,7 @@ public class AnimalSimulator {
             o.updateHealthTime(); // update health
            
             // if dead
-            if(o.getHealth() <= 0){  
+            if(o.getHealth() <= 0){
                 dead.add(o); // add to list of dead
             }
         }

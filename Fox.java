@@ -8,13 +8,14 @@ public class Fox implements Organism{
 	// Constants (specific to this animal type)
 	static final String type = "Fox";
 		//TODO add rabbit
-	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Mouse"));
+	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Mouse", "Rabbit"));
+	static final ArrayList<String> predatorTypes = new ArrayList<String>(Arrays.asList("Wolf"));
 	static final double maxHealth = 30.0;
 	static final double hungerHealth = 15;
 	static final double healthLostPerGameTick = 0.5;
 	static final double healthGainedEatingPerGameTick = 0.5;
-	static final int maxSpeed = 5;     // pixels
-	static final int sightRadius = 40; // pixels
+	static final int maxSpeed = 8;     // pixels
+	static final int sightRadius = 60; // pixels
 	static final int eatingRadius = 10; // pixels
 
 	// Variables (to be set and changed)
@@ -25,7 +26,8 @@ public class Fox implements Organism{
 	int speed = maxSpeed;
 	double health;
 	Point2D.Double targetLocation;
-	Organism currentPrey;
+	Organism prey;
+	Organism predator;
 	
 	/* 	Organisms can be in various states represented by an integer
 		0. idle
@@ -75,33 +77,34 @@ public class Fox implements Organism{
 		*/
 		ArrayList<Organism> nearbyOrganisms = getOrganismsWithinSightRadius(organisms);
 		ArrayList<Organism> nearbyPrey = getNearbyPrey(nearbyOrganisms);
+		ArrayList<Organism> nearbyPredators = getNearbyPredators(nearbyOrganisms);
 
-
-		
-		if(state == 1){ // If organism is already eating, continue eating
-			// System.out.println(toString()+" state = 1, continue eating");
-			eatPrey(currentPrey);
+		if(!nearbyPredators.isEmpty()){
+			predator = getClosestPredator(nearbyPredators);
+			if(getXY().distance(predator.getXY()) <= eatingRadius){
+				// being eaten
+				state = 2;
+			}
+			else{
+				// escaping
+				state = 4;
+			}
+		}
+		else if(state == 1){ // If organism is already eating, continue eating
+			eatPrey();
 		}
 		else if(health <= hungerHealth){ // Else if organism is below hungerHealth and there exists prey within sight radius
 			if(!nearbyPrey.isEmpty()){
-				Organism newPrey = getClosestPrey(nearbyPrey);
-				if(getXY().distance(newPrey.getXY()) <= eatingRadius){
+				prey = getClosestPrey(nearbyPrey);
+				if(getXY().distance(prey.getXY()) <= eatingRadius){
 					// eating
-					// System.out.println(toString()+" state = 1, begin eating");
 					state = 1;
-					currentPrey = newPrey;
-					eatPrey(currentPrey);
+					eatPrey();
 				}
 				else{
 					// hunting
-					// System.out.println(toString()+" state = 3, hunting");
 					state = 3;
-					setTargetLocation(newPrey.getXY());
 				}
-			}
-			else{
-				// else - Idle, Random Walk
-				state = 0;
 			}
 		}
 		else{
@@ -256,6 +259,40 @@ public class Fox implements Organism{
 			return (new Point2D.Double(this.X, this.Y-yDist));
 		}
 	}
+	public Point2D.Double escape(){ // Called in move()
+		// System.out.println(" this.X="+this.X+" this.Y="+this.Y);
+		Point2D.Double predatorXY = predator.getXY();
+
+		double xDist = this.X - predatorXY.x;
+		double yDist = this.Y - predatorXY.y;
+
+		if(Math.abs(xDist) > maxSpeed){
+			if(xDist < 0){
+				xDist = -1*maxSpeed;
+			}
+			else{
+				xDist = maxSpeed;
+			}
+		}
+		if(Math.abs(yDist) > maxSpeed){
+			if(yDist < 0){
+				yDist = -1*maxSpeed;
+			}
+			else{
+				yDist = maxSpeed;
+			}
+		}
+
+		// System.out.println("    xDist:"+xDist+" yDist:"+yDist);
+		if(Math.abs(xDist) >= Math.abs(yDist)){
+			// move along x at top speed
+			return (new Point2D.Double(this.X-xDist, this.Y));
+		}
+		else{
+			// move along y at top speed
+			return (new Point2D.Double(this.X, this.Y-yDist));
+		}
+	}
 	public ArrayList<Organism> getOrganismsWithinSightRadius(ArrayList<Organism> organisms){
 		// Create emtpy list of organisms to fill up then return
 		ArrayList<Organism> organismsWithinRadius = new ArrayList<Organism>();
@@ -297,7 +334,35 @@ public class Fox implements Organism{
 		}
 		return org;
 	}
-	public void eatPrey(Organism prey){
+	public ArrayList<Organism> getNearbyPredators(ArrayList<Organism> nearbyOrganisms){
+		/* Argument is result of calling getOrganismsWithinSightRadius() */
+
+		// create empty list of organisms to fill up then return
+		ArrayList<Organism> nearbyPredators = new ArrayList<Organism>();
+		
+		// iterate through nearbyOrganisms
+		for(Organism o : nearbyOrganisms){
+			if( this.predatorTypes.contains(o.getType()) ){
+				nearbyPredators.add(o);
+			}
+		}
+		return nearbyPredators;
+	}
+	public Organism getClosestPredator(ArrayList<Organism> nearbyPredators){
+		Organism org = nearbyPredators.get(0);
+		double dist = getXY().distance(org.getXY());
+
+		// find closest predator
+		for(Organism o : nearbyPredators){
+			double d = getXY().distance(o.getXY());
+			if(d < dist){
+				dist = d;
+				org = o;
+			}
+		}
+		return org;
+	}
+	public void eatPrey(){
 		// System.out.println(this.type+" id:"+this.id + " eating...");
 
 		if(health < maxHealth){

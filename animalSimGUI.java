@@ -369,7 +369,6 @@ public class animalSimGUI extends JPanel {
                 System.out.println("Fox.png not found");
         }
         
-
         if(displayHealth){
             // health bar
             g.setColor(Color.RED);
