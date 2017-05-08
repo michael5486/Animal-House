@@ -12,7 +12,7 @@ public class Mouse implements Organism{
 	static final double hungerHealth = 2.5;
 	static final double healthLostPerGameTick = 0.01;
 	static final double healthGainedEatingPerGameTick = 0.5;
-	static final int maxSpeed = 5;     // pixels
+	static final int maxSpeed = 2;     // pixels
 	static final int sightRadius = 40; // pixels
 	static final int eatingRadius = 10; // pixels
 
