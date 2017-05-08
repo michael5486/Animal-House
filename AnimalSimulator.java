@@ -261,7 +261,7 @@ public class AnimalSimulator {
 
         Thread plotThread = new Thread(){
             public void run () {
-                Function.show(plantPopulation,mousePopulation,foxPopulation, rabbitPopulation);
+                Function.show(plantPopulation, mousePopulation, foxPopulation, rabbitPopulation, bearPopulation);
             }
         };
         plotThread.start();
