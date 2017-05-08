@@ -8,7 +8,7 @@ public class Plant implements Organism{
 	static final String type = "Plant";
 	ArrayList<String> preyTypes = null;
 	static final double maxHealth = 100;
-	static final double healthLostPerGameTick = -1; // Plant gains health per game tick
+	static final double healthLostPerGameTick = -0.5; // Plant gains health per game tick
 
 	// Variables (to be set)
 	int id;

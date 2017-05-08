@@ -9,7 +9,7 @@ public class Mouse implements Organism{
 	static final String type = "Mouse";
 	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Plant"));
 	static final double maxHealth = 5.0;
-	static final double hungerHealth = 2.55;
+	static final double hungerHealth = 2.5;
 	static final double healthLostPerGameTick = 0.01;
 	static final double healthGainedEatingPerGameTick = 0.5;
 	static final int maxSpeed = 5;     // pixels
@@ -75,6 +75,7 @@ public class Mouse implements Organism{
 		ArrayList<Organism> nearbyOrganisms = getOrganismsWithinSightRadius(organisms);
 		ArrayList<Organism> nearbyPrey = getNearbyPrey(nearbyOrganisms);
 
+
 		
 		if(state == 1){ // If organism is already eating, continue eating
 			// System.out.println(toString()+" state = 1, continue eating");
@@ -97,7 +98,10 @@ public class Mouse implements Organism{
 					setTargetLocation(newPrey.getXY());
 				}
 			}
-			
+			else{
+				// else - Idle, Random Walk
+				state = 0;
+			}
 		}
 		else{
 			// else - Idle, Random Walk
