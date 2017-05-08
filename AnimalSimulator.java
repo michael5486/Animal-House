@@ -156,7 +156,7 @@ public class AnimalSimulator {
             id++;
         }
         for (int i = 0; i < numRabbits; i++) { //rabbits
-            organisms.add(new Rabbit(id, createRandomPoint()));
+            organisms.add(new Rabbit(id, createRandomPoint(), D));
             id++;
         }
     }
