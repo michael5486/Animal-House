@@ -7,8 +7,10 @@ public class Plant implements Organism{
 	// Constants (specific to this animal type)
 	static final String type = "Plant";
 	ArrayList<String> preyTypes = null;
-	static final double maxHealth = 100;
-	static final double healthLostPerGameTick = -0.005; // Plant gains health per game tick
+	static final double maxHealth = 40;
+	static final double healthLostPerGameTick = -0.01; // Plant gains health per game tick
+	static final double probabilityGivingBirth = 0.1;
+	static final int avgNumBabies = 1;
 
 	// Variables (to be set)
 	int id;
@@ -146,6 +148,12 @@ public class Plant implements Organism{
 	}
 	public int getState(){
 		return state;
+	}
+	public boolean isGivingBirth(){
+
+	}
+	public int getNumBabiesProduced(){
+		
 	}
 	// Set
 	public void setX(int x){

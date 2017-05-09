@@ -65,9 +65,12 @@ public class AnimalSimulator {
         updateHealth();
 
         /* Step 2 */
-        updateState();
+        //reproduce();
 
         /* Step 3 */
+        updateState();
+
+        /* Step 4 */
         moveOrganisms();
   
 

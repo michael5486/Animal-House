@@ -16,6 +16,8 @@ public class Mouse implements Organism{
 	static final int maxSpeed = 2;     // pixels
 	static final int sightRadius = 40; // pixels
 	static final int eatingRadius = 10; // pixels
+	static final double probabilityGivingBirth = 0.05 / 2;
+	static final int avgNumBabies = 7;
 
 	// Variables (to be set and changed)
 	int id;
@@ -50,11 +52,6 @@ public class Mouse implements Organism{
 
 		// set initial health
 		this.health = generateRandomInitialHealth();
-
-		// set sex
-		if(Math.random() <= 0.5){
-			isFemale = true;
-		}
 	}
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -439,6 +436,12 @@ public class Mouse implements Organism{
 	}
 	public int getState(){
 		return state;
+	}
+	public boolean isGivingBirth(){
+
+	}
+	public int getNumBabiesProduced(){
+		
 	}
 	// Set
 	public void setX(int x){

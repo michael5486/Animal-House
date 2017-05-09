@@ -16,6 +16,8 @@ public class Fox implements Organism{
 	static final int maxSpeed = 8;     // pixels
 	static final int sightRadius = 60; // pixels
 	static final int eatingRadius = 10; // pixels
+	static final double probabilityGivingBirth = 0.008 / 2;
+	static final int avgNumBabies = 4;
 
 	// Variables (to be set and changed)
 	int id;
@@ -434,6 +436,12 @@ public class Fox implements Organism{
 	}
 	public int getState(){
 		return state;
+	}
+	public boolean isGivingBirth(){
+
+	}
+	public int getNumBabiesProduced(){
+		
 	}
 	// Set
 	public void setX(int x){
