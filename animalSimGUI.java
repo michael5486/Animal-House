@@ -24,11 +24,11 @@ public class animalSimGUI extends JPanel {
     static final double delT = 0.1;
 
     // Initial numbers of organisms
-    int numPlants = 20;
+    int numPlants = 40;
     int numMice = 30;
-    int numFoxes = 4;
-    int numRabbits = 15;
-    int numBears = 2;
+    int numFoxes = 10;
+    int numRabbits = 10;
+    int numBears = 1;
 
     /* Animation Options */
     boolean displayAxes = false;

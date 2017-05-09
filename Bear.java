@@ -14,7 +14,7 @@ public class Bear implements Organism{
 	static final double healthLostPerGameTick = 0.2;
 	static final double healthGainedEatingPerGameTick = 5;
 	static final int maxSpeed = 6;     // pixels
-	static final int sightRadius = 120; // pixels
+	static final int sightRadius = 100; // pixels
 	static final int eatingRadius = 10; // pixels
 	static final double probabilityGivingBirth = 0.000027 / 2;
 	static final int avgNumBabies = 2;

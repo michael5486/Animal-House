@@ -74,14 +74,20 @@ public class AnimalSimulator {
         moveOrganisms();
   
 
-        // ~~~~~~~~~~ Don't touch this, or uncomment it ~~~~~~~~~~~~~
         // Update statistics 
         updatePopulationStatistics();
 
+
+        // Quit ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        if(t > 200){
+            displayPopulationGraph();
+            return true;
+        }
         if(getNumOrganismType("Mouse") == 0 && getNumOrganismType("Fox") == 0 && getNumOrganismType("Rabbit") == 0 && getNumOrganismType("Bear") == 0){
             displayPopulationGraph();
             return true;
         }
+        
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
         // update time
@@ -292,11 +298,54 @@ public class AnimalSimulator {
     }
 
     public void updatePopulationStatistics(){
-        plantPopulation.add(t,getNumOrganismType("Plant"));
-        mousePopulation.add(t,getNumOrganismType("Mouse"));
-        foxPopulation.add(t,getNumOrganismType("Fox"));
-        rabbitPopulation.add(t, getNumOrganismType("Rabbit"));
-        bearPopulation.add(t, getNumOrganismType("Bear"));
+        int n;
+        n = getNumOrganismType("Plant");
+        if(n > 0){
+            plantPopulation.add(t,n);
+        }
+        n = getNumOrganismType("Mouse");
+        if(n > 0){
+            mousePopulation.add(t,n);
+        }
+        n = getNumOrganismType("Fox");
+        if(n > 0){
+            foxPopulation.add(t,n);
+        }
+        n = getNumOrganismType("Rabbit");
+        if(n > 0){
+            rabbitPopulation.add(t,n);
+        }
+        n = getNumOrganismType("Bear");
+        if(n > 0){
+            bearPopulation.add(t,n);
+        }
+        
+
+        // the code below is a bug fix.
+        if(t == 0){
+            n = getNumOrganismType("Plant");
+            if(n == 0){
+                plantPopulation.add(t,1);
+            }
+            n = getNumOrganismType("Mouse");
+            if(n == 0){
+                mousePopulation.add(t,1);
+            }
+            n = getNumOrganismType("Fox");
+            if(n == 0){
+                foxPopulation.add(t,1);
+            }
+            n = getNumOrganismType("Rabbit");
+            if(n == 0){
+                rabbitPopulation.add(t,1);
+            }
+            n = getNumOrganismType("Bear");
+            if(n == 0){
+                bearPopulation.add(t,1);
+            } 
+        }
+        
+
     }
 
     public void displayPopulationGraph(){

@@ -7,7 +7,7 @@ public class Rabbit implements Organism{
 	
 	// Constants (specific to this animal type)
 	static final String type = "Rabbit";
-	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Plants"));
+	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Plant"));
 	static final ArrayList<String> predatorTypes = new ArrayList<String>(Arrays.asList("Fox", "Wolf", "Bear"));
 	static final double maxHealth = 10;
 	static final double hungerHealth = 5;
@@ -16,8 +16,8 @@ public class Rabbit implements Organism{
 	static final int maxSpeed = 12;     // pixels
 	static final int sightRadius = 60; // pixels
 	static final int eatingRadius = 10; // pixels
-	static final double probabilityGivingBirth = 0.00083 / 2;
-	static final int avgNumBabies = 6;
+	static final double probabilityGivingBirth = 0.0004 / 2;
+	static final int avgNumBabies = 1; // although the number is closer to 6 or 8, very few babies survive.
 
 	// Variables (to be set and changed)
 	int id;
