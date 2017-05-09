@@ -303,6 +303,8 @@ public class animalSimGUI extends JPanel {
         int x = o.getX();
         int y = o.getY();
         double health = o.getHealth();
+        double maxHealth = o.getMaxHealth();
+        int radius = 8;
 
         Color mouseColor = new Color(128,128,128);
         g.setColor(mouseColor);
@@ -323,13 +325,13 @@ public class animalSimGUI extends JPanel {
         if(displayHealth){
             // health bar
             g.setColor(Color.RED);
-            double healthBarValue = health*4.0; // 20 pixels = 5 health for mice (max health)
-            g.fillRect(x-10, y-14, (int)Math.ceil(healthBarValue), 1);
+            double healthBarValue = health*radius*2/maxHealth;
+            g.fillRect(x-radius, y-radius-4, (int)Math.floor(healthBarValue), 1);
 
             // health bar edges
             g.setColor(Color.BLACK);
-            g.fillRect(x-11, y-15, 1, 3);
-            g.fillRect(x+10, y-15, 1, 3);
+            g.fillRect(x-radius, y-radius-1-4, 1, 3);
+            g.fillRect(x+radius, y-radius-1-4, 1, 3);
         }
         if (displayOrganismID) {
             //Organism ID
@@ -342,6 +344,8 @@ public class animalSimGUI extends JPanel {
         int x = o.getX();
         int y = o.getY();
         double health = o.getHealth();
+        double maxHealth = o.getMaxHealth();
+        int radius = 20;
 
         Color plantColor = new Color(51,102,0);
         g.setColor(plantColor);
@@ -377,13 +381,13 @@ public class animalSimGUI extends JPanel {
         if(displayHealth){
             // health bar
             g.setColor(Color.RED);
-            double healthBarValue = health/2.0; // 50 pixels = 100 health for plants (max health)
-            g.fillRect(x-25, y-32, (int)Math.ceil(healthBarValue), 1);
+            double healthBarValue = health*radius*2/maxHealth;
+            g.fillRect(x-radius, y-radius-10, (int)Math.floor(healthBarValue), 1);
 
             // health bar edges
             g.setColor(Color.BLACK);
-            g.fillRect(x-26, y-33, 1, 3);
-            g.fillRect(x+25, y-33, 1, 3);
+            g.fillRect(x-radius, y-radius-1-10, 1, 3);
+            g.fillRect(x+radius, y-radius-1-10, 1, 3);
         }
         if (displayOrganismID) {
             //Organism ID
@@ -396,10 +400,12 @@ public class animalSimGUI extends JPanel {
         int x = o.getX();
         int y = o.getY();
         double health = o.getHealth();
+        double maxHealth = o.getMaxHealth();
+        int radius = 15;
 
         try {
             BufferedImage open = ImageIO.read(new File("Fox.png"));
-            g.drawImage(open, x-15, y-15, 30, 30, null);
+            g.drawImage(open, x-radius, y-radius, radius*2, radius*2, null);
 
         }
         catch (IOException e) {
@@ -409,13 +415,13 @@ public class animalSimGUI extends JPanel {
         if(displayHealth){
             // health bar
             g.setColor(Color.RED);
-            double healthBarValue = health*30/12; // 30 pixels for full health
-            g.fillRect(x-15, y-15, (int)Math.ceil(healthBarValue), 1);
+            double healthBarValue = health*radius*2/maxHealth;
+            g.fillRect(x-radius, y-radius, (int)Math.floor(healthBarValue), 1);
 
             // health bar edges
             g.setColor(Color.BLACK);
-            g.fillRect(x-15, y-16, 1, 3);
-            g.fillRect(x+15, y-16, 1, 3);
+            g.fillRect(x-radius, y-radius-1, 1, 3);
+            g.fillRect(x+radius, y-radius-1, 1, 3);
         }
         if (displayOrganismID) {
             //Organism ID
@@ -428,10 +434,12 @@ public class animalSimGUI extends JPanel {
         int x = o.getX();
         int y = o.getY();
         double health = o.getHealth();
+        double maxHealth = o.getMaxHealth();
+        int radius = 15;
 
         try {
             BufferedImage open = ImageIO.read(new File("Rabbit.png"));
-            g.drawImage(open, x-15, y-15, 30, 30, null);
+            g.drawImage(open, x-radius, y-radius, radius*2, radius*2, null);
 
         }
         catch (IOException e) {
@@ -441,13 +449,13 @@ public class animalSimGUI extends JPanel {
         if(displayHealth){
             // health bar
             g.setColor(Color.RED);
-            double healthBarValue = health * 3; // I'm lazy, make it 30 pixels for full health and reuse fox code
-            g.fillRect(x-15, y-15, (int)Math.ceil(healthBarValue), 1);
+            double healthBarValue = health*radius*2/maxHealth;
+            g.fillRect(x-radius, y-radius, (int)Math.floor(healthBarValue), 1);
 
             // health bar edges
             g.setColor(Color.BLACK);
-            g.fillRect(x-15, y-16, 1, 3);
-            g.fillRect(x+15, y-16, 1, 3);
+            g.fillRect(x-radius, y-radius-1, 1, 3);
+            g.fillRect(x+radius, y-radius-1, 1, 3);
         }
         if (displayOrganismID) {
             //Organism ID
@@ -460,10 +468,12 @@ public class animalSimGUI extends JPanel {
         int x = o.getX();
         int y = o.getY();
         double health = o.getHealth();
+        double maxHealth = o.getMaxHealth();
+        int radius = 20;
 
         try {
             BufferedImage open = ImageIO.read(new File("Bear.png"));
-            g.drawImage(open, x-20, y-20, 40, 40, null);
+            g.drawImage(open, x-radius, y-radius, radius*2, radius*2, null);
 
         }
         catch (IOException e) {
@@ -473,13 +483,13 @@ public class animalSimGUI extends JPanel {
         if(displayHealth){
             // health bar
             g.setColor(Color.RED);
-            double healthBarValue = health/2; // I'm lazy, make it 30 pixels for full health and reuse fox code
-            g.fillRect(x-15, y-15, (int)Math.ceil(healthBarValue), 1);
+            double healthBarValue = health*radius*2/maxHealth;
+            g.fillRect(x-radius, y-radius, (int)Math.floor(healthBarValue), 1);
 
             // health bar edges
             g.setColor(Color.BLACK);
-            g.fillRect(x-15, y-16, 1, 3);
-            g.fillRect(x+15, y-16, 1, 3);
+            g.fillRect(x-radius, y-radius-1, 1, 3);
+            g.fillRect(x+radius, y-radius-1, 1, 3);
         }
         if (displayOrganismID) {
             //Organism ID

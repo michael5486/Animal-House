@@ -14,7 +14,7 @@ public class Bear implements Organism{
 	static final double healthLostPerGameTick = 0.2;
 	static final double healthGainedEatingPerGameTick = 5;
 	static final int maxSpeed = 6;     // pixels
-	static final int sightRadius = 80; // pixels
+	static final int sightRadius = 120; // pixels
 	static final int eatingRadius = 10; // pixels
 	static final double probabilityGivingBirth = 0.000027 / 2;
 	static final int avgNumBabies = 2;
@@ -24,7 +24,6 @@ public class Bear implements Organism{
 	int X, Y;
 	int prevX, prevY;
 	Dimension D;
-	int speed = maxSpeed;
 	double health;
 	Point2D.Double targetLocation;
 	Organism prey;
@@ -163,6 +162,7 @@ public class Bear implements Organism{
 		String prevDirection = "none";
 		int newX = this.X;
 		int newY = this.Y;
+		int speed = (int)RandTool.gaussian(maxSpeed/2.0, 1);
 
 		// get previous direction of travel from X,Y and prevX and prevY
 		if(this.X - this.prevX == 0 && this.Y - this.prevY < 0){
@@ -427,6 +427,9 @@ public class Bear implements Organism{
 	}
 	public double getHealth(){
 		return this.health;
+	}
+	public double getMaxHealth(){
+		return this.maxHealth;
 	}
 	public int getSightRadius(){
 		return this.sightRadius;

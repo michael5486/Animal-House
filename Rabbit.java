@@ -11,7 +11,7 @@ public class Rabbit implements Organism{
 	static final ArrayList<String> predatorTypes = new ArrayList<String>(Arrays.asList("Fox", "Wolf", "Bear"));
 	static final double maxHealth = 10;
 	static final double hungerHealth = 5;
-	static final double healthLostPerGameTick = 0.02;
+	static final double healthLostPerGameTick = 0.03;
 	static final double healthGainedEatingPerGameTick = 0.5;
 	static final int maxSpeed = 12;     // pixels
 	static final int sightRadius = 60; // pixels
@@ -24,7 +24,6 @@ public class Rabbit implements Organism{
 	int X, Y;
 	int prevX, prevY;
 	Dimension D;
-	int speed = maxSpeed;
 	double health;
 	Point2D.Double targetLocation;
 	Organism prey;
@@ -163,6 +162,7 @@ public class Rabbit implements Organism{
 		String prevDirection = "none";
 		int newX = this.X;
 		int newY = this.Y;
+		int speed = (int)RandTool.gaussian(maxSpeed/2.0, 1);
 
 		// get previous direction of travel from X,Y and prevX and prevY
 		if(this.X - this.prevX == 0 && this.Y - this.prevY < 0){
@@ -430,6 +430,9 @@ public class Rabbit implements Organism{
 	}
 	public double getHealth(){
 		return this.health;
+	}
+	public double getMaxHealth(){
+		return this.maxHealth;
 	}
 	public int getSightRadius(){
 		return this.sightRadius;

@@ -43,6 +43,7 @@ public interface Organism{
 	public int getY();
 	public Point2D.Double getXY();
 	public double getHealth();
+	public double getMaxHealth();
 	public int getSightRadius();
 	public int getState();
 	public boolean isGivingBirth();

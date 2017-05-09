@@ -8,9 +8,9 @@ public class Plant implements Organism{
 	static final String type = "Plant";
 	ArrayList<String> preyTypes = null;
 	static final double maxHealth = 30;
-	static final double healthLostPerGameTick = -0.01; // Plant gains health per game tick
+	static final double healthLostPerGameTick = -0.02; // Plant gains health per game tick
 	static final double probabilityGivingBirth = 0.0001;
-	static final int avgNumBabies = 4;
+	static final int avgNumBabies = 3;
 
 	// Variables (to be set)
 	int id;
@@ -142,6 +142,9 @@ public class Plant implements Organism{
 	}
 	public double getHealth(){
 		return this.health;
+	}
+	public double getMaxHealth(){
+		return this.maxHealth;
 	}
 	public int getSightRadius(){
 		return 0;
