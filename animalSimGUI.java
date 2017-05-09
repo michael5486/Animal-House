@@ -26,7 +26,7 @@ public class animalSimGUI extends JPanel {
     // Initial numbers of organisms
     int numPlants = 40;
     int numMice = 30;
-    int numFoxes = 10;
+    int numFoxes = 6;
     int numRabbits = 10;
     int numBears = 1;
 

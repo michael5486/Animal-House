@@ -79,7 +79,7 @@ public class AnimalSimulator {
 
 
         // Quit ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        if(t > 200){
+        if(t > 400){
             displayPopulationGraph();
             return true;
         }
