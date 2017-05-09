@@ -115,7 +115,7 @@ public class Fox implements Organism{
 	}
 
 	// Step 3: Move
-	public Point2D.Double move(ArrayList<Organism> organisms) {
+	public void move() {
 		// System.out.println(toString()+"state="+state+" move()");
 		Point2D.Double temp = null;
 
@@ -152,79 +152,87 @@ public class Fox implements Organism{
 				break;
 		}
 
-		return temp;
+		this.X = (int)temp.x;
+		this.Y = (int)temp.y;
 	}
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 	/* ~~~~~~~~~~~~~~ Utility methods - called by control methods ~~~~~~~~~~~~~~~~~ */
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 	public Point2D.Double randomWalk(){ // Called in move()
-		String prevDirection = "none";
-		int newX = this.X;
-		int newY = this.Y;
-		int speed = (int)RandTool.gaussian(maxSpeed/2.0, 1);
+		// initialize newLocation point that is not within boundary
+        Point2D.Double newLocation = new Point2D.Double(-1,-1); 
+        // loop until generated point is within boundary
+        while(!isPointWithinBoundary(newLocation)){
+			String prevDirection = "none";
+			int newX = this.X;
+			int newY = this.Y;
+			// int speed = (int)RandTool.gaussian(maxSpeed/2.0, 1);
+			int speed = maxSpeed;
 
-		// get previous direction of travel from X,Y and prevX and prevY
-		if(this.X - this.prevX == 0 && this.Y - this.prevY < 0){
-			prevDirection = "north";
-		}
-		else if(this.X - this.prevX == 0 && this.Y - this.prevY > 0){
-			prevDirection = "south";
-		}
-		else if(this.X - this.prevX < 0 && this.Y - this.prevY == 0){
-			prevDirection = "west";
-		}
-		else if(this.X - this.prevX > 0 && this.Y - this.prevY == 0){
-			prevDirection = "east";
-		}
+			// get previous direction of travel from X,Y and prevX and prevY
+			if(this.X - this.prevX == 0 && this.Y - this.prevY < 0){
+				prevDirection = "north";
+			}
+			else if(this.X - this.prevX == 0 && this.Y - this.prevY > 0){
+				prevDirection = "south";
+			}
+			else if(this.X - this.prevX < 0 && this.Y - this.prevY == 0){
+				prevDirection = "west";
+			}
+			else if(this.X - this.prevX > 0 && this.Y - this.prevY == 0){
+				prevDirection = "east";
+			}
 
-		// chance of this animal moving in the same direction
-		double sameDirectionChance = 0.8;
+			// chance of this animal moving in the same direction
+			double sameDirectionChance = 0.8;
 
-		// chance of this animal staying in the same location
-		if(prevDirection == "none"){
-			sameDirectionChance = 0.4;
-		}
+			// chance of this animal staying in the same location
+			if(prevDirection == "none"){
+				sameDirectionChance = 0.4;
+			}
 
-		if(Math.random() < sameDirectionChance){
-			// continue moving in same direction as previous move
-			if(prevDirection == "north"){
-				newY -= speed;
+			if(Math.random() < sameDirectionChance){
+				// continue moving in same direction as previous move
+				if(prevDirection == "north"){
+					newY -= speed;
+				}
+				else if(prevDirection == "south"){
+					newY += speed;
+				}
+				else if(prevDirection == "east"){
+					newX += speed;
+				}
+				else if(prevDirection == "west"){
+					newX -= speed;
+				}
+				else if(prevDirection == "none"){
+					// do nothing
+				}
 			}
-			else if(prevDirection == "south"){
-				newY += speed;
-			}
-			else if(prevDirection == "east"){
-				newX += speed;
-			}
-			else if(prevDirection == "west"){
-				newX -= speed;
-			}
-			else if(prevDirection == "none"){
-				// do nothing
-			}
-		}
-		else{
-			// change direction
-			double newDirection = Math.random();
+			else{
+				// change direction
+				double newDirection = Math.random();
 
-	        if(newDirection < 0.2){ // north
-	        	newY -= speed;
-	        }
-	        else if(newDirection < 0.4){ // south
-	        	newY += speed;
-	        }
-	        else if(newDirection < 0.6){ // east
-	        	newX += speed;
-	        }
-	        else if(newDirection < 0.8){ // west
-	        	newX -= speed;
-	        }
-	        else if(newDirection < 1.0){ // same spot
-	        	// do nothing
-	        }
-		}
-		return (new Point2D.Double(newX,newY));
+		        if(newDirection < 0.2){ // north
+		        	newY -= speed;
+		        }
+		        else if(newDirection < 0.4){ // south
+		        	newY += speed;
+		        }
+		        else if(newDirection < 0.6){ // east
+		        	newX += speed;
+		        }
+		        else if(newDirection < 0.8){ // west
+		        	newX -= speed;
+		        }
+		        else if(newDirection < 1.0){ // same spot
+		        	// do nothing
+		        }
+			}            
+            newLocation = new Point2D.Double(newX,newY);
+        }
+		return newLocation;
 	}
 	public Point2D.Double hunt(){ // Called in move()
 		// System.out.println(" this.X="+this.X+" this.Y="+this.Y);

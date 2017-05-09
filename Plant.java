@@ -49,13 +49,13 @@ public class Plant implements Organism{
 	// Step 2: Update State
 	public void updateState(ArrayList<Organism> organisms) {
 		// Plants can't move,
-		// they never changes state
+		// they never changes state(int)
 	}
 
 	// Step 3: Move
-	public Point2D.Double move(ArrayList<Organism> organism) {
-		//plant doesnt move
-		return (new Point2D.Double(this.X, this.Y));
+	public void move() {
+		//plant doesn't move
+		// 
 	}
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

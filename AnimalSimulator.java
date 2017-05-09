@@ -131,6 +131,7 @@ public class AnimalSimulator {
                 numBears--;
             }
         }
+        dead = null;
     }
     public void updateState() {
         //cycle through all organisms
@@ -141,14 +142,7 @@ public class AnimalSimulator {
     public void moveOrganisms(){
         // Cycle through all organisms
         for(Organism o : organisms){
-            // initialize newLocation point that is not within boundary
-            Point2D.Double newLocation = new Point2D.Double(-1,-1); 
-            
-            // loop until generated point is within boundary
-            while(!isPointWithinBoundary(newLocation)){
-                newLocation = o.move(organisms);
-            }
-            o.setXY(newLocation);
+            o.move();
         }
     }
     public void reproduce() {
@@ -189,6 +183,7 @@ public class AnimalSimulator {
         for (Organism o : temp) {
             organisms.add(o);
         }
+        temp = null;
     }
 
 
