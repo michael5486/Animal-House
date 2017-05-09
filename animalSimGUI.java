@@ -50,13 +50,12 @@ public class animalSimGUI extends JPanel {
     JTextField numPlantsField, numMiceField, numFoxesField, numRabbitsField, numBearsField;
     JSlider speedSlider;
     Dimension D;
-    JButton resetB, goButton, quitButton, pauseButton;
+    JButton resetButton, goButton, quitButton, pauseButton;
 
     // Running Trials
     JTextField numTrialsField;
-    JLabel currentTrialNum;
     JButton trialsButton;
-    int numTrials = 20;
+    int numTrials = 25;
 
 
 
@@ -135,14 +134,8 @@ public class animalSimGUI extends JPanel {
             System.out.println("--Error: Entry fields must have integer values! Defaulting numBears to 0.");
             numBears = 0;
             numBearsField.setText("0");
-        }        
-    }
+        }
 
-    boolean nextStep() {
-        return animalSimulator.nextStep(); // done = true
-    }
-
-    void runTrials(){
         // Get numTrials from entry field
         try{
             numTrials = Integer.parseInt(numTrialsField.getText());
@@ -156,14 +149,19 @@ public class animalSimGUI extends JPanel {
             System.out.println("--Error: Entry fields must have integer values! Defaulting numTrialss to 0.");
             numTrials = 0;
             numTrialsField.setText("0");
-        }
+        }        
+    }
 
-        trialsButton.setEnabled(false);
+    boolean nextStep() {
+        return animalSimulator.nextStep(); // done = true
+    }
 
-        AnimalSimulator.runTrials(D, numTrials);
+    void runTrials(){
+        // Read values from bottom entry fields
+        getNumbersFromEntryField();
 
-        trialsButton.setEnabled(true);
-
+        // Run Trials to compute average population graph
+        AnimalSimulator.runTrials(D, numTrials, numPlants, numMice, numFoxes, numRabbits, numBears);
     }
 
     void reset() {
@@ -227,6 +225,7 @@ public class animalSimGUI extends JPanel {
                 if (isCompleted) {
                     pauseButton.setEnabled(false);
                     goButton.setEnabled(false);
+                    trialsButton.setEnabled(true);
                     isPaused = true;
                     System.out.println ("DONE!");
                     break;
@@ -562,12 +561,12 @@ public class animalSimGUI extends JPanel {
         /* make a panel for the buttons */
         JPanel buttonPanel = new JPanel();
 
-        resetB = new JButton ("Reset");
+        resetButton = new JButton ("Reset");
         goButton = new JButton("Go!");
         quitButton = new JButton("Quit");
         pauseButton = new JButton("Pause");
 
-        resetB.addActionListener (
+        resetButton.addActionListener (
             new ActionListener () {
                 public void actionPerformed (ActionEvent a)
                 {
@@ -605,7 +604,7 @@ public class animalSimGUI extends JPanel {
         buttonPanel.add(quitButton);
         buttonPanel.add(goButton);
         buttonPanel.add(pauseButton);
-        buttonPanel.add(resetB);
+        buttonPanel.add(resetButton);
 
         goButton.setVisible(true);
         pauseButton.setVisible(false);

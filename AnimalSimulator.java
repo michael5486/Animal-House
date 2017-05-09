@@ -7,7 +7,7 @@ import javax.swing.*;
 
 public class AnimalSimulator {
 
-    static final int maxT = 1000;
+    static final int maxT = 2500;
 
     // Constants set from constructor arguments:
     Dimension D;
@@ -337,9 +337,8 @@ public class AnimalSimulator {
         plotThread.start();
     }
 
-    public static void runTrials(Dimension d, int numTrials){
-        System.out.println("hi");
-
+    public static void runTrials(Dimension D, int numTrials, int numPlants, int numMice, int numFoxes, int numRabbits, int numBears){
+        System.out.println("Computing average population graph: "+numTrials+" trials");
         /* Statics */
         Function avgPlantPopulation = new Function("Average Plant population vs time");
         Function avgMousePopulation = new Function("Average Mouse population vs time");
@@ -358,7 +357,8 @@ public class AnimalSimulator {
         for(int i = 1; i <= numTrials; i++){
             System.out.println("Trial: "+i+"/"+numTrials);
             // create new simulation
-            a = new AnimalSimulator(d, false, 40, 30, 6, 10, 1);
+            a = new AnimalSimulator(D, false, numPlants, numMice, numFoxes, numRabbits, numBears);
+            // a = new AnimalSimulator(d, false, 40, 30, 6, 10, 1);
             while(!a.nextStep()){
                 // hello world
             }
@@ -373,33 +373,38 @@ public class AnimalSimulator {
             a = null;
         }
 
-        /* Running in threads 
-        java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(numTrials);
-        for(int i = 1; i <= numTrials; i++){
-            // System.out.println("Trial: "+i);
-            Thread thread = new Thread(){
-                public void run () {
-                    // create new simulation
-                    AnimalSimulator a = new AnimalSimulator(d, false, 40, 30, 6, 10, 1);
-                    while(!a.nextStep()){
-                        // hello world
-                    }
-                    for(int x = 0; x < maxT; x++){
-                        totalPlant[x] += a.plantPopulation.get(x);
-                        totalMouse[x] += a.mousePopulation.get(x);
-                        totalFox[x] += a.foxPopulation.get(x);
-                        totalRabbit[x] += a.rabbitPopulation.get(x);
-                        totalBear[x] += a.bearPopulation.get(x);
-                    }
-                    // System.out.println("latch countdown");
-                    latch.countDown();
-                }
-            };
-            thread.start();
-            
-        }
-        latch.await(); // Wait for countdown
-        /* end Thread section */
+        // //Running in threads 
+        // java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(numTrials);
+        // for(int i = 1; i <= numTrials; i++){
+        //     // System.out.println("Trial: "+i);
+        //     Thread thread = new Thread(){
+        //         public void run () {
+        //             // create new simulation
+        //             AnimalSimulator a = new AnimalSimulator(D, false, numPlants, numMice, numFoxes, numRabbits, numBears);
+        //             while(!a.nextStep()){
+        //                 // hello world
+        //             }
+        //             for(int x = 0; x < maxT; x++){
+        //                 totalPlant[x] += a.plantPopulation.get(x);
+        //                 totalMouse[x] += a.mousePopulation.get(x);
+        //                 totalFox[x] += a.foxPopulation.get(x);
+        //                 totalRabbit[x] += a.rabbitPopulation.get(x);
+        //                 totalBear[x] += a.bearPopulation.get(x);
+        //             }
+        //             // System.out.println("latch countdown");
+        //             latch.countDown();
+        //         }
+        //     };
+        //     thread.start();
+        // }
+        // try{
+        //     latch.await();
+        // }
+        // catch(InterruptedException e){
+        // }
+        
+        
+        // end Thread section 
 
         // find averages
         for(int x = 0; x < maxT; x++){
@@ -414,13 +419,6 @@ public class AnimalSimulator {
 
     }
 
-
-
-    public static void main(String[] args) throws InterruptedException{
-        Dimension d = new Dimension(1150, 558); // gui window size
-        
-        runTrials(d, 20);  
-    }
 }
 
 

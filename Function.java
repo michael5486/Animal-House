@@ -194,6 +194,7 @@ public class Function {
 	SimplePlotPanel.makePlotFrame (points, name, 600, 480);
     }
 
+
     public static void show (Function ... fSet)
     {
         ArrayList<Vector> pointSets = new ArrayList<Vector> ();
@@ -202,7 +203,18 @@ public class Function {
             pointSets.add (F.points);
             names.add (F.name);
         }
-	SimplePlotPanel.makePlotFrame (pointSets, names, fSet[0].xLabel, 600, 480);
+    SimplePlotPanel.makePlotFrame (pointSets, names, fSet[0].xLabel, 600, 480);
+    }
+
+    public static void show (String title, Function ... fSet)
+    {
+        ArrayList<Vector> pointSets = new ArrayList<Vector> ();
+        ArrayList<String> names = new ArrayList<String> ();
+        for (Function F: fSet) {
+            pointSets.add (F.points);
+            names.add (F.name);
+        }
+	SimplePlotPanel.makePlotFrame (title, pointSets, names, fSet[0].xLabel, 600, 480);
     }
 
 

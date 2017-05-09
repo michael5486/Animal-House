@@ -61,7 +61,8 @@ public class SimplePlotPanel extends JPanel {
 
   // A set of colors to use.
 
-  static Color colors[] = {Color.red, Color.blue, Color.green, Color.magenta};
+  static Color colors[] = {Color.red, Color.blue, Color.green, Color.magenta, Color.cyan, Color.orange, Color.yellow,   
+Color.pink, Color.lightGray};
 
   // Parameters to constructor: total number of curves. Over all curves,
   // the largest number of X values, the largest number of Y values.
@@ -127,9 +128,20 @@ public class SimplePlotPanel extends JPanel {
       makePlotFrame (points, "", 600, 480);
   }
 
-
   public static void makePlotFrame (ArrayList<Vector> pointSets, ArrayList<String> names, String xLabel, int frameWidth, int frameHeight)
   {
+      Vector[] pointSetVector = new Vector [pointSets.size()];
+      String[] nameVector = new String [names.size()];
+      for (int i=0; i<pointSets.size(); i++) {
+          pointSetVector[i] = pointSets.get(i);
+          nameVector[i] = names.get(i);
+      }
+      makePlotFrame (pointSetVector, nameVector, xLabel, frameWidth, frameHeight);
+  }
+
+  public static void makePlotFrame (String title, ArrayList<Vector> pointSets, ArrayList<String> names, String xLabel, int frameWidth, int frameHeight)
+  {
+      // titleString = title;
       Vector[] pointSetVector = new Vector [pointSets.size()];
       String[] nameVector = new String [names.size()];
       for (int i=0; i<pointSets.size(); i++) {
@@ -142,6 +154,8 @@ public class SimplePlotPanel extends JPanel {
 
   public static void makePlotFrame (Vector[] pointSets, String[] names, String xLabel, int frameWidth, int frameHeight)
   {
+      
+
       // Find largest set.
       int N = pointSets[0].size();
       for (int i=1; i<pointSets.length; i++) {
