@@ -31,7 +31,7 @@ public class animalSimGUI extends JPanel {
 
     /* Animation Options */
     boolean displayAxes = false;
-    boolean displayHealth = true;
+    boolean displayHealth = false;
     boolean displaySightRadius = false;
     boolean displayOrganismID = false;
 
@@ -41,14 +41,16 @@ public class animalSimGUI extends JPanel {
     
     /* GUI Animation stuff */
     Thread currentThread;
-    boolean isPaused = false;
+    boolean isPaused = true;
     int sleepTime = 150;
+    boolean isCompleted = false;
 
     /* GUI Construction stuff */
     Container cPane = null;
     JTextField numPlantsField, numMiceField, numFoxesField, numRabbitsField, numBearsField;
     JSlider speedSlider;
     Dimension D;
+    JButton resetB, goButton, quitButton, pauseButton;
 
 
 
@@ -137,6 +139,8 @@ public class animalSimGUI extends JPanel {
 
     void reset() {
         System.out.println("\nReset:");
+        isCompleted = false;
+        isPaused = true;
 
         // Read values from bottom entry fields
         getNumOrganismsFromEntryField();
@@ -151,10 +155,7 @@ public class animalSimGUI extends JPanel {
 
         System.out.println("Go:");
 
-        if (isPaused) {
-            isPaused = false;
-            return;
-        }
+        isPaused = false;
 
         stopAnimationThread ();    // To ensure only one thread.
         
@@ -176,8 +177,12 @@ public class animalSimGUI extends JPanel {
     	while (true) {
 
             if (!isPaused) {
-                boolean done = nextStep();
-                if (done) {
+                isCompleted = nextStep();
+                
+                if (isCompleted) {
+                    pauseButton.setEnabled(false);
+                    goButton.setEnabled(false);
+                    isPaused = true;
                     System.out.println ("DONE!");
                     break;
                 }
@@ -512,16 +517,25 @@ public class animalSimGUI extends JPanel {
         /* make a panel for the buttons */
         JPanel buttonPanel = new JPanel();
 
-        JButton resetB = new JButton ("Reset");
-        JButton goButton = new JButton("Go");
-        JButton quitButton = new JButton("Quit");
-        JButton pauseButton = new JButton("Pause");
+        resetB = new JButton ("Reset");
+        goButton = new JButton("Go");
+        quitButton = new JButton("Quit");
+        pauseButton = new JButton("Pause");
 
         resetB.addActionListener (
             new ActionListener () {
                 public void actionPerformed (ActionEvent a)
                 {
                     reset ();
+                    System.out.println(isPaused);
+                    if(isPaused){
+                        goButton.setEnabled(true);
+                        pauseButton.setEnabled(false);
+                    }
+                    else{
+                        goButton.setEnabled(false);
+                        pauseButton.setEnabled(true);
+                    }
                 }
             }
         );
@@ -529,6 +543,8 @@ public class animalSimGUI extends JPanel {
             new ActionListener () {
                 public void actionPerformed (ActionEvent a) {
                     go();
+                    goButton.setEnabled(false);
+                    pauseButton.setEnabled(true);
                 }
             }
         );
@@ -545,15 +561,20 @@ public class animalSimGUI extends JPanel {
             new ActionListener () {
                 public void actionPerformed (ActionEvent a) {
                     pause();
+                    goButton.setEnabled(true);
+                    pauseButton.setEnabled(false);
                 }
             }
         );
 
+        pauseButton.setEnabled(false);
 
         buttonPanel.add(quitButton);
         buttonPanel.add(resetB);
         buttonPanel.add(goButton);
         buttonPanel.add(pauseButton);
+
+
 
         // add button panel to control panel
         panel.add(buttonPanel); 
@@ -577,7 +598,6 @@ public class animalSimGUI extends JPanel {
             }
         );
 
-        // sliderPanel.add(new JLabel("Simulation speed:   "));
         sliderPanel.add(new JLabel("slow"));
         sliderPanel.add(speedSlider);
         sliderPanel.add(new JLabel("fast"));
