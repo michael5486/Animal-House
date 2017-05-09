@@ -8,7 +8,7 @@ public class Mouse implements Organism{
 	// Constants (specific to this animal type)
 	static final String type = "Mouse";
 	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Plant"));
-	static final ArrayList<String> predatorTypes = new ArrayList<String>(Arrays.asList("Fox"));
+	static final ArrayList<String> predatorTypes = new ArrayList<String>(Arrays.asList("Fox", "Bear"));
 	static final double maxHealth = 5.0;
 	static final double hungerHealth = 2.5;
 	static final double healthLostPerGameTick = 0.01;
@@ -16,7 +16,7 @@ public class Mouse implements Organism{
 	static final int maxSpeed = 2;     // pixels
 	static final int sightRadius = 40; // pixels
 	static final int eatingRadius = 10; // pixels
-	static final double probabilityGivingBirth = 0.00005 / 2;
+	static final double probabilityGivingBirth = 0.0005 / 2;
 	static final int avgNumBabies = 7;
 
 	// Variables (to be set and changed)

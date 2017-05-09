@@ -9,14 +9,14 @@ public class Bear implements Organism{
 	static final String type = "Bear";
 	static final ArrayList<String> preyTypes = new ArrayList<String>(Arrays.asList("Mouse", "Rabbit" ,"Plant", "Fox"));
 	static final ArrayList<String> predatorTypes = new ArrayList<String>();
-	static final double maxHealth = 60.0;
-	static final double hungerHealth = 30;
+	static final double maxHealth = 100.0;
+	static final double hungerHealth = 50;
 	static final double healthLostPerGameTick = 0.2;
 	static final double healthGainedEatingPerGameTick = 5;
 	static final int maxSpeed = 6;     // pixels
 	static final int sightRadius = 80; // pixels
 	static final int eatingRadius = 10; // pixels
-	static final double probabilityGivingBirth = 0.0000027 / 2;
+	static final double probabilityGivingBirth = 0.000027 / 2;
 	static final int avgNumBabies = 2;
 
 	// Variables (to be set and changed)

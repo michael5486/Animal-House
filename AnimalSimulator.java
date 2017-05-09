@@ -150,7 +150,6 @@ public class AnimalSimulator {
             organisms.add(new Plant(id, createRandomPoint(), D));
             id++;
         }
-
         for(int i = 0; i < numMice; i++){ // mice
             // create mice
             organisms.add(new Mouse(id, createRandomPoint(), D));
