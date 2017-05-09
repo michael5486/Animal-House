@@ -435,10 +435,13 @@ public class Bear implements Organism{
 		return state;
 	}
 	public boolean isGivingBirth(){
-
+		if(Math.random() <= probabilityGivingBirth){
+			return true;
+		}
+		return false;
 	}
 	public int getNumBabiesProduced(){
-		
+		return (int)RandTool.gaussian(avgNumBabies, 1);
 	}
 	// Set
 	public void setX(int x){
