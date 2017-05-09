@@ -7,11 +7,14 @@ import javax.swing.*;
 
 public class AnimalSimulator {
 
+    static final int maxT = 100;
+
     // Constants set from constructor arguments:
     double delT;
+    Dimension D;
+    boolean gui;
 
     // Variables set from constructor arguments:
-    Dimension D;
     int numPlants;
     int numMice;
     int numFoxes;
@@ -37,8 +40,11 @@ public class AnimalSimulator {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~ Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    AnimalSimulator(Dimension D, double initDelT, int initNumPlants, int initNumMice, int initNumFoxes, int initNumRabbits, int initNumBears){
+    AnimalSimulator(Dimension D, boolean gui, double initDelT, int initNumPlants, int initNumMice, int initNumFoxes, int initNumRabbits, int initNumBears){
         this.D = D;
+        this.gui = gui;
+        System.out.println(D.height);
+        System.out.println(D.width);
         delT = initDelT;
         numPlants = initNumPlants;
         numMice = initNumMice;
@@ -53,7 +59,7 @@ public class AnimalSimulator {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~ Next Step Method ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public boolean nextStep (double delT) {
+    public boolean nextStep () {
         /* Step 1 */ 
         updateHealth();
 
@@ -72,14 +78,19 @@ public class AnimalSimulator {
 
 
         // Quit
-        if(t > 300){
-            displayPopulationGraph();
+        if(t > maxT){
+            if(gui){
+                 displayPopulationGraph();
+            }
             return true;
         }
-        if(getNumOrganismType("Mouse") == 0 && getNumOrganismType("Fox") == 0 && getNumOrganismType("Rabbit") == 0 && getNumOrganismType("Bear") == 0){
-            displayPopulationGraph();
-            return true;
-        }
+        /* Uncomment below and comment above to run until extinction */
+        // if(getNumOrganismType("Mouse") == 0 && getNumOrganismType("Fox") == 0 && getNumOrganismType("Rabbit") == 0 && getNumOrganismType("Bear") == 0){
+        //     if(gui){
+        //          displayPopulationGraph();
+        //     }
+        //     return true;
+        // }
         
         // Update time step
         t = t + delT;
@@ -150,7 +161,7 @@ public class AnimalSimulator {
             //if organism is giving birth
             if (o.isGivingBirth()) {
                 int numBabies = o.getNumBabiesProduced();
-                System.out.printf("%s made %d babies!\n", o.getType(), numBabies);
+                // System.out.printf("%s made %d babies!\n", o.getType(), numBabies);
                 for (int i = 0; i < numBabies; i++) {
                     if (o.getType() == "Plant") {
                         temp.add(new Plant(id, createRandomPoint(), D));
@@ -333,6 +344,52 @@ public class AnimalSimulator {
             }
         };
         plotThread.start();
+    }
+
+    public static void main(String[] args){
+        Dimension d = new Dimension(1100, 558); // gui window size
+        AnimalSimulator a;
+
+        int numTrials = 10;
+
+        /* Statics */
+        Function avgPlantPopulation = new Function("Average Plant population vs time");
+        Function avgMousePopulation = new Function("Average Mouse population vs time");
+        Function avgFoxPopulation = new Function("Average Fox population vs time");
+        Function avgRabbitPopulation = new Function("Average Rabbit population vs time");
+        Function avgBearPopulation = new Function("Average Bear population vs time");
+
+        double[] totalPlant = new double[maxT];
+        double[] totalMouse = new double[maxT];
+        double[] totalFox = new double[maxT];
+        double[] totalRabbit = new double[maxT];
+        double[] totalBear = new double[maxT];
+
+        for(int i = 0; i < numTrials; i++){
+            // create new simulation
+            a = new AnimalSimulator(d, false, 0.1, 40, 30, 6, 10, 1);
+            while(!a.nextStep()){
+                // hello world
+            }
+            for(int x = 0; x < maxT; x++){
+                totalPlant[x] += a.plantPopulation.get(x);
+                totalMouse[x] += a.mousePopulation.get(x);
+                totalFox[x] += a.foxPopulation.get(x);
+                totalRabbit[x] += a.rabbitPopulation.get(x);
+                totalBear[x] += a.bearPopulation.get(x);
+            }
+        }
+        
+        // find averages
+        for(int x = 0; x < maxT; x++){
+            avgPlantPopulation.add(x, totalPlant[x]/numTrials);
+            avgMousePopulation.add(x, totalMouse[x]/numTrials);
+            avgFoxPopulation.add(x, totalFox[x]/numTrials);
+            avgRabbitPopulation.add(x, totalRabbit[x]/numTrials);
+            avgBearPopulation.add(x, totalBear[x]/numTrials);
+        }
+
+        Function.show(avgPlantPopulation, avgMousePopulation, avgFoxPopulation, avgRabbitPopulation, avgBearPopulation);
     }
 }
 

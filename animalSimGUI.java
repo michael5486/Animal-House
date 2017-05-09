@@ -133,7 +133,7 @@ public class animalSimGUI extends JPanel {
     }
 
     boolean nextStep() {
-        return animalSimulator.nextStep(delT); // done = true
+        return animalSimulator.nextStep(); // done = true
     }
 
     void reset() {
@@ -143,7 +143,7 @@ public class animalSimGUI extends JPanel {
         getNumOrganismsFromEntryField();
 
         // Initialize animal simulator
-        animalSimulator = new AnimalSimulator(D, delT, numPlants, numMice, numFoxes, numRabbits, numBears);
+        animalSimulator = new AnimalSimulator(D, true, delT, numPlants, numMice, numFoxes, numRabbits, numBears);
 
         this.repaint();
     }
