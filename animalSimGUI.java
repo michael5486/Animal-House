@@ -159,22 +159,11 @@ public class animalSimGUI extends JPanel {
         }
 
         trialsButton.setEnabled(false);
-        resetB.setEnabled(false);
-        goButton.setEnabled(false);
 
-        stopAnimationThread ();    // To ensure only one thread.
-        
-        currentThread = new Thread () {
-            public void run () 
-            {
-                AnimalSimulator.runTrials(D, numTrials); // this isn't being called?????
-            }
-        };
-        currentThread.start();
-
-        
+        AnimalSimulator.runTrials(D, numTrials);
 
         trialsButton.setEnabled(true);
+
     }
 
     void reset() {
@@ -780,7 +769,7 @@ public class animalSimGUI extends JPanel {
             new ActionListener () {
                 public void actionPerformed (ActionEvent a)
                 {
-                    // runTrials ();
+                    runTrials ();
                 }
             }
         );
