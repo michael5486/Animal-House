@@ -384,9 +384,9 @@ public class AnimalSimulator {
             thread.start();
             
         }
-
-
         latch.await(); // Wait for countdown
+
+        
         // find averages
         for(int x = 0; x < maxT; x++){
             avgPlantPopulation.add(x, totalPlant[x]/numTrials);
