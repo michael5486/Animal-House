@@ -16,7 +16,7 @@ public class Rabbit implements Organism{
 	static final int maxSpeed = 12;     // pixels
 	static final int sightRadius = 60; // pixels
 	static final int eatingRadius = 10; // pixels
-	static final double probabilityGivingBirth = 0.083 / 2;
+	static final double probabilityGivingBirth = 0.000083 / 2;
 	static final int avgNumBabies = 6;
 
 	// Variables (to be set and changed)

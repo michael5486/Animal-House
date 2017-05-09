@@ -65,7 +65,7 @@ public class AnimalSimulator {
         updateHealth();
 
         /* Step 2 */
-        //reproduce();
+        reproduce();
 
         /* Step 3 */
         updateState();
@@ -188,6 +188,45 @@ public class AnimalSimulator {
         Point2D.Double randPoint = new Point2D.Double(cartX, cartY);
 
         return randPoint; 
+    }
+
+
+// ~~~~~~~~~~~~~~  Reproduction Methods ~~~~~~~~~~~~~~~
+
+    public void reproduce() {
+
+        ArrayList<Organism> temp = new ArrayList<Organism>();
+        for (Organism o : organisms) {
+            //if organism is giving birth
+            if (o.isGivingBirth()) {
+                int numBabies = o.getNumBabiesProduced();
+                System.out.printf("%s made %d babies!\n", o.getType(), numBabies);
+                for (int i = 0; i < numBabies; i++) {
+                    if (o.getType().equals("Plant")) {
+                        temp.add(new Plant(id, createRandomPoint(), D));
+                        id++;
+                    }
+                    else if (o.getType().equals("Mouse")) {
+                        temp.add(new Mouse(id, o.getXY(), D));
+                        id++;                    }
+                    else if (o.getType().equals("Rabbit")) {
+                        temp.add(new Rabbit(id, o.getXY(), D));
+                        id++;
+                    }
+                    else if (o.getType().equals("Fox")) {
+                        temp.add(new Fox(id, o.getXY(), D));
+                        id++;
+                    }
+                    else if (o.getType().equals("Bear")) {
+                        temp.add(new Bear(id, o.getXY(), D));
+                        id++;
+                    }
+                }
+            }
+        }
+        for (Organism o : temp) {
+            organisms.add(o);
+        }
     }
 
 
