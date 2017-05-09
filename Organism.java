@@ -45,6 +45,9 @@ public interface Organism{
 	public double getHealth();
 	public int getSightRadius();
 	public int getState();
+	public boolean isFemale();
+	public boolean isGivingBirth();
+	public int getNumBabiesProduced();
 	// Set
 	public void setX(int x);
 	public void setY(int y);

@@ -11,9 +11,9 @@ public class Bear implements Organism{
 	static final ArrayList<String> predatorTypes = new ArrayList<String>();
 	static final double maxHealth = 60.0;
 	static final double hungerHealth = 30;
-	static final double healthLostPerGameTick = 0.05;
+	static final double healthLostPerGameTick = 0.2;
 	static final double healthGainedEatingPerGameTick = 5;
-	static final int maxSpeed = 1;     // pixels
+	static final int maxSpeed = 6;     // pixels
 	static final int sightRadius = 80; // pixels
 	static final int eatingRadius = 10; // pixels
 

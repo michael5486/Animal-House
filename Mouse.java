@@ -21,6 +21,7 @@ public class Mouse implements Organism{
 	int id;
 	int X, Y;
 	int prevX, prevY;
+	boolean isFemale;
 	Dimension D;
 	int speed = maxSpeed;
 	double health;
@@ -49,6 +50,11 @@ public class Mouse implements Organism{
 
 		// set initial health
 		this.health = generateRandomInitialHealth();
+
+		// set sex
+		if(Math.random() <= 0.5){
+			isFemale = true;
+		}
 	}
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
