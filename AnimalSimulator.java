@@ -337,11 +337,8 @@ public class AnimalSimulator {
         plotThread.start();
     }
 
-    public static void main(String[] args) throws InterruptedException{
-        Dimension d = new Dimension(1100, 558); // gui window size
-
-
-        int numTrials = 100;
+    public static void runTrials(Dimension d, int numTrials){
+        System.out.println("hi");
 
         /* Statics */
         Function avgPlantPopulation = new Function("Average Plant population vs time");
@@ -415,7 +412,14 @@ public class AnimalSimulator {
 
         Function.show(avgPlantPopulation, avgMousePopulation, avgFoxPopulation, avgRabbitPopulation, avgBearPopulation);
 
+    }
+
+
+
+    public static void main(String[] args) throws InterruptedException{
+        Dimension d = new Dimension(1150, 558); // gui window size
         
+        runTrials(d, 20);  
     }
 }
 

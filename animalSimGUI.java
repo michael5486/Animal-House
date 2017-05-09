@@ -52,10 +52,17 @@ public class animalSimGUI extends JPanel {
     Dimension D;
     JButton resetB, goButton, quitButton, pauseButton;
 
+    // Running Trials
+    JTextField numTrialsField;
+    JLabel currentTrialNum;
+    JButton trialsButton;
+    int numTrials = 20;
+
+
 
 
     /* Get input from GUI text boxes */
-    void getNumOrganismsFromEntryField(){ // called in reset()
+    void getNumbersFromEntryField(){ // called in reset()
         // Get numPlants from entry field
         try{
             numPlants = Integer.parseInt(numPlantsField.getText());
@@ -129,21 +136,59 @@ public class animalSimGUI extends JPanel {
             numBears = 0;
             numBearsField.setText("0");
         }        
-
-        System.out.printf("  numPlants = %d\n  numMice  = %d  \n  numFoxes  = %d\n  numRabbits  = %d\n  numBears = %d\n", numPlants, numMice, numFoxes, numRabbits, numBears);
     }
 
     boolean nextStep() {
         return animalSimulator.nextStep(); // done = true
     }
 
+    void runTrials(){
+        // Get numTrials from entry field
+        try{
+            numTrials = Integer.parseInt(numTrialsField.getText());
+            if(numTrials < 0){
+                numTrials = 0;
+                numTrialsField.setText("0");
+                System.out.println("--Error: numTrials cannot be less than 0! Defaulting to 0.");
+            }
+        }
+        catch(NumberFormatException e){
+            System.out.println("--Error: Entry fields must have integer values! Defaulting numTrialss to 0.");
+            numTrials = 0;
+            numTrialsField.setText("0");
+        }
+
+        trialsButton.setEnabled(false);
+        resetB.setEnabled(false);
+        goButton.setEnabled(false);
+
+        stopAnimationThread ();    // To ensure only one thread.
+        
+        currentThread = new Thread () {
+            public void run () 
+            {
+                AnimalSimulator.runTrials(D, numTrials); // this isn't being called?????
+            }
+        };
+        currentThread.start();
+
+        
+
+        trialsButton.setEnabled(true);
+    }
+
     void reset() {
         System.out.println("\nReset:");
         isCompleted = false;
         isPaused = true;
+        goButton.setVisible(true);
+        goButton.setEnabled(true);
+        pauseButton.setVisible(false);
+        pauseButton.setEnabled(false);
+        trialsButton.setEnabled(true);
 
         // Read values from bottom entry fields
-        getNumOrganismsFromEntryField();
+        getNumbersFromEntryField();
 
         // Initialize animal simulator
         animalSimulator = new AnimalSimulator(D, true, numPlants, numMice, numFoxes, numRabbits, numBears);
@@ -156,6 +201,12 @@ public class animalSimGUI extends JPanel {
         System.out.println("Go:");
 
         isPaused = false;
+
+        goButton.setVisible(false);
+        goButton.setEnabled(false);
+        pauseButton.setVisible(true);
+        pauseButton.setEnabled(true);
+        trialsButton.setEnabled(false);
 
         stopAnimationThread ();    // To ensure only one thread.
         
@@ -171,6 +222,11 @@ public class animalSimGUI extends JPanel {
     void pause() {
         System.out.println("Pause:");
         isPaused = true;
+        goButton.setVisible(true);
+        goButton.setEnabled(true);
+        pauseButton.setVisible(false);
+        pauseButton.setEnabled(false);
+        trialsButton.setEnabled(true);
     }
 
     void animate () {
@@ -518,7 +574,7 @@ public class animalSimGUI extends JPanel {
         JPanel buttonPanel = new JPanel();
 
         resetB = new JButton ("Reset");
-        goButton = new JButton("Go");
+        goButton = new JButton("Go!");
         quitButton = new JButton("Quit");
         pauseButton = new JButton("Pause");
 
@@ -527,15 +583,6 @@ public class animalSimGUI extends JPanel {
                 public void actionPerformed (ActionEvent a)
                 {
                     reset ();
-                    System.out.println(isPaused);
-                    if(isPaused){
-                        goButton.setEnabled(true);
-                        pauseButton.setEnabled(false);
-                    }
-                    else{
-                        goButton.setEnabled(false);
-                        pauseButton.setEnabled(true);
-                    }
                 }
             }
         );
@@ -543,8 +590,6 @@ public class animalSimGUI extends JPanel {
             new ActionListener () {
                 public void actionPerformed (ActionEvent a) {
                     go();
-                    goButton.setEnabled(false);
-                    pauseButton.setEnabled(true);
                 }
             }
         );
@@ -561,20 +606,20 @@ public class animalSimGUI extends JPanel {
             new ActionListener () {
                 public void actionPerformed (ActionEvent a) {
                     pause();
-                    goButton.setEnabled(true);
-                    pauseButton.setEnabled(false);
                 }
             }
         );
 
         pauseButton.setEnabled(false);
+        goButton.setEnabled(false);
 
         buttonPanel.add(quitButton);
-        buttonPanel.add(resetB);
         buttonPanel.add(goButton);
         buttonPanel.add(pauseButton);
+        buttonPanel.add(resetB);
 
-
+        goButton.setVisible(true);
+        pauseButton.setVisible(false);
 
         // add button panel to control panel
         panel.add(buttonPanel); 
@@ -583,7 +628,7 @@ public class animalSimGUI extends JPanel {
         /* make a panel for the speed slider */
         JPanel sliderPanel = new JPanel();
 
-        speedSlider = new JSlider (0, 15, 8);
+        speedSlider = new JSlider (0, 10, 8);
         speedSlider.setInverted(true);
         speedSlider.setMajorTickSpacing(5);
         speedSlider.setMinorTickSpacing(1);
@@ -692,17 +737,17 @@ public class animalSimGUI extends JPanel {
         numMiceField.setText(Integer.toString(numMice)); 
         panel.add(numMiceField);
 
-        JLabel foxLabel = new JLabel("Foxes");
-        panel.add(foxLabel);
-        numFoxesField = new JTextField(5);
-        numFoxesField.setText(Integer.toString(numFoxes));
-        panel.add(numFoxesField);
-
         JLabel rabbitLabel = new JLabel("Rabbits");
         panel.add(rabbitLabel);
         numRabbitsField = new JTextField(5);
         numRabbitsField.setText(Integer.toString(numRabbits));
         panel.add(numRabbitsField);
+
+        JLabel foxLabel = new JLabel("Foxes");
+        panel.add(foxLabel);
+        numFoxesField = new JTextField(5);
+        numFoxesField.setText(Integer.toString(numFoxes));
+        panel.add(numFoxesField);
 
         JLabel bearLabel = new JLabel("Bears");
         panel.add(bearLabel);
@@ -713,11 +758,46 @@ public class animalSimGUI extends JPanel {
         return panel;
     }
 
+    JPanel makeTrialPanel(){
+        JPanel panel = new JPanel();
+
+        /* Set the border and give it a title */
+        TitledBorder border = new TitledBorder("Average Population Graph");
+        border.setTitleJustification(TitledBorder.CENTER);
+        border.setTitlePosition(TitledBorder.TOP);
+        panel.setBorder (border);
+
+        JLabel numTrialsLabel = new JLabel("Number of Trials:");
+        panel.add(numTrialsLabel);
+        numTrialsField = new JTextField(5);
+        numTrialsField.setText(Integer.toString(numTrials));
+        panel.add(numTrialsField);
+
+        // button
+        trialsButton = new JButton ("Compute Graph");
+
+        trialsButton.addActionListener (
+            new ActionListener () {
+                public void actionPerformed (ActionEvent a)
+                {
+                    // runTrials ();
+                }
+            }
+        );
+
+
+
+        panel.add(trialsButton);
+
+        return panel;
+    }
+
+
     JPanel makeBottomPanel () {
     	JPanel panel = new JPanel ();
 
     	/* creates a GridLayout with one rows and one column */
-    	panel.setLayout (new GridLayout (1,1));
+    	panel.setLayout (new GridLayout (1,4));
 
     	/* creates a control panel with Reset, Go, and Quit buttons as well as slider bar for sleep time*/
     	JPanel sPanel = makeControlPanel ();
@@ -730,16 +810,18 @@ public class animalSimGUI extends JPanel {
         JPanel ePanel = makeEntryPanel ();
         panel.add (ePanel);
 
+        JPanel tPanel = makeTrialPanel ();
+        panel.add (tPanel);
+
         return panel;
     }
 
     void makeFrame () {
     	JFrame frame = new JFrame ();
-    	frame.setSize (1100, 700);
-        frame.setMinimumSize(new Dimension(1100, 700));
-        frame.setMaximumSize(new Dimension(1100, 700));
-    	frame.setTitle ("animalSimGUI")
-;
+    	// frame.setSize (1500, 700);
+        frame.setMinimumSize(new Dimension(1150, 700));
+        frame.setMaximumSize(new Dimension(1150, 700));
+    	frame.setTitle ("animalSimGUI");
     	//Obtains the content pane layer so we can add to it
     	//Container is part of Abstract Window Toolkit, used to create GUIs
     	cPane = frame.getContentPane();
@@ -749,7 +831,7 @@ public class animalSimGUI extends JPanel {
 
         D = this.getSize();
 
-        reset();
+        // reset();
     }
 
     // Main
