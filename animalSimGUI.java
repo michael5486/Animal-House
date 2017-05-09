@@ -21,7 +21,6 @@ public class animalSimGUI extends JPanel {
 
     // Animal Simulator
     AnimalSimulator animalSimulator;
-    static final double delT = 0.1;
 
     // Initial numbers of organisms
     int numPlants = 40;
@@ -143,7 +142,7 @@ public class animalSimGUI extends JPanel {
         getNumOrganismsFromEntryField();
 
         // Initialize animal simulator
-        animalSimulator = new AnimalSimulator(D, true, delT, numPlants, numMice, numFoxes, numRabbits, numBears);
+        animalSimulator = new AnimalSimulator(D, true, numPlants, numMice, numFoxes, numRabbits, numBears);
 
         this.repaint();
     }

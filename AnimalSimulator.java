@@ -7,10 +7,9 @@ import javax.swing.*;
 
 public class AnimalSimulator {
 
-    static final int maxT = 100;
+    static final int maxT = 1000;
 
     // Constants set from constructor arguments:
-    double delT;
     Dimension D;
     boolean gui;
 
@@ -22,7 +21,7 @@ public class AnimalSimulator {
     int numBears;
     
     // Variables 
-    double t = 0; // Current time step. Initialized to zero.
+    int t = 0; // Current time step. Initialized to zero.
     int id = 1; // this will increment
 
     /* List of all organisms */
@@ -40,12 +39,9 @@ public class AnimalSimulator {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~ Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    AnimalSimulator(Dimension D, boolean gui, double initDelT, int initNumPlants, int initNumMice, int initNumFoxes, int initNumRabbits, int initNumBears){
+    AnimalSimulator(Dimension D, boolean gui, int initNumPlants, int initNumMice, int initNumFoxes, int initNumRabbits, int initNumBears){
         this.D = D;
         this.gui = gui;
-        System.out.println(D.height);
-        System.out.println(D.width);
-        delT = initDelT;
         numPlants = initNumPlants;
         numMice = initNumMice;
         numFoxes = initNumFoxes;
@@ -93,7 +89,7 @@ public class AnimalSimulator {
         // }
         
         // Update time step
-        t = t + delT;
+        t++;
         return false;
     }
 
@@ -350,7 +346,7 @@ public class AnimalSimulator {
         Dimension d = new Dimension(1100, 558); // gui window size
         AnimalSimulator a;
 
-        int numTrials = 10;
+        int numTrials = 20;
 
         /* Statics */
         Function avgPlantPopulation = new Function("Average Plant population vs time");
@@ -358,16 +354,17 @@ public class AnimalSimulator {
         Function avgFoxPopulation = new Function("Average Fox population vs time");
         Function avgRabbitPopulation = new Function("Average Rabbit population vs time");
         Function avgBearPopulation = new Function("Average Bear population vs time");
-
         double[] totalPlant = new double[maxT];
         double[] totalMouse = new double[maxT];
         double[] totalFox = new double[maxT];
         double[] totalRabbit = new double[maxT];
         double[] totalBear = new double[maxT];
 
-        for(int i = 0; i < numTrials; i++){
+        for(int i = 1; i <= numTrials; i++){
+            System.out.println("Trial: "+i);
+
             // create new simulation
-            a = new AnimalSimulator(d, false, 0.1, 40, 30, 6, 10, 1);
+            a = new AnimalSimulator(d, false, 40, 30, 6, 10, 1);
             while(!a.nextStep()){
                 // hello world
             }
