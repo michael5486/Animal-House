@@ -346,7 +346,7 @@ public class AnimalSimulator {
         Dimension d = new Dimension(1100, 558); // gui window size
 
 
-        int numTrials = 8;
+        int numTrials = 50;
 
         /* Statics */
         Function avgPlantPopulation = new Function("Average Plant population vs time");
@@ -360,6 +360,28 @@ public class AnimalSimulator {
         double[] totalRabbit = new double[maxT];
         double[] totalBear = new double[maxT];
 
+
+        /* No Threads */
+        for(int i = 1; i <= numTrials; i++){
+            System.out.println("Trial: "+i+"/"+numTrials);
+            // create new simulation
+            AnimalSimulator a = new AnimalSimulator(d, false, 40, 30, 6, 10, 1);
+            while(!a.nextStep()){
+                // hello world
+            }
+
+            for(int x = 0; x < maxT; x++){
+                totalPlant[x] += a.plantPopulation.get(x);
+                totalMouse[x] += a.mousePopulation.get(x);
+                totalFox[x] += a.foxPopulation.get(x);
+                totalRabbit[x] += a.rabbitPopulation.get(x);
+                totalBear[x] += a.bearPopulation.get(x);
+            }
+
+            System.gc();
+        }
+
+        /* Running in threads 
         java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(numTrials);
         for(int i = 1; i <= numTrials; i++){
             // System.out.println("Trial: "+i);
@@ -385,8 +407,8 @@ public class AnimalSimulator {
             
         }
         latch.await(); // Wait for countdown
+        /* end Thread section */
 
-        
         // find averages
         for(int x = 0; x < maxT; x++){
             avgPlantPopulation.add(x, totalPlant[x]/numTrials);
