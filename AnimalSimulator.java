@@ -346,7 +346,7 @@ public class AnimalSimulator {
         Dimension d = new Dimension(1100, 558); // gui window size
 
 
-        int numTrials = 50;
+        int numTrials = 100;
 
         /* Statics */
         Function avgPlantPopulation = new Function("Average Plant population vs time");
@@ -360,12 +360,13 @@ public class AnimalSimulator {
         double[] totalRabbit = new double[maxT];
         double[] totalBear = new double[maxT];
 
+        AnimalSimulator a = null;
 
         /* No Threads */
         for(int i = 1; i <= numTrials; i++){
             System.out.println("Trial: "+i+"/"+numTrials);
             // create new simulation
-            AnimalSimulator a = new AnimalSimulator(d, false, 40, 30, 6, 10, 1);
+            a = new AnimalSimulator(d, false, 40, 30, 6, 10, 1);
             while(!a.nextStep()){
                 // hello world
             }
@@ -377,8 +378,7 @@ public class AnimalSimulator {
                 totalRabbit[x] += a.rabbitPopulation.get(x);
                 totalBear[x] += a.bearPopulation.get(x);
             }
-
-            System.gc();
+            a = null;
         }
 
         /* Running in threads 
