@@ -336,7 +336,7 @@ public class animalSimGUI extends JPanel {
         if (displayOrganismID) {
             //Organism ID
             g.setColor(Color.BLACK);
-            g.drawString(Integer.toString(o.getID()), x-10, y+20);
+            g.drawString(Integer.toString(o.getID()), x-radius, y+19);
         }
     }
 
@@ -392,7 +392,7 @@ public class animalSimGUI extends JPanel {
         if (displayOrganismID) {
             //Organism ID
             g.setColor(Color.BLACK);
-            g.drawString(Integer.toString(o.getID()), x-10, y+14);
+            g.drawString(Integer.toString(o.getID()), x-8, y+12);
         }
     }
 
@@ -426,7 +426,7 @@ public class animalSimGUI extends JPanel {
         if (displayOrganismID) {
             //Organism ID
             g.setColor(Color.BLACK);
-            g.drawString(Integer.toString(o.getID()), x-9, y+17);
+            g.drawString(Integer.toString(o.getID()), x-8, y+21);
         }
     }
 
@@ -460,7 +460,7 @@ public class animalSimGUI extends JPanel {
         if (displayOrganismID) {
             //Organism ID
             g.setColor(Color.BLACK);
-            g.drawString(Integer.toString(o.getID()), x-9, y+17);
+            g.drawString(Integer.toString(o.getID()), x-6, y+25);
         }        
     }
 
@@ -494,7 +494,7 @@ public class animalSimGUI extends JPanel {
         if (displayOrganismID) {
             //Organism ID
             g.setColor(Color.BLACK);
-            g.drawString(Integer.toString(o.getID()), x-9, y+17);
+            g.drawString(Integer.toString(o.getID()), x-8, y+28);
         }        
     }
 

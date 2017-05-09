@@ -24,15 +24,6 @@ public class AnimalSimulator {
 
     /* List of all organisms */
     ArrayList<Organism> organisms = new ArrayList<Organism>();
-    /* 
-    Note from Karl:
-        We can also make lists of specific organisms.
-        For example:
-                ArrayList<Plant> plants = new ArrayList<Plant>();
-        Then we can call specific methods from the Plant class that 
-        are not defined in the organism interface.
-    */
-
 
     /* Statics */
     Function plantPopulation = new Function("Plant population vs time");
@@ -41,7 +32,11 @@ public class AnimalSimulator {
     Function rabbitPopulation = new Function("Rabbit population vs time");
     Function bearPopulation = new Function("Bear population vs time");
 
-    // Constructor
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~ Constructor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     AnimalSimulator(Dimension D, double initDelT, int initNumPlants, int initNumMice, int initNumFoxes, int initNumRabbits, int initNumBears){
         this.D = D;
         delT = initDelT;
@@ -53,13 +48,11 @@ public class AnimalSimulator {
 
         // create animals
         createAnimals();
-
-        /* --------For testing purposes------- */
-        // for(Organism o : organisms){
-        // }
     }
 
-// ~~~~~~~~~~~~~~~ Next Step Method ~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~ Next Step Method ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public boolean nextStep (double delT) {
         /* Step 1 */ 
         updateHealth();
@@ -78,8 +71,8 @@ public class AnimalSimulator {
         updatePopulationStatistics();
 
 
-        // Quit ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        if(t > 400){
+        // Quit
+        if(t > 300){
             displayPopulationGraph();
             return true;
         }
@@ -88,35 +81,14 @@ public class AnimalSimulator {
             return true;
         }
         
-        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-
-        // update time
+        // Update time step
         t = t + delT;
         return false;
     }
 
-
-// ~~~~~~~~~~~~~~~ Update State Methods ~~~~~~~~~~~~~~~~~~~~~
-    public void moveOrganisms(){
-        // Cycle through all organisms
-        for(Organism o : organisms){
-            // initialize newLocation point that is not within boundary
-            Point2D.Double newLocation = new Point2D.Double(-1,-1); 
-            
-            // loop until generated point is within boundary
-            while(!isPointWithinBoundary(newLocation)){
-                newLocation = o.move(organisms);
-            }
-            o.setXY(newLocation);
-        }
-    }
-
-    public void updateState() {
-        //cycle through all organisms
-        for (Organism o : organisms) {
-            o.updateState(organisms);
-        }
-    }
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~ Methods called in nextStep() ~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public void updateHealth(){
         // Every animal's health is always updated with time. Regardless of any state that it is in.
@@ -136,13 +108,90 @@ public class AnimalSimulator {
         // remove dead organisms
         for(Organism o : dead){
             organisms.remove(o);
+            if(o.getType() == "Plant"){
+                numPlants--;
+            }
+            else if(o.getType() == "Mouse"){
+                numMice--;
+            }
+            else if(o.getType() == "Rabbit"){
+                numRabbits--;
+            }
+            else if(o.getType() == "Fox"){
+                numFoxes--;
+            }
+            else if(o.getType() == "Bear"){
+                numBears--;
+            }
+        }
+    }
+    public void updateState() {
+        //cycle through all organisms
+        for (Organism o : organisms) {
+            o.updateState(organisms);
+        }
+    }
+    public void moveOrganisms(){
+        // Cycle through all organisms
+        for(Organism o : organisms){
+            // initialize newLocation point that is not within boundary
+            Point2D.Double newLocation = new Point2D.Double(-1,-1); 
+            
+            // loop until generated point is within boundary
+            while(!isPointWithinBoundary(newLocation)){
+                newLocation = o.move(organisms);
+            }
+            o.setXY(newLocation);
+        }
+    }
+    public void reproduce() {
+        ArrayList<Organism> temp = new ArrayList<Organism>();
+        for (Organism o : organisms) {
+            //if organism is giving birth
+            if (o.isGivingBirth()) {
+                int numBabies = o.getNumBabiesProduced();
+                System.out.printf("%s made %d babies!\n", o.getType(), numBabies);
+                for (int i = 0; i < numBabies; i++) {
+                    if (o.getType() == "Plant") {
+                        temp.add(new Plant(id, createRandomPoint(), D));
+                        numPlants++;
+                        id++;
+                    }
+                    else if (o.getType() == "Mouse") {
+                        temp.add(new Mouse(id, o.getXY(), D));
+                        numMice++;
+                        id++;                    }
+                    else if (o.getType() == "Rabbit") {
+                        temp.add(new Rabbit(id, o.getXY(), D));
+                        numRabbits++;
+                        id++;
+                    }
+                    else if (o.getType() == "Fox") {
+                        temp.add(new Fox(id, o.getXY(), D));
+                        numFoxes++;
+                        id++;
+                    }
+                    else if (o.getType() == "Bear") {
+                        temp.add(new Bear(id, o.getXY(), D));
+                        numBears++;
+                        id++;
+                    }
+                }
+            }
+        }
+        for (Organism o : temp) {
+            organisms.add(o);
         }
     }
 
 
 
 
-//~~~~~~~~~ Methods for initializing AnimalSimulator instance ~~~~~~~~~~~~~~
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~ Methods for initializing AnimalSimulator instance ~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public void createAnimals() { // called from reset()
         // System.out.println("  Animals created.");
@@ -196,50 +245,14 @@ public class AnimalSimulator {
     }
 
 
-// ~~~~~~~~~~~~~~  Reproduction Methods ~~~~~~~~~~~~~~~
-
-    public void reproduce() {
-
-        ArrayList<Organism> temp = new ArrayList<Organism>();
-        for (Organism o : organisms) {
-            //if organism is giving birth
-            if (o.isGivingBirth()) {
-                int numBabies = o.getNumBabiesProduced();
-                System.out.printf("%s made %d babies!\n", o.getType(), numBabies);
-                for (int i = 0; i < numBabies; i++) {
-                    if (o.getType().equals("Plant")) {
-                        temp.add(new Plant(id, createRandomPoint(), D));
-                        id++;
-                    }
-                    else if (o.getType().equals("Mouse")) {
-                        temp.add(new Mouse(id, o.getXY(), D));
-                        id++;                    }
-                    else if (o.getType().equals("Rabbit")) {
-                        temp.add(new Rabbit(id, o.getXY(), D));
-                        id++;
-                    }
-                    else if (o.getType().equals("Fox")) {
-                        temp.add(new Fox(id, o.getXY(), D));
-                        id++;
-                    }
-                    else if (o.getType().equals("Bear")) {
-                        temp.add(new Bear(id, o.getXY(), D));
-                        id++;
-                    }
-                }
-            }
-        }
-        for (Organism o : temp) {
-            organisms.add(o);
-        }
-    }
 
 
 
-// ~~~~~~~~~~~~~~~ Utility Methods ~~~~~~~~~~~~~~~~~~~~~
-
-    /* Check to see if a point is within screen boundary */
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~ Utility Methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public boolean isPointWithinBoundary(Point2D.Double point){
+         /* Check to see if a point is within screen boundary */
         int x = (int)point.x;
         int y = (int)point.y;
         int screenWidth = D.width;
@@ -253,39 +266,15 @@ public class AnimalSimulator {
         }
     }
 
-
     public ArrayList<Organism> getOrganisms(){
         return organisms;
     }
 
-    public void removeOrganism(Organism organism){
-        for(Organism o : organisms){
-            if(o.equals(organism)){
-                organisms.remove(o);
-            }
-        }
-    }
-    public void removeOrganism(int id){
-        for(Organism o : organisms){
-            if(o.getID() == id){
-                organisms.remove(o);
-            }
-        }
-    }
-
-    public ArrayList<Organism> getOrganismsType(String type) {
-        ArrayList<Organism> temp = new ArrayList<Organism>();  
-        for(Organism o : organisms){
-            if(o.getType() == type){
-                temp.add(o);
-            }
-        }
-        return temp;
-    }
 
 
-
-// ~~~~~~~~~~~~~~~~~~ Statistics and Graph Methods ~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~ Statistics and Graph Methods ~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public int getNumOrganismType(String type){
         int population = 0;
@@ -298,54 +287,40 @@ public class AnimalSimulator {
     }
 
     public void updatePopulationStatistics(){
-        int n;
-        n = getNumOrganismType("Plant");
-        if(n > 0){
-            plantPopulation.add(t,n);
+        if(numPlants > 0){
+            plantPopulation.add(t,numPlants);
         }
-        n = getNumOrganismType("Mouse");
-        if(n > 0){
-            mousePopulation.add(t,n);
+        if(numMice > 0){
+            mousePopulation.add(t,numMice);
         }
-        n = getNumOrganismType("Fox");
-        if(n > 0){
-            foxPopulation.add(t,n);
+        if(numFoxes > 0){
+            foxPopulation.add(t,numFoxes);
         }
-        n = getNumOrganismType("Rabbit");
-        if(n > 0){
-            rabbitPopulation.add(t,n);
+        if(numRabbits > 0){
+            rabbitPopulation.add(t,numRabbits);
         }
-        n = getNumOrganismType("Bear");
-        if(n > 0){
-            bearPopulation.add(t,n);
+        if(numBears > 0){
+            bearPopulation.add(t,numBears);
         }
         
-
-        // the code below is a bug fix.
+        // the code below is a bug fix. just leave it.
         if(t == 0){
-            n = getNumOrganismType("Plant");
-            if(n == 0){
+            if(numPlants == 0){
                 plantPopulation.add(t,1);
             }
-            n = getNumOrganismType("Mouse");
-            if(n == 0){
+            if(numMice == 0){
                 mousePopulation.add(t,1);
             }
-            n = getNumOrganismType("Fox");
-            if(n == 0){
+            if(numFoxes == 0){
                 foxPopulation.add(t,1);
             }
-            n = getNumOrganismType("Rabbit");
-            if(n == 0){
+            if(numRabbits == 0){
                 rabbitPopulation.add(t,1);
             }
-            n = getNumOrganismType("Bear");
-            if(n == 0){
+            if(numBears == 0){
                 bearPopulation.add(t,1);
             } 
         }
-        
-
     }
 
     public void displayPopulationGraph(){

@@ -11,7 +11,7 @@ public class Fox implements Organism{
 	static final ArrayList<String> predatorTypes = new ArrayList<String>(Arrays.asList("Wolf", "Bear"));
 	static final double maxHealth = 12.0;
 	static final double hungerHealth = 6;
-	static final double healthLostPerGameTick = 0.0175;
+	static final double healthLostPerGameTick = 0.02;
 	static final double healthGainedEatingPerGameTick = 0.5;
 	static final int maxSpeed = 8;     // pixels
 	static final int sightRadius = 100; // pixels
